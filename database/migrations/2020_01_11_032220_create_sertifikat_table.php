@@ -15,16 +15,21 @@ class CreateSertifikatTable extends Migration
     {
         Schema::create('sertifikat', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedInteger('tsid');
+            $table->boolean('is_generate');
+            $table->boolean('is_upload');
             $table->unsignedInteger('diklat_jadwal_id')->unique();
             $table->boolean('barcode')->default(false);
             $table->boolean('kualifikasi')->default(false);
             $table->boolean('import')->default(false);
-            $table->string('tempat');
-            $table->date('tanggal');
-            $table->string('jabatan');
-            $table->string('nama');
-            $table->string('pangkat');
-            $table->string('nip');
+            $table->string('format_nomor')->nullable;
+            $table->string('tempat')->nullable;
+            $table->date('tanggal')->nullable;
+            $table->string('jabatan')->nullable;
+            $table->string('nama')->nullable;
+            $table->string('pangkat')->nullable;
+            $table->string('nip')->nullable;
+            $table->text('spesimen')->nullable;
             $table->timestamps();
         });
     }

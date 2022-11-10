@@ -9,6 +9,18 @@
         @csrf
         <input type="hidden" name="step" value="2">
         <div class="block-content block-content-full">
+            @if(count($errors) > 0)
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <ul class="px-3 m-0">
+                    @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
             <h2 class="content-heading pt-0">Data Peserta</h2>
             <div class="form-group mb-0">
                 <label for="foto">Foto</label><br>
@@ -31,48 +43,48 @@
                 </div>
                 <div class="col-6">
                     <label for="nip">NIK (No. KTP)</label>
-                    <input class="js-maxlength form-control" type="text" id="ktp" name="ktp" placeholder="NIK (No. KTP)..." minlength="16" maxlength="16" data-always-show="true" data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-primary" required>
+                    <input class="js-maxlength form-control" type="text" id="ktp" name="ktp" placeholder="NIK (No. KTP)..." minlength="16" maxlength="16" data-always-show="true" data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-primary" value="{{ old('ktp') }}" required>
                 </div>                                    
             </div>
             <div class="form-group form-row">
                 <div class="col-6">
                 <label for="instansi">Nama Lengkap</label>
-                    <input class="form-control" type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Nama Lengkap..." required>
+                    <input class="form-control" type="text" id="nama_lengkap" name="nama_lengkap" placeholder="Nama Lengkap..." value="{{ old('nama_lengkap') }}" required>
                 </div>
                 <div class="col-6">
                         <label for="instansi">Nama Panggilan</label>
-                    <input class="form-control" type="text" id="nama_panggil" name="nama_panggil" placeholder="Nama Panggilan..." required>
+                    <input class="form-control" type="text" id="nama_panggil" name="nama_panggil" placeholder="Nama Panggilan..." value="{{ old('nama_panggil') }}" required>
                 </div>
             </div>
             <div class="form-group">
                 <label for="instansi">Alamat</label>
-                <textarea class="form-control" name="alamat" placeholder="Alamat..." required></textarea>
+                <textarea class="form-control" name="alamat" placeholder="Alamat..." required>{{ old('alamat') }}</textarea>
             </div>                                
             <div class="form-group form-row">
                 <div class="col-6">
                     <label for="instansi">Tempat Lahir</label>
-                    <input class="form-control" type="text" id="tmp_lahir" name="tmp_lahir" placeholder="Tempat Lahir..." required>
+                    <input class="form-control" type="text" id="tmp_lahir" name="tmp_lahir" placeholder="Tempat Lahir..." value="{{ old('tmp_lahir') }}" required>
                 </div>
                 <div class="col-6">
                     <label for="instansi">Tanggal Lahir</label>
-                    <input class="js-datepicker form-control" type="text" id="tgl_lahir" name="tgl_lahir" placeholder="Tanggal Lahir" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="yyyy-mm-dd" required>
+                    <input class="js-datepicker form-control" type="text" id="tgl_lahir" name="tgl_lahir" placeholder="Tanggal Lahir" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="yyyy-mm-dd" value="{{ old('tgl_lahir') }}" required>
                 </div>
             </div>  
             <div class="form-group form-row">
                 <div class="col-6">
                     <label for="instansi">Jenis Kelamin</label>
                     <select class="form-control" id="jk" name="jk" style="width: 100%;" required>
-                        <option value="" selected>-- Pilih Jenis Kelamin --</option>
-                        <option value="L">Laki-laki</option>
-                        <option value="P">Perempuan</option>
+                        <option value="" {{ old('jk') == '' ? "selected" : "" }}>-- Pilih Jenis Kelamin --</option>
+                        <option value="L" {{ old('jk') == 'L' ? "selected" : "" }}>Laki-laki</option>
+                        <option value="P" {{ old('jk') == 'P' ? "selected" : "" }}>Perempuan</option>
                     </select>
                 </div>
                 <div class="col-6">
                     <label for="instansi">Agama</label>
                     <select class="form-control" id="agama" name="agama" style="width: 100%;" required>
-                        <option value="" selected>-- Pilih Agama --</option>
+                        <option value="" {{ old('agama') == '' ? "selected" : "" }}>-- Pilih Agama --</option>
                         @foreach ($agama as $a)
-                        <option value="{{ $a->id }}">{{ $a->nama }}</option>                                    
+                        <option value="{{ $a->id }}" {{ old('agama') == $a->id ? "selected" : "" }}>{{ $a->nama }}</option>                                    
                         @endforeach
                     </select>
                 </div>
@@ -80,60 +92,60 @@
             <div class="form-group form-row">
                 <div class="col-6">
                     <label for="instansi">No. Handphone</label>
-                    <input class="form-control" type="text" id="hp" name="hp" placeholder="No. Handphone..." required>
+                    <input class="form-control" type="text" id="hp" name="hp" placeholder="No. Handphone..." value="{{ old('hp') }}" required>
                 </div>
                 <div class="col-6">
                     <label for="instansi">Email</label>
-                    <input class="form-control" type="email" id="email" name="email" placeholder="Email..." required>
+                    <input class="form-control" type="email" id="email" name="email" placeholder="Email..." value="{{ old('email') }}" required>
                 </div>
             </div>              
             <div class="form-group form-row">
                 <div class="col-6">
                     <label for="instansi">Status Perkawinan</label>
                     <select class="form-control" id="marital" name="marital" style="width: 100%;" required>
-                        <option value="" selected>-- Pilih Status Perkawinan --</option>
-                        <option value="1">Menikah</option>
-                        <option value="2">Belum Menikah</option>
-                        <option value="3">Duda</option>
-                        <option value="4">Janda</option>
+                        <option value="" {{ old('marital') == '' ? "selected" : "" }}>-- Pilih Status Perkawinan --</option>
+                        <option value="1" {{ old('marital') == '1' ? "selected" : "" }}>Menikah</option>
+                        <option value="2" {{ old('marital') == '2' ? "selected" : "" }}>Belum Menikah</option>
+                        <option value="3" {{ old('marital') == '3' ? "selected" : "" }}>Duda</option>
+                        <option value="4" {{ old('marital') == '4' ? "selected" : "" }}>Janda</option>
                     </select>
                 </div>
                 <div class="col-6">
-                    <label for="instansi">Pangkat</label>
+                    <label for="instansi">Pangkat / Golongan</label>
                     <select class="form-control" id="pangkat" name="pangkat" style="width: 100%;" required>
-                        <option value="" selected>-- Pilih Pangkat --</option>
+                        <option value="" {{ old('pangkat') == '' ? "selected" : "" }}>-- Pilih Pangkat/Golongan --</option>
                         @foreach ($pangkat as $p)
-                        <option value="{{ $p->id }}">{{ $p->singkat }}</option>                                    
+                        <option value="{{ $p->id }}" {{ old('pangkat') == $p->id ? "selected" : "" }}>{{ $p->singkat }}</option>                                    
                         @endforeach
                     </select>
                 </div>                                    
             </div>                                                                                                             
             <div class="form-group">
                 <label for="instansi">Jabatan</label>
-                <input class="form-control" type="text" id="jabatan" name="jabatan" placeholder="Jabatan..." required>
+                <input class="form-control" type="text" id="jabatan" name="jabatan" placeholder="Jabatan..." value="{{ old('jabatan') }}" required>
             </div>
             <h2 class="content-heading pt-3 mb-3">Data Instansi & Unit Kerja</h2>
             <div class="form-group">
                 <label for="instansi">Instansi</label>
                 <select class="form-control" id="instansi" name="instansi" style="width: 100%;" required>
-                    <option value="" selected>-- Pilih Instansi --</option>
+                    <option value="" {{ old('instansi') == '' ? "selected" : "" }}>-- Pilih Instansi --</option>
                     @foreach ($instansi as $i)
-                    <option value="{{ $i->nama }}">{{ $i->nama }}</option>                                    
+                    <option value="{{ $i->nama }}" {{ old('instansi') == $i->nama ? "selected" : "" }}>{{ $i->nama }}</option>                                    
                     @endforeach
                 </select>
             </div>
             <div class="form-group">
                 <label for="instansi">Satuan Kerja (SKPD/OPD)</label>
-                <input class="form-control" type="text" id="satker_nama" name="satker_nama" placeholder="Satuan Kerja..." required>
+                <input class="form-control" type="text" id="satker_nama" name="satker_nama" placeholder="Satuan Kerja..." value="{{ old('satker_nama') }}" required>
             </div>
             <div class="form-group">
                 <label for="instansi">Alamat</label>
-                <textarea class="form-control" id="satker_alamat" name="satker_alamat" placeholder="Alamat Satuan Kerja..." required></textarea>
+                <textarea class="form-control" id="satker_alamat" name="satker_alamat" placeholder="Alamat Satuan Kerja..." required>{{ old('satker_alamat') }}</textarea>
             </div>    
             <div class="form-group form-row">
                 <div class="col-6">
                 <label for="instansi">No. Telepon</label>
-                <input class="form-control" type="text" id="satker_telp" name="satker_telp" placeholder="No. Telepon Satuan Kerja" required>
+                <input class="form-control" type="text" id="satker_telp" name="satker_telp" placeholder="No. Telepon Satuan Kerja" value="{{ old('satker_telp') }}" required>
                 </div>
             </div>                                                                                             
         </div>

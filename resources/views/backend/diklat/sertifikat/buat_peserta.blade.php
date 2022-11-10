@@ -59,6 +59,9 @@
                                 <th class="font-w700" style="width: 20%;">Nama</th>
                                 <th class="font-w700">Instansi</th>
                                 <th class="font-w700">Satuan Kerja</th>
+                                @if(!$sertifikat->is_generate && $sertifikat->is_upload)
+                                <th class="font-w700" style="width: 20%;">Nomor Sertifikat</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -84,7 +87,12 @@
                                 </td>
                                 <td class="d-none d-sm-table-cell">
                                     {{ $p->satker_nama }}
-                                </td>            
+                                </td>
+                                @if(!$sertifikat->is_generate && $sertifikat->is_upload)
+                                <td class="d-none d-sm-table-cell">
+                                    <input type="text" class="form-control" id="row_nomor_{{$loop->iteration}}" name="pid_nomor_{{$p->id}}" value="">
+                                </td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>

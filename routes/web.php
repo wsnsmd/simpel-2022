@@ -51,6 +51,8 @@ Route::post('/alumni', 'AlumniController@cari')->name('alumni.cari');
 
 Route::get('/send/email', 'HomeController@mail');
 
+Route::get('/sertifikat/{peserta}/{jadwal}/{sertifikat}/{email}', 'SertifikatController@show')->name('sertifikat.show');
+
 // Route::get('/test-finish', 'JadwalController@testFinish');
 
 Route::view('/informasi', 'frontend.informasi')->name('informasi');
@@ -139,6 +141,13 @@ Route::group(['prefix'=>$admin_path,'as'=>$admin_path.'.'], function () {
         Route::post('sertifikat/{jadwal}/peserta', 'Diklat\SertifikatController@buatPeserta')->name('sertifikat.buat.peserta');
         Route::post('sertifikat/{jadwal}/peserta/simpan', 'Diklat\SertifikatController@buatPesertaSimpan')->name('sertifikat.buat.peserta.simpan');
         Route::post('sertifikat/{id}/cetak', 'Diklat\SertifikatController@cetak')->name('sertifikat.cetak');
+        Route::get('sertifikat/{id}/spesimen/posisi', 'Diklat\SertifikatController@getSpesimenPos')->name('sertifikat.spesimen.posisi');
+        Route::post('sertifikat/{id}/spesimen/posisi', 'Diklat\SertifikatController@postSpesimenPos')->name('sertifikat.spesimen.posisi.update');
+        Route::post('sertifikat/{jadwal}/email', 'Diklat\SertifikatController@emailTemplate')->name('sertifikat.email.template');
+        Route::post('sertifikat/{jadwal}/email/simpan', 'Diklat\SertifikatController@emailTemplateSimpan')->name('sertifikat.email.template.simpan');
+        Route::post('sertifikat/{jadwal}/kirim/email', 'Diklat\SertifikatController@kirimEmail')->name('sertifikat.kirim.email');
+        Route::post('sertifikat/kirim/simpeg', 'Diklat\SertifikatController@kirimSimpeg')->name('sertifikat.kirim.simpeg');
+        Route::post('sertifikat/{id}/upload', 'Diklat\SertifikatController@postUpload')->name('sertifikat.upload');
 
         // Seminar
         Route::get('seminar/{jadwal}/{slug}/kelompok/create', 'Diklat\SeminarController@createKelompok')->name('seminar.kelompok.create');
@@ -181,7 +190,7 @@ Route::group(['prefix'=>'ajax','as'=>'ajax.'], function () {
 
     Route::post('caripegawai', function (Request $request) {
         $id = $request->nip;
-        $client = new Client(['http_errors' => false]);
+        $client = new Client(['http_errors' => false, 'verify' => false]);
 
         try 
         {

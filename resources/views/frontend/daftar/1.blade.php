@@ -18,14 +18,14 @@
                     <option value="3">Pemerintah Provinsi/Kementerian/Lembaga Lain</option>
                 </select>
             </div>
-            {{-- <div class="form-group">
-                <label for="status">Status PNS</label>
+            <div class="form-group">
+                <label for="status">Status ASN</label>
                 <select class="custom-select" id="status" name="status" required>
-                    <option value="">-- Pilih Status PNS --</option>
+                    <option value="">-- Pilih Status ASN --</option>
                     <option value="1">PNS</option>
-                    <option value="2">Non-PNS</option>
+                    <option value="2">PPPK</option>
                 </select>
-            </div> --}}
+            </div>
             <div class="form-group">
                 <label for="nip">NIP tanpa spasi</label>
                 <input class="js-maxlength form-control" type="text" id="nip" name="nip" placeholder="NIP tanpa spasi" minlength="18" maxlength="18" data-always-show="true" data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-primary" required>

@@ -141,7 +141,7 @@ class ChecklistController extends Controller
 
             $file = $input['file'];
             $nama_file = time()."_".$file->getClientOriginalName(); 
-            $path = $input['file']->storeAs('public/files/checklist/', $nama_file);
+            $path = $input['file']->storeAs('public/files/checklist', $nama_file);
 
             $checklist->path = $path;
             $checklist->save();

@@ -155,5 +155,7 @@ return [
         'nama' => 'Atribut',        
         'singkat' => 'Atribut',
         'pangkat' => 'Atribut',
+        'nip' => 'NIP',
+        'ktp' => 'NIK (No. KTP)'
     ],
 ];

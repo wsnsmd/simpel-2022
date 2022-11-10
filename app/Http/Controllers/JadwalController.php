@@ -142,6 +142,7 @@ class JadwalController extends Controller
 
         $request->session()->put('instansi', $request->instansi);
         $request->session()->put('nip', $request->nip);
+        $request->session()->put('status_asn', $request->status);
 
         return redirect()->route('jadwal.daftar.step2');        
     }
@@ -160,78 +161,92 @@ class JadwalController extends Controller
         }        
 
         $jadwal = DB::table('v_front_jadwal')->where('id', session('jadwal_id'))->first();
-        $pangkat = DB::table('pangkat')->get();
         $agama = DB::table('agama')->get();
+        if(session('status_asn') == 1)
+            $pangkat = DB::table('pangkat')->where('pangkat', '<>', 'PPPK')->get();
+        else 
+            $pangkat = DB::table('pangkat')->where('pangkat', '=', 'PPPK')->get();
 
         if(session('instansi') == 1)
         {
-            $instansi = DB::table('instansi')->where('id', 1)->first();
-            $id = session('nip');
-            $client = new Client(['http_errors' => false]);
-    
-            try 
+            if(session('status_asn') == 1)
             {
-                $req_pegawai = $client->get(env('SIMPEG_PNS') . $id . '/?api_token=' . env('SIMPEG_KEY'));
-    
-                if($req_pegawai->getStatusCode() == 200)
+                $instansi = DB::table('instansi')->where('id', 1)->first();
+                $id = session('nip');
+                $client = new Client(['http_errors' => false]);
+        
+                try 
                 {
-                    $res_pegawai = $req_pegawai->getBody();
-                    $data_pegawai = json_decode($res_pegawai, true);
-
-                    if($data_pegawai['status']['kode'] != 200)
-                        return redirect()->back()->with('error', $data_pegawai['keterangan']); 
-    
-                    $req_satker = $client->get(env('SIMPEG_SATKER') . $data_pegawai['id_skpd'] . '/?api_token=' . env('SIMPEG_KEY'));
-    
-                    if($req_satker->getStatusCode() == 200)
+                    $req_pegawai = $client->get(env('SIMPEG_PNS') . $id . '/?api_token=' . env('SIMPEG_KEY'));
+        
+                    if($req_pegawai->getStatusCode() == 200)
                     {
-                        $res_satker = $req_satker->getBody();
-                        $satker = json_decode($res_satker, true);
-    
-                        $nama_lengkap = $data_pegawai['nama'];
-                        $tmp_nama = explode(' ', $nama_lengkap);
-                        $singkat = '';
-    
-                        foreach($tmp_nama as $i => $key)
+                        $res_pegawai = $req_pegawai->getBody();
+                        $data_pegawai = json_decode($res_pegawai, true);
+
+                        if($data_pegawai['status']['kode'] != 200)
+                            return redirect()->back()->with('error', $data_pegawai['keterangan']); 
+        
+                        $req_satker = $client->get(env('SIMPEG_SATKER') . $data_pegawai['id_skpd'] . '/?api_token=' . env('SIMPEG_KEY'));
+        
+                        if($req_satker->getStatusCode() == 200)
                         {
-                            if($i > 0)
-                                $singkat = $singkat . substr($key, 0, 1);
+                            $res_satker = $req_satker->getBody();
+                            $satker = json_decode($res_satker, true);
+        
+                            $nama_lengkap = $data_pegawai['nama'];
+                            $tmp_nama = explode(' ', $nama_lengkap);
+                            $singkat = '';
+        
+                            foreach($tmp_nama as $i => $key)
+                            {
+                                if($i > 0)
+                                    $singkat = $singkat . substr($key, 0, 1);
+                            }
+        
+                            $nama = $tmp_nama[0] . ' ' . $singkat;
+
+                            $instansi = DB::table('instansi')->where('id', 1)->first();
+        
+                            $pegawai = array(
+                                'nip' => $data_pegawai['nip_baru'],
+                                'nik' => $data_pegawai['nik'],
+                                'nama_lengkap' => $nama_lengkap,
+                                'nama' => $nama,
+                                'telp' => $data_pegawai['no_hape'],
+                                'email' => $data_pegawai['email'],
+                                'tmp_lahir' => $data_pegawai['tempat_lahir'],
+                                'tgl_lahir' => $data_pegawai['tgl_lahir'],
+                                'jk' => simpegJK($data_pegawai['id_jenis_kelamin']),
+                                'agama' => $data_pegawai['id_agama'],
+                                'marital' => $data_pegawai['id_status_nikah'],
+                                'alamat' => $data_pegawai['alamat'],
+                                'jabatan' => $data_pegawai['jabatan'],
+                                'pangkat' => $data_pegawai['id_golongan'],
+                                'instansi' => $instansi->nama,
+                                'satker_nama' => $satker['unit_kerja'][0]['skpd'],
+                                'satker_telp' => $satker['unit_kerja'][0]['no_telp'],
+                                'satker_alamat' => $satker['unit_kerja'][0]['alamat_skpd'],
+                            );
+
+                            return view('frontend.daftar.2group1', compact('jadwal', 'pangkat', 'agama', 'instansi', 'pegawai'));
                         }
-    
-                        $nama = $tmp_nama[0] . ' ' . $singkat;
-
-                        $instansi = DB::table('instansi')->where('id', 1)->first();
-    
-                        $pegawai = array(
-                            'nip' => $data_pegawai['nip_baru'],
-                            'nik' => $data_pegawai['nik'],
-                            'nama_lengkap' => $nama_lengkap,
-                            'nama' => $nama,
-                            'telp' => $data_pegawai['no_hape'],
-                            'email' => $data_pegawai['email'],
-                            'tmp_lahir' => $data_pegawai['tempat_lahir'],
-                            'tgl_lahir' => $data_pegawai['tgl_lahir'],
-                            'jk' => simpegJK($data_pegawai['id_jenis_kelamin']),
-                            'agama' => $data_pegawai['id_agama'],
-                            'marital' => $data_pegawai['id_status_nikah'],
-                            'alamat' => $data_pegawai['alamat'],
-                            'jabatan' => $data_pegawai['jabatan'],
-                            'pangkat' => $data_pegawai['id_golongan'],
-                            'instansi' => $instansi->nama,
-                            'satker_nama' => $satker['unit_kerja'][0]['skpd'],
-                            'satker_telp' => $satker['unit_kerja'][0]['no_telp'],
-                            'satker_alamat' => $satker['unit_kerja'][0]['alamat_skpd'],
-                        );
-
-                        return view('frontend.daftar.2group1', compact('jadwal', 'pangkat', 'agama', 'instansi', 'pegawai'));
                     }
                 }
+                catch(Exception $ex)
+                {
+                    $notifikasi = 'Terjadi kesalahan, mohon cek kembali NIP Pegawai!';
+        
+                    return redirect()->back()->with('error', $notifikasi); 
+                }
             }
-            catch(Exception $ex)
+            else 
             {
-                $notifikasi = 'Terjadi kesalahan, mohon cek kembali NIP Pegawai!';
-    
-                return redirect()->back()->with('error', $notifikasi); 
+                $instansi = DB::table('instansi')->where('id', 1)->get();
+                $pegawai = array(
+                    'nip' => session('nip'),
+                );
+                return view('frontend.daftar.2group2', compact('jadwal', 'pangkat', 'agama', 'instansi', 'pegawai'));
             }
         }
         else if(session('instansi') == 2)
@@ -253,7 +268,7 @@ class JadwalController extends Controller
     public function poststep2(Request $request)
     {        
         $validator = $request->validate([            
-            // update skpk 'foto' => 'image|max:512',
+            'foto' => 'image|max:512',
             'nip' => 'required|min:18|max:18',
             'ktp' => 'required|min:16|max:16',
             'nama_lengkap' => 'required',
@@ -329,6 +344,7 @@ class JadwalController extends Controller
                         ->count();
             
             $kode = "R" . sprintf("%s%02s%04s", $tahun, $bulan, ++$result);
+            $status_asn = session('status_asn');
 
             $id = DB::table('peserta')->insertGetId([
                 'kode' => $kode,
@@ -353,6 +369,7 @@ class JadwalController extends Controller
                 'satker_telp' => $request->satker_telp,
                 'diklat_jadwal_id' => $jadwal->id,
                 'token' => $token,
+                'status_asn' => $status_asn,
                 'created_at' => $created_at,
             ]);
 
@@ -365,6 +382,7 @@ class JadwalController extends Controller
                 'instansi',
                 'peserta',
                 'foto_temp',
+                'status_asn',
             ]);
 
             $peserta = DB::table('peserta')->find($id);
@@ -391,18 +409,15 @@ class JadwalController extends Controller
             abort(404);
         }
 
-        if($peserta->konfirmasi)
-        {
-            abort(404);
-        }
-
-        DB::table('peserta')->where('id', $id)->update([
-            'konfirmasi' => true
-        ]);
-
         $jadwal = DB::table('v_jadwal_detail')->find($peserta->diklat_jadwal_id);
 
-        Mail::to($peserta->email)->send(new VerifikasiWaitMailable($peserta->nama_lengkap, $jadwal));
+        if(!$peserta->konfirmasi)
+        {
+            DB::table('peserta')->where('id', $id)->update([
+                'konfirmasi' => true
+            ]);
+            Mail::to($peserta->email)->send(new VerifikasiWaitMailable($peserta->nama_lengkap, $jadwal));
+        }
 
         return view('frontend.daftar.konfirmasi', compact('jadwal', 'peserta'));
     }

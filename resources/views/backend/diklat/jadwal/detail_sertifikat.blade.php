@@ -85,12 +85,68 @@
                 $('#mdl-buat-form').trigger('reset');
                 // $('textarea[name=keterangan]').val('');
                 $('.is-invalid').removeClass('is-invalid');
+                $('#generate').addClass('d-none');
             });
+
+            $('#mdl-simpeg').on('hidden.bs.modal', function() {
+                $('#mdl-simpeg-form').trigger('reset');
+                $('#simpeg').addClass('d-none');
+            });
+
+            $('#is_generate').on('change', function () {
+                if($('#is_generate').val() == true) {
+                    $('#generate').removeClass('d-none');
+                }
+                else {
+                    $('#generate').addClass('d-none');
+                }
+            });
+
+            $('#simpeg_jenis').on('change', function () {
+                if($('#simpeg_jenis').val() == true) {
+                    $('#simpeg').removeClass('d-none');
+                }
+                else {
+                    $('#simpeg').addClass('d-none');
+                    $('#simpeg_struktural').prop('selectedIndex', 0);
+                }
+            })
         })        
         
         function showBuat() {
             action = 'add';
             $('#mdl-buat').modal('show');
+        }
+
+        function showSpesimen(id) {
+            $('#mdl-pos-spesimen').modal('show');
+            var url = "{{ route('backend.diklat.sertifikat.spesimen.posisi', ':id') }}";
+            var url_update = "{{ route('backend.diklat.sertifikat.spesimen.posisi.update', ':id') }}";
+            url = url.replace(':id', id);
+            url_update = url_update.replace(':id', id);
+            $('#mdl-pos-spesimen-form').attr('action', url_update);
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function(data) {
+                    $('#bawah').val(data.spesimen_bawah);
+                    $('#kiri').val(data.spesimen_kiri);
+                    $('#mdl-pos-spesimen').modal('show');
+                }
+            });
+        }
+
+        function showUpload(id) {
+            $('#mdl-upload').modal('show');
+            var url_upload = "{{ route('backend.diklat.sertifikat.upload', ':id') }}";
+            url_upload = url_upload.replace(':id', id);
+            $('#mdl-upload-form').attr('action', url_upload);
+            console.log(id);
+        }
+
+        function showSimpeg() {
+            $('#mdl-simpeg').modal('show');
         }
     </script>
 @endsection
@@ -156,6 +212,45 @@
                     @csrf                
                 </form>
             </div>
+            <div class="col-6 col-md-4 col-xl-2">
+                <a class="block block-rounded block-link-pop text-center d-flex align-items-center" href="javascript:;" onclick="showSimpeg()">
+                    <div class="block-content">
+                        <p class="mb-2 d-sm-block">
+                            <i class="fa fa-users text-info fa-2x"></i>
+                        </p>
+                        <p class="font-w600 font-size-sm text-uppercase">Upload Simpeg</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-6 col-md-4 col-xl-2">
+                <a class="block block-rounded block-link-pop text-center d-flex align-items-center" href="javascript:;" onclick="event.preventDefault(); document.getElementById('email-template-form').submit();">
+                    <div class="block-content">
+                        <p class="mb-2 d-sm-block">
+                            <i class="fa fa-envelope-open-text text-danger fa-2x"></i>
+                        </p>
+                        <p class="font-w600 font-size-sm text-uppercase">Template Email</p>
+                    </div>
+                </a>
+                <form id="email-template-form" action="{{ route('backend.diklat.sertifikat.email.template', ['jadwal' => $jadwal->id]) }}" method="post" style="display: none;">
+                    @csrf                
+                </form>
+            </div>
+            @if(!is_null($email))
+            <div class="col-6 col-md-4 col-xl-2">
+                <a class="block block-rounded block-link-pop text-center d-flex align-items-center" href="javascript:;" onclick="event.preventDefault(); document.getElementById('kirim-email-form').submit();">
+                    <div class="block-content">
+                        <p class="mb-2 d-sm-block">
+                            <i class="fa fa-mail-bulk text-secondary fa-2x"></i>
+                        </p>
+                        <p class="font-w600 font-size-sm text-uppercase">Kirim Email</p>
+                    </div>
+                </a>
+                <form id="kirim-email-form" action="{{ route('backend.diklat.sertifikat.kirim.email', ['jadwal' => $jadwal->id]) }}" method="post" style="display: none;">
+                    @csrf 
+                    <input type="hidden" name="sertifikat_id" value="{{ $sertifikat->id }}" />               
+                </form>
+            </div>
+            @endif
             @endif
             @endif   
         </div>
@@ -176,13 +271,18 @@
                     <table class="table table-bordered table-striped table-vcenter js-dataTable-full">
                         <thead>
                             <tr>
-                                <th class="font-w700 text-center" style="width: 30px;">#</th>
-                                <th class="font-w700 text-center" style="width: 60px;">Nomor</th>
-                                <th class="font-w700 text-center" style="width: 12%;">NIP</th>   
-                                <th class="font-w700 text-center">Nama</th>                         
-                                <th class="font-w700 text-center">Satuan Kerja</th>
-                                <th class="font-w700 text-center">Instansi</th>
-                                <th class="font-w700 text-center" style="width: 10%;">Aksi</th>
+                                <th class="font-w700 text-center" style="width: 30px; vertical-align: middle;" rowspan="2">#</th>
+                                <th class="font-w700 text-center" style="width: 60px; vertical-align: middle;" rowspan="2">Nomor</th>
+                                <th class="font-w700 text-center" style="width: 12%; vertical-align: middle;" rowspan="2">NIP</th>   
+                                <th class="font-w700 text-center" style="vertical-align: middle;" rowspan="2">Nama</th>                         
+                                <th class="font-w700 text-center" style="vertical-align: middle;" rowspan="2">Satuan Kerja</th>
+                                <th class="font-w700 text-center" style="vertical-align: middle;" rowspan="2">Instansi</th>
+                                <th class="font-w700 text-center" colspan="2">Status Kirim</th>
+                                <th class="font-w700 text-center" style="width: 10%; vertical-align: middle;" rowspan="2">Aksi</th>
+                            </tr>
+                            <tr>
+                                <th class="font-w700 text-center">Simpeg</th>
+                                <th class="font-w700 text-center">Email</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -204,14 +304,47 @@
                                 </td>          
                                 <td class="font-w600">
                                     {{ $sp->instansi }}
-                                </td>               
-                                <td class="text-center">
-                                    <form action="{{ route('backend.diklat.sertifikat.cetak', $sp->spid) }}" method="POST" target="_cetak">
-                                        @csrf
-                                        <button type="submit" class="btn btn-sm btn-outline-primary">
-                                            <i class="fa fa-print mr-1"></i> Cetak
+                                </td>
+                                <td class="font-w600 text-center">
+                                    @if(is_null($sp->simpeg_at))
+                                    <span class="badge badge-danger">Belum</span>
+                                    @else
+                                    <span class="badge badge-success">Sudah</span>
+                                    @endif
+                                </td>
+                                <td class="font-w600">
+                                    @if(is_null($sp->email_at))
+                                    <span class="badge badge-danger">Belum</span>
+                                    @else
+                                    <span class="badge badge-success">Sudah</span>
+                                    @endif
+                                </td>           
+                                <td class="text-center fs-base">
+                                    <div class="d-flex justify-content-center">                                   
+                                    @if($sertifikat->is_generate)
+                                        <form action="{{ route('backend.diklat.sertifikat.cetak', $sp->spid) }}" method="POST" target="_cetak">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-primary" title="Cetak">
+                                                <i class="fa fa-print"></i>
+                                            </button>
+                                        </form>
+                                        @if(!is_null($sertifikat->tsid))
+                                            <button type="button" class="btn btn-sm btn-info mx-1" title="Posisi Spesimen" onclick="showSpesimen({{$sp->spid}})">
+                                                <i class="fa fa-file-alt"></i>
+                                            </button>
+                                        @endif
+                                    @endif
+                                    @if($sertifikat->is_upload)
+                                        <button type="button" class="btn btn-sm btn-warning" title="Upload" onclick="showUpload({{$sp->spid}})">
+                                            <i class="fa fa-upload"></i>
                                         </button>
-                                    </form>
+                                        @if (!is_null($sp->upload))
+                                        <a href="{{ asset(\Storage::url($sp->upload)) }}" class="btn btn-sm btn-success mx-1" title="Lihat" target="_blank">
+                                            <i class="fa fa-eye"></i> 
+                                        </a>
+                                        @endif
+                                    @endif
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach
@@ -221,25 +354,201 @@
             </div>
         </div>
         <!-- END Peserta Sertifikat -->
-        @endif
 
-        <!-- Modal Buat -->
-        <div class="modal fade" id="mdl-buat" tabindex="-1" role="dialog" aria-labelledby="mdl-buat" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-popin" role="document">
-                <form id="mdl-buat-form" method="POST" action="{{ route('backend.diklat.sertifikat.store') }}" autocomplete="off">
+        <!-- Modal Posisi Spesimen -->
+        <div class="modal fade" id="mdl-pos-spesimen" tabindex="-1" role="dialog" aria-labelledby="mdl-pos-spesimen" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-popin" role="document">
+                <form id="mdl-pos-spesimen-form" method="POST" action="" autocomplete="off">
                     @csrf
                     <input type="hidden" name="jadwal_id" value="{{ $jadwal->id }}">
                     <div class="modal-content">
-                            <div class="block block-themed block-transparent mb-0">
-                                <div class="block-header bg-primary-dark">
-                                    <h3 class="block-title" id="mdl-form-title">Buat Sertifikat</h3>
-                                    <div class="block-options">
-                                        <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
-                                            <i class="fa fa-fw fa-times"></i>
-                                        </button>
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">Posisi Spesimen</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content" id="mdl-form-content">                                    
+                                <div class="form-group form-row">
+                                    <div class="col-6">
+                                        <label for="kiri" class="control-label">Kiri <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="kiri" name="kiri" placeholder="10.0" required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="bawah" class="control-label">Bawah <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="bawah" name="bawah" placeholder="5.5" required>
                                     </div>
                                 </div>
-                                <div class="block-content" id="mdl-form-content">
+                                <div class="form-group form-row">
+                                    <div class="col-6">
+                                        <div class="custom-control custom-checkbox custom-control-primary mb-1">
+                                            <input class="custom-control-input" type="checkbox" value="" id="spesimen_semua" name="spesimen_semua">
+                                            <label class="custom-control-label" for="spesimen_semua">Semua</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full text-right bg-light">
+                                <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-sm btn-primary btn-submit"></i> Simpan</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- END Modal Posisi Spesimen -->
+
+        @if($sertifikat->is_upload)
+        <!-- Modal Upload -->
+        <div class="modal fade" id="mdl-upload" tabindex="-1" role="dialog" aria-labelledby="mdl-upload" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-popin" role="document">
+                <form id="mdl-upload-form" method="POST" action="" enctype="multipart/form-data" autocomplete="off">
+                    @csrf
+                    <input type="hidden" name="jadwal_id" value="{{ $jadwal->id }}">
+                    <div class="modal-content">
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">Upload Sertifikat</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content" id="mdl-form-content">                                    
+                                <div class="form-group">
+                                    <label for="file" class="control-label">File <span class="text-danger">*</span></label>
+                                    <input type="file" class="form-control" id="file" name="file" accept="application/pdf" required>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full text-right bg-light">
+                                <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-sm btn-primary btn-submit"></i> Simpan</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- END Modal Upload -->
+        @endif
+
+        <!-- Modal Simpeg -->
+        <div class="modal fade" id="mdl-simpeg" tabindex="-1" role="dialog" aria-labelledby="mdl-simpeg" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-popin" role="document">
+                <form id="mdl-simpeg-form" method="POST" action="{{ route('backend.diklat.sertifikat.kirim.simpeg') }}" autocomplete="off">
+                    @csrf
+                    <input type="hidden" name="jadwal_id" value="{{ $jadwal->id }}">
+                    <div class="modal-content">
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">Upload Simpeg</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content" id="mdl-form-content">                                    
+                                <div class="form-group">
+                                    <label for="simpeg_jenis" class="control-label">Jenis Pelatihan <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="simpeg_jenis" name="jenis" style="width: 100%;" required>
+                                        <option value="" selected>-- Pilih Jenis --</option>
+                                        <option value="1">Struktural</option>
+                                        <option value="2">Fungsional</option>
+                                        <option value="3">Teknis</option>
+                                        <option value="4">Seminar</option>
+                                    </select>
+                                </div>
+                                <div id="simpeg" class="option-target d-none">
+                                    <div class="form-group">
+                                        <label for="simpeg_struktural" class="control-label">Jenis Struktural <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="simpeg_struktural" name="struktural" style="width: 100%;">
+                                            <option value="" selected>-- Pilih Jenis Struktural --</option>
+                                            <option value="2">PKP / DIKLAT PIM IV / SEPADA / SEPALA/ ADUM / ADUMLA </option>
+                                            <option value="3">PKA / DIKLAT PIM III / SEPADYA / SEPAMA / </option>
+                                            <option value="4">DIKLAT PIM II / SESPA / SEPAMEN</option>
+                                            <option value="5">DIKLAT PIM I</option>
+                                            <option value="6">LEMHANAS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full text-right bg-light">
+                                <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-sm btn-primary btn-submit"></i> Simpan</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- END Modal Simpeg -->
+
+        @else
+        <!-- Modal Buat -->
+        <div class="modal fade" id="mdl-buat" tabindex="-1" role="dialog" aria-labelledby="mdl-buat" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-popin" role="document">
+                <form id="mdl-buat-form" method="POST" action="{{ route('backend.diklat.sertifikat.store') }}" autocomplete="off" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="jadwal_id" value="{{ $jadwal->id }}">
+                    <div class="modal-content">
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title" id="mdl-form-title">Buat Sertifikat</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content" id="mdl-form-content">
+                                <div class="form-group form-row">
+                                    <div class="col-6">
+                                        <label for="is_generate" class="control-label">Generate Otomatis <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="is_generate" name="is_generate" style="width: 100%;" required>
+                                            <option value="0">Tidak</option>
+                                            <option value="1">Ya</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="is_upload" class="control-label">Upload <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="is_upload" name="is_upload" style="width: 100%;" required>
+                                            <option value="0">Tidak</option>
+                                            <option value="1">Ya</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group form-row">
+                                    <div class="col-6">
+                                        <label for="tempat" class="control-label">Tempat Sertifikat <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="tempat" name="tempat" placeholder="Cth. Samarinda..." required>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="tanggal" class="control-label">Tanggal Sertifikat <span class="text-danger">*</span></label>
+                                        <input type="text" class="js-datepicker form-control" id="tanggal" name="tanggal" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" required>
+                                    </div>
+                                </div>
+                                <div id="generate" class="option-target d-none">
+                                    <div class="form-group form-row">
+                                        <div class="col-6">
+                                            <label for="tsid" class="control-label">Template <span class="text-danger">*</span></label>
+                                            <select class="form-control" id="tsid" name="tsid" style="width: 100%;" required>
+                                                <option value="" selected>-- Pilih Template --</option>
+                                                @foreach ($template as $tp)
+                                                <option value="{{ $tp->id }}">{{ $tp->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="format_nomor" class="control-label">Format Nomor <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="format_nomor" name="format_nomor" placeholder="Cth. {N}/{m}/{y}" value="" required>
+                                        </div>
+                                    </div>   
                                     <div class="form-group form-row">
                                         <div class="col-6">
                                             <label for="barcode" class="control-label">Barcode <span class="text-danger">*</span></label>
@@ -257,27 +566,7 @@
                                                 <option value="1">Ya</option>
                                             </select>
                                         </div>
-                                    </div>                         
-                                    <div class="form-group form-row">
-                                        <div class="col-6">
-                                            <label for="import" class="control-label">Import <span class="text-danger">*</span></label>
-                                            <select class="form-control" id="import" name="import" style="width: 100%;" required>
-                                                <option value="" selected>-- Pilih Import --</option>
-                                                <option value="0">Tidak</option>
-                                                <option value="1">Ya</option>
-                                            </select>
-                                        </div>
-                                    </div>                                    
-                                    <div class="form-group form-row">
-                                        <div class="col-6">
-                                            <label for="tempat" class="control-label">Tempat Sertifikat <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="tempat" name="tempat" placeholder="Cth. Samarinda..." required>
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="tanggal" class="control-label">Tanggal Sertifikat<span class="text-danger">*</span></label>
-                                            <input type="text" class="js-datepicker form-control" id="tanggal" name="tanggal" data-week-start="1" data-autoclose="true" data-today-highlight="true" data-date-format="yyyy-mm-dd" placeholder="yyyy-mm-dd" required>
-                                        </div>
-                                    </div>
+                                    </div>                                                          
                                     <h2 class="content-heading pt-0 mb-3">Pejabat Penandatangan</h2>
                                     <div class="form-group form-row">
                                         <div class="col-6">
@@ -298,18 +587,26 @@
                                             <label for="pangkat" class="control-label">Pangkat <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="pangkat" name="pangkat" placeholder="Pangkat..." required>
                                         </div>
-                                    </div>                                
-                                </div>
-                                <div class="block-content block-content-full text-right bg-light">
-                                    <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-sm btn-primary btn-submit"></i> Simpan</button>
-                                </div>
+                                    </div>
+                                    <div class="form-group form-row">
+                                        <div class="col-6">
+                                            <label for="spesimen" class="control-label">Spesimen</label>
+                                            <input type="file" class="form-control" id="spesimen" name="spesimen" accept="image/png">
+                                        </div>
+                                    </div>    
+                                </div>                           
+                            </div>
+                            <div class="block-content block-content-full text-right bg-light">
+                                <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-sm btn-primary btn-submit"></i> Simpan</button>
                             </div>
                         </div>
+                    </div>
                 </form>
             </div>
         </div>
         <!-- END Modal Buat -->
+        @endif
     </div>
     <!-- END Page Content -->     
 @endsection

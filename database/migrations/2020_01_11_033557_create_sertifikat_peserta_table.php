@@ -23,7 +23,12 @@ class CreateSertifikatPesertaTable extends Migration
             $table->string('kualifikasi')->nullable();
             $table->unsignedInteger('tahun');
             $table->string('bidang');
+            $table->text('upload')->nullable();
+            $table->string('spesimen_kiri')->nullable();
+            $table->string('spesimen_bawah')->nullable();
             $table->timestamps();
+            $table->date('simpeg_at')->nullable();
+            $table->date('email_at')->nullable();
         });
     }
 

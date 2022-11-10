@@ -128,6 +128,7 @@ class PesertaController extends Controller
                 'konfirmasi' => true,
                 // 'batal' => $request->batal,
                 // 'batal_ket' => $request->batal_ket,
+                'status_asn' => $request->status_asn,
                 'created_at' => $created_at,
             ]);
 
@@ -238,6 +239,7 @@ class PesertaController extends Controller
                 'verifikasi' => $request->verifikasi,
                 'batal' => $request->batal,
                 'batal_ket' => $request->batal_ket,
+                'status_asn' => $request->status_asn,
                 'updated_at' => $updated_at,
             ]);
 

@@ -512,10 +512,12 @@ class JadwalController extends Controller
         if(!is_null($sertifikat))
         {
             $sertPeserta = DB::table('v_sertifikat')->where('sertifikat_id', $sertifikat->id)->get();
-            return view('backend.diklat.jadwal.detail_sertifikat', compact('jadwal', 'sertifikat', 'sertPeserta'));
+            $email = DB::table('sertifikat_email')->where('sertifikat_id', $sertifikat->id)->first();
+            return view('backend.diklat.jadwal.detail_sertifikat', compact('jadwal', 'sertifikat', 'sertPeserta', 'email'));
         }
+        $template = DB::table('sertifikat_template')->orderBy('nama')->get();
 
-        return view('backend.diklat.jadwal.detail_sertifikat', compact('jadwal', 'sertifikat'));
+        return view('backend.diklat.jadwal.detail_sertifikat', compact('jadwal', 'sertifikat', 'template'));
     }
 
     public function mapel($jadwal)

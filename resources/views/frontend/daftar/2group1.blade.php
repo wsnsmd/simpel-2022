@@ -9,6 +9,18 @@
         @csrf
         <input type="hidden" name="step" value="2">
         <div class="block-content block-content-full">
+            @if(count($errors) > 0)
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <ul class="px-3 m-0">
+                    @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
             <h2 class="content-heading pt-0">Data Peserta</h2>
             <div class="form-group mb-0">
                 <label for="foto">Foto</label><br>
@@ -102,9 +114,9 @@
                     </select>
                 </div>
                 <div class="col-6">
-                    <label for="instansi">Pangkat</label>
+                    <label for="instansi">Pangkat / Golongan</label>
                     <select class="form-control" id="pangkat" name="pangkat" style="width: 100%;" required>
-                        <option value="" selected>-- Pilih Pangkat --</option>
+                        <option value="" selected>-- Pilih Pangkat/Golongan --</option>
                         @foreach ($pangkat as $p)
                         <option value="{{ $p->id }}" {{ $pegawai['pangkat'] == $p->id ? 'selected' : ''}}>{{ $p->singkat }}</option>                                    
                         @endforeach
