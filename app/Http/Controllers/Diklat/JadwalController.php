@@ -92,6 +92,7 @@ class JadwalController extends Controller
             'tgl_awal' => 'required',
             'tgl_akhir' => 'required',
             'registrasi' => 'required',
+            'registrasi_lengkap' => 'required',
             'panitia_nama' => 'required',
             'panitia_telp' => 'required',
             'panitia_email' => 'required',
@@ -125,6 +126,7 @@ class JadwalController extends Controller
                 'tahun' => $tahun,
                 'kelas' => $request->kelas,
                 'registrasi' => $request->registrasi,
+                'registrasi_lengkap' => $request->registrasi_lengkap,
                 'reg_awal' => $request->reg_awal,
                 'reg_akhir' => $request->reg_akhir,
                 'panitia_nama' => $request->panitia_nama,
@@ -190,6 +192,7 @@ class JadwalController extends Controller
             'tgl_awal' => 'required',
             'tgl_akhir' => 'required',
             'registrasi' => 'required',
+            'registrasi_lengkap' => 'required',
             'panitia_nama' => 'required',
             'panitia_telp' => 'required',
             'panitia_email' => 'required',
@@ -227,6 +230,7 @@ class JadwalController extends Controller
                 'tahun' => $tahun,
                 'kelas' => $request->kelas,
                 'registrasi' => $request->registrasi,
+                'registrasi_lengkap' => $request->registrasi_lengkap,
                 'reg_awal' => $request->reg_awal,
                 'reg_akhir' => $request->reg_akhir,
                 'panitia_nama' => $request->panitia_nama,
@@ -492,6 +496,9 @@ class JadwalController extends Controller
                     ->where('batal', true)
                     ->get();
 
+        if(!$jadwal->registrasi_lengkap)
+            return view('backend.diklat.jadwal.detail_peserta_s', compact('jadwal', 'pes_verif', 'pes_noverif', 'pes_confirm', 'pes_batal', 'pes_tolak'));
+        
         return view('backend.diklat.jadwal.detail_peserta', compact('jadwal', 'pes_verif', 'pes_noverif', 'pes_confirm', 'pes_batal', 'pes_tolak'));
     }
 

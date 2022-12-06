@@ -13,14 +13,16 @@ class SertifikatController extends Controller
     //
     public function show($peserta, $jadwal, $sertifikat, $email)
     {
+        $cekSertifikat = DB::table('sertifikat_peserta')->where('id', $sertifikat)->first();
         $cek = DB::table('v_sertifikat')
                     ->where('id', $peserta)
+                    ->where('sertifikat_id', $cekSertifikat->sertifikat_id)
                     ->first();
-        
+
         if($cek->id == $peserta && $cek->diklat_jadwal_id == $jadwal && $cek->spid == $sertifikat && str_slug($cek->email) == $email)
         {
             $sertPeserta = DB::table('v_sertifikat')
-                        ->select('nip', 'nama_lengkap', 'tmp_lahir', 'tgl_lahir', 'jabatan', 'foto', 'instansi', 'satker_nama', 'diklat_jadwal_id', 'pangkat', 'golongan', 'nomor', 'sertifikat_id', 'spesimen_kiri', 'spesimen_bawah', 'upload') 
+                        ->select('nip', 'nama_lengkap', 'tmp_lahir', 'tgl_lahir', 'jabatan', 'foto', 'instansi', 'satker_nama', 'diklat_jadwal_id', 'pangkat', 'golongan', 'nomor', 'sertifikat_id', 'spesimen_kiri', 'spesimen_bawah', 'upload')
                         ->where('spid', $sertifikat)
                         ->first();
 
@@ -45,7 +47,7 @@ class SertifikatController extends Controller
             {
                 $sertPeserta->foto = asset(\Storage::url($sertPeserta->foto));
             }
-            else 
+            else
             {
                 $sertPeserta->foto = asset('media/avatars/avatar8.jpg');
             }

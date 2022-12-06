@@ -137,7 +137,7 @@
                                                 {!! $sertPeserta->nama_lengkap !!} <br />
                                             </span>
                                             <hr class="style2" />
-                                            <span style="font-weight: bold; font-size: 14pt; font-family: bookman">Sebagai Peserta</span>
+                                            <span style="font-weight: bold; font-size: 14pt; font-family: bookman">Sebagai {!! $sertPeserta->sebagai !!}</span>
                                         </td>
                                     </tr>						
                                 </tbody>

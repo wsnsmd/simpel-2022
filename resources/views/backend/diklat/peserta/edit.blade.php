@@ -205,10 +205,11 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="status_asn">Status ASN</label>
                         <div class="col-sm-9">
-                            <select class="custom-select" id="status_asn" name="status_asn">
+                            <select class="custom-select" id="status_asn" name="status_asn" required>
                                 <option value="">-- Pilih Status ASN --</option>
                                 <option value="1" {{ ($peserta->status_asn == 1 ? 'selected' : '') }}>PNS</option>
                                 <option value="2" {{ ($peserta->status_asn == 2 ? 'selected' : '') }}>PPPK</option>
+                                <option value="0" {{ ($peserta->status_asn == 0 ? 'selected' : '') }}>Non-ASN</option>
                             </select>
                         </div>
                     </div>

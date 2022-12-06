@@ -7,17 +7,13 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-use PhpOffice\PhpSpreadsheet\Helper\Sample;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use App\Jobs\EmailVerifikasiStatusJob;
 use App\Mail\DaftarMailable;
 use App\Mail\VerifikasiStatusMailable;
 use Gate;
 use Session;
-use File;
 use Storage;
 use ZipArchive;
 
@@ -33,7 +29,7 @@ class PesertaController extends Controller
         });
         $this->user = Auth::user();
     }
-    
+
     public function index()
     {
 
@@ -48,12 +44,15 @@ class PesertaController extends Controller
         $agama = DB::table('agama')->get();
         $instansi = DB::table('instansi')->get();
 
+        if(!$jadwal->registrasi_lengkap)
+            return view('backend.diklat.peserta.create_simple', compact('jadwal', 'instansi'));
+
         return view('backend.diklat.peserta.create', compact('jadwal', 'pangkat', 'agama', 'instansi'));
     }
 
     public function store(Request $request, $id)
     {
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'foto' => 'image|max:512',
             // 'nip' => 'required|min:18|max:18',
             // 'ktp' => 'required|min:16|max:16',
@@ -78,11 +77,11 @@ class PesertaController extends Controller
             // 'batal_ket' => 'required_if:batal,==,1'
         ]);
 
-        try 
+        try
         {
             $this->checkAuth($id);
 
-            $jadwal = DB::table('diklat_jadwal')->where('id', $id)->first();            
+            $jadwal = DB::table('diklat_jadwal')->where('id', $id)->first();
             $bulan = date('m');
             $tahun = date('Y');
             $created_at = date('Y-m-d H:i:s');
@@ -92,13 +91,13 @@ class PesertaController extends Controller
                         ->whereMonth('created_at', '=', $bulan)
                         ->whereYear('created_at', '=', $tahun)
                         ->count();
-            
+
             $kode = "R" . sprintf("%s%02s%04s", $tahun, $bulan, ++$result);
 
             if(isset($request->foto))
             {
                 $foto = $request->file('foto');
-                $nama_file = time()."_".$foto->getClientOriginalName();    
+                $nama_file = time()."_".$foto->getClientOriginalName();
                 $path = $request->foto->storeAs('public/files/photo/peserta', $nama_file);
             }
 
@@ -140,13 +139,88 @@ class PesertaController extends Controller
                             'success' => $notifikasi,
                             'page' => 'peserta'
                         ]);
-            
-            return redirect()->back()->with('success', $notifikasi); 
+
+            return redirect()->back()->with('success', $notifikasi);
         }
         catch(\Exception $e)
         {
             $notifikasi = 'Data peserta gagal ditambahkan!';
-            return redirect()->back()->with('error', $notifikasi); 
+            return redirect()->back()->with('error', $notifikasi);
+        }
+    }
+
+    public function storeSimple(Request $request, $id)
+    {
+        $validator = $request->validate([
+            'status_asn' => 'required',
+            'nama_lengkap' => 'required',
+            'jk' => 'required',
+            'hp' => 'required',
+            'email' => 'required|email',
+            'jabatan' => 'required',
+            'instansi' => 'required',
+            'sebagai' => 'required',
+        ]);
+
+        try
+        {
+            $this->checkAuth($id);
+
+            $jadwal = DB::table('diklat_jadwal')->where('id', $id)->first();
+            $peserta = DB::table('peserta')
+                    ->where('email', $request->email)
+                    ->where('diklat_jadwal_id', $jadwal->id)
+                    ->first();
+
+            if(!empty($peserta))
+            {
+                $notifikasi = 'Email Anda telah terdaftar untuk mengikuti kegiatan ini!';
+                return redirect()->back()->with('error', $notifikasi);
+            }
+
+            $bulan = date('m');
+            $tahun = date('Y');
+            $created_at = date('Y-m-d H:i:s');
+
+            $result = DB::table('peserta')
+                        ->whereMonth('created_at', '=', $bulan)
+                        ->whereYear('created_at', '=', $tahun)
+                        ->count();
+
+            $kode = "R" . sprintf("%s%02s%04s", $tahun, $bulan, ++$result);
+
+            DB::table('peserta')->insert([
+                'kode' => $kode,
+                'nip' => $request->nip,
+                'nama_lengkap' => $request->nama_lengkap,
+                'jk' => $request->jk,
+                'hp' => $request->hp,
+                'email' => $request->email,
+                'jabatan' => $request->jabatan,
+                'instansi' => $request->instansi,
+                'diklat_jadwal_id' => $jadwal->id,
+                'verifikasi' => true,
+                'konfirmasi' => true,
+                'status_asn' => $request->status_asn,
+                'sebagai' => $request->sebagai,
+                'created_at' => $created_at,
+            ]);
+
+            $notifikasi = 'Data peserta berhasil ditambahkan!';
+
+            if(isset($request->add))
+                return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'peserta'])
+                        ->with([
+                            'success' => $notifikasi,
+                            'page' => 'peserta'
+                        ]);
+
+            return redirect()->back()->with('success', $notifikasi);
+        }
+        catch(\Exception $e)
+        {
+            $notifikasi = 'Data peserta gagal ditambahkan!';
+            return redirect()->back()->with('error', $notifikasi);
         }
     }
 
@@ -165,18 +239,22 @@ class PesertaController extends Controller
         $agama = DB::table('agama')->get();
         $instansi = DB::table('instansi')->get();
 
+        if(!$jadwal->registrasi_lengkap)
+            return view('backend.diklat.peserta.edit_simple', compact('jadwal', 'peserta', 'instansi'));
+
         return view('backend.diklat.peserta.edit', compact('jadwal', 'peserta', 'pangkat', 'agama', 'instansi'));
     }
 
     public function update(Request $request, $id)
     {
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'foto' => 'image|max:512',
             // 'nip' => 'required|min:18|max:18',
             // 'ktp' => 'required|min:16|max:16',
             'nama_lengkap' => 'required',
             // 'nama_panggil' => 'required',
             // 'alamat' => 'required',
+            'status_asn' => 'required',
             'jk' => 'required',
             'tmp_lahir' => 'required',
             'tgl_lahir' => 'required|date',
@@ -195,11 +273,11 @@ class PesertaController extends Controller
             'batal_ket' => 'required_if:batal,==,1'
         ]);
 
-        try 
+        try
         {
             $peserta = DB::table('peserta')->where('id', $id)->first();
             $this->checkAuth($peserta->diklat_jadwal_id);
-            $jadwal = DB::table('diklat_jadwal')->where('id', $peserta->diklat_jadwal_id)->first();            
+            $jadwal = DB::table('diklat_jadwal')->where('id', $peserta->diklat_jadwal_id)->first();
             $bulan = date('m');
             $tahun = date('Y');
             $updated_at = date('Y-m-d H:i:s');
@@ -208,10 +286,10 @@ class PesertaController extends Controller
             if(isset($request->foto))
             {
                 $foto = $request->file('foto');
-                $nama_file = time()."_".$foto->getClientOriginalName();    
+                $nama_file = time()."_".$foto->getClientOriginalName();
                 $path = $request->foto->storeAs('public/files/photo/peserta', $nama_file);
             }
-            else 
+            else
             {
                 $path = $request->foto_lama;
             }
@@ -257,7 +335,54 @@ class PesertaController extends Controller
         catch(\Exception $e)
         {
             $notifikasi = 'Data peserta gagal diubah!';
-            return redirect()->back()->with('error', $e->getMessage()); 
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function updateSimple(Request $request, $id)
+    {
+        $validator = $request->validate([
+            'status_asn' => 'required',
+            'nama_lengkap' => 'required',
+            'jk' => 'required',
+            'hp' => 'required',
+            'email' => 'required|email',
+            'jabatan' => 'required',
+            'instansi' => 'required',
+            'sebagai' => 'required',
+        ]);
+
+        try
+        {
+            $peserta = DB::table('peserta')->where('id', $id)->first();
+            $this->checkAuth($peserta->diklat_jadwal_id);
+            $jadwal = DB::table('diklat_jadwal')->where('id', $peserta->diklat_jadwal_id)->first();
+            $updated_at = date('Y-m-d H:i:s');
+
+            DB::table('peserta')->where('id', $id)->update([
+                'nama_lengkap' => $request->nama_lengkap,
+                'jk' => $request->jk,
+                'hp' => $request->hp,
+                'email' => $request->email,
+                'jabatan' => $request->jabatan,
+                'instansi' => $request->instansi,
+                'status_asn' => $request->status_asn,
+                'sebagai' => $request->sebagai,
+                'updated_at' => $updated_at,
+            ]);
+
+            $notifikasi = 'Data peserta berhasil diubah!';
+
+            return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'peserta'])
+                    ->with([
+                        'success' => $notifikasi,
+                        'page' => 'peserta'
+                    ]);
+        }
+        catch(\Exception $e)
+        {
+            $notifikasi = 'Data peserta gagal diubah!';
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -273,7 +398,7 @@ class PesertaController extends Controller
         {
             $notifikasi = 'Data peserta berhasil dihapus!';
             return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'peserta'])
-                    ->with([                        
+                    ->with([
                         'success' => $notifikasi,
                         'page' => 'peserta'
                     ]);
@@ -294,9 +419,9 @@ class PesertaController extends Controller
         $jadwal = DB::table('v_jadwal_detail')->where('id', $peserta->diklat_jadwal_id)->first();
         $verifikasi = $request->setuju;
 
-        try 
+        try
         {
-            switch($verifikasi) 
+            switch($verifikasi)
             {
                 case 1:
                     $notifikasi = 'Data verifikasi peserta telah disetujui!';
@@ -318,7 +443,9 @@ class PesertaController extends Controller
 
             if($jadwal->registrasi && $verifikasi != 0)
             {
-                Mail::to($peserta->email)->send(new VerifikasiStatusMailable($peserta->nama_lengkap, $jadwal, $status));
+                // Mail::to($peserta->email)->send(new VerifikasiStatusMailable($peserta->nama_lengkap, $jadwal, $status));
+                $job = new EmailVerifikasiStatusJob($peserta->nama_lengkap, $peserta->email, $jadwal, $status);
+                $this->dispatch($job);
             }
 
             return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'peserta'])
@@ -345,11 +472,11 @@ class PesertaController extends Controller
         $jadwal = DB::table('v_jadwal_detail')->where('id', $peserta->diklat_jadwal_id)->first();
         $konfirmasi = $request->konfirmasi;
 
-        try 
+        try
         {
-            switch($konfirmasi) 
+            switch($konfirmasi)
             {
-                case 1:                    
+                case 1:
                     DB::table('peserta')->where('id', $id)->update([
                         'konfirmasi' => true,
                     ]);
@@ -386,7 +513,7 @@ class PesertaController extends Controller
         $jadwal = DB::table('diklat_jadwal')->where('id', $peserta->diklat_jadwal_id)->first();
         $verifikasi = $request->setuju;
 
-        try 
+        try
         {
             DB::table('peserta')->where('id', $id)->update([
                 'batal' => true,
@@ -412,7 +539,7 @@ class PesertaController extends Controller
         }
     }
 
-    public function export(Request $request) 
+    public function export(Request $request)
     {
         $this->checkAuth($request->jadwal_id);
 
@@ -437,7 +564,7 @@ class PesertaController extends Controller
 				// 			->setTitle('Office XLS Document')
 				// 			->setSubject('Office XLS Document')
 				// 			->setCategory('Pelatihan');
-							
+
 				// $spreadsheet->setActiveSheetIndex(0)
 				// 			->setCellValue('A1', 'nama {diisi dengan nama peserta}')
 				// 			->setCellValue('B1', 'no_identitas {Diisi dengan NIP/NRP/NPP/NIK}')
@@ -455,7 +582,7 @@ class PesertaController extends Controller
 				// 			->setCellValue('N1', 'sumber_anggaran (Pilih Satu)')
 				// 			->setCellValue('O1', 'Instansi (Pilih Satu)')
                 //             ->setCellValue('P1', 'Alamat Instansi');
-                            
+
                 // $spreadsheet->setActiveSheetIndex(0)
 				// 			->setCellValue('A2', '{contoh : Ahmad Bustomi S.Kom}}')
 				// 			->setCellValue('B2', '{NIP/NRP/NPP/NIK}')
@@ -475,9 +602,9 @@ class PesertaController extends Controller
                 //             ->setCellValue('P2', '{Alamat Instansi}')
                 //             ->setCellValue('Q2', '<= Baris tidak perlu dihapus, daftar dapat langsung ditambahkan di bawahnya dengan meng copy baris ini');
 
-				$row = 3;			
+				$row = 3;
 
-				foreach ($peserta as $p) 
+				foreach ($peserta as $p)
 				{
 					// $spreadsheet->getActiveSheet()->getStyle('G'.$row)
 					// 			->setQuotePrefix(true);
@@ -505,7 +632,7 @@ class PesertaController extends Controller
 								->setCellValue('P'.$row, $p->satker_alamat);
 					$row++;
 				}
-							
+
 				// Rename worksheet
 				// $spreadsheet->getActiveSheet()->setTitle('Report Excel '.date('d-m-Y H'));
 				// $spreadsheet->getActiveSheet()->setTitle('Daftar Peserta');
@@ -514,7 +641,7 @@ class PesertaController extends Controller
 				// {
 				// 	$spreadsheet->getActiveSheet()->getColumnDimension($col)->setAutoSize(true);
 				// 	$spreadsheet->getActiveSheet()->getStyle($col.'1')->getFont()->setBold(true);
-				// }			
+				// }
 
 				// $spreadsheet->getActiveSheet()->getPageSetup()
 				// 			->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
@@ -563,7 +690,7 @@ class PesertaController extends Controller
 							->setTitle('Office XLS Document')
 							->setSubject('Office XLS Document')
 							->setCategory('Pelatihan');
-							
+
 				$spreadsheet->setActiveSheetIndex(0)
                             ->setCellValue('A1', 'firstname')
                             ->setCellValue('B1', 'lastname')
@@ -573,9 +700,9 @@ class PesertaController extends Controller
 
 				$no = 1;
                 $row = 2;
-                
-                foreach ($peserta as $p) 
-				{					
+
+                foreach ($peserta as $p)
+				{
 					$spreadsheet->setActiveSheetIndex(0)
 								->setCellValue('A'.$row, $p->nama_lengkap)
 								->setCellValue('B'.$row, $jadwal->nama)
@@ -610,7 +737,7 @@ class PesertaController extends Controller
                 $peserta = DB::table('v_peserta')
 								->where('diklat_jadwal_id', $request->jadwal_id)
                                 ->get();
-                                
+
                 $zip = new ZipArchive;
                 $fileName = storage_path() . DIRECTORY_SEPARATOR . 'foto-'. $jadwal->nama . '-' . time() . '.zip';
 
@@ -638,7 +765,7 @@ class PesertaController extends Controller
         exit;
     }
 
-    public function import(Request $request, $id) 
+    public function import(Request $request, $id)
     {
         $this->checkAuth($id);
 
@@ -657,8 +784,8 @@ class PesertaController extends Controller
                             ->orderby('nama', 'asc')
                             ->get();
                 break;
-                
-            case 'user':            
+
+            case 'user':
                 $from = DB::table('v_jadwal_detail')
                             ->where('id', '<>', $id)
                             ->where('tahun', $this->tahun)
@@ -666,7 +793,7 @@ class PesertaController extends Controller
                             ->orderby('nama', 'asc')
                             ->get();
                 break;
-            
+
             case 'kontribusi':
                 $instansi = DB::table('instansi')->where('id', $this->user->instansi_id)->first();
                 $from = DB::table('v_jadwal_detail')
@@ -713,8 +840,8 @@ class PesertaController extends Controller
         {
             DB::beginTransaction();
 
-            foreach($pid as $p) 
-            {   
+            foreach($pid as $p)
+            {
                 $kode = "R" . sprintf("%s%02s%04s", $tahun, $bulan, ++$result);
 
                 $peserta = DB::table('peserta')->find($p);
@@ -773,6 +900,28 @@ class PesertaController extends Controller
         }
     }
 
+    public function konfirmasiJadwal(Request $request)
+    {
+      $jadwal = DB::table('diklat_jadwal')->where('id', $request->jadwal_id)->first();
+      $updated_at = date('Y-m-d H:i:s');
+
+      DB::table('diklat_jadwal')->where('id', $request->jadwal_id)->update([
+          'is_konfirmasi' => $request->status,
+          'updated_at' => $updated_at,
+      ]);
+
+      $notifikasi = 'Konfirmasi kehadiran berhasil ditutup!';
+
+      if($request->status)
+        $notifikasi = 'Konfirmasi kehadiran berhasil dibuka!';
+
+      return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'peserta'])
+              ->with([
+                  'success' => $notifikasi,
+                  'page' => 'peserta'
+              ]);
+    }
+
     public function checkAuth($id)
     {
         if($this->isAdmin())
@@ -791,12 +940,12 @@ class PesertaController extends Controller
         {
             return true;
         }
-        else 
+        else
         {
             if(Gate::allows('isKelasKontribusi', $jadwal) && $jadwal->status_jadwal < 3)
                 return true;
         }
-        
+
         abort(403);
     }
 }

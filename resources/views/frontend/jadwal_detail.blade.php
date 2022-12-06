@@ -42,25 +42,10 @@
             });
 
             jQuery('.js-dataTable-full').dataTable({
-                pageLength: 25,
-                lengthMenu: [[10, 25, 50], [10, 25, 50]],
+                pageLength: 100,
+                lengthMenu: [[10, 50, 100], [10, 50, 100]],
                 autoWidth: false,
                 scrollX: true,
-            });
-
-            $('#form-cari').submit(function (e) {
-                e.preventDefault();
-                var form = $(this);
-                var url = form.attr('action');
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: form.serialize(), 
-                    success: function(data)
-                    {
-                        $('#div-data').html(data);
-                    }
-                });
             });
         });
     </script>
@@ -125,7 +110,7 @@
                         <div class="block-content tab-content overflow-hidden">
                             <div class="tab-pane fade active show" id="daftar-peserta" role="tabpanel">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-hover" style="width:100%">
+                                    <table class="table table-bordered table-hover js-dataTable-full" style="width:100%">
                                         <thead class="">
                                             <th class="font-w700">No</th>
                                             <th class="font-w700">NIP</th>
@@ -138,9 +123,17 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>
 												@php
-													$count = strlen($p->nip) - 8;
-													$output = substr_replace($p->nip, str_repeat('*', $count), 2, $count);
-													echo $output
+                                                    $output = '';
+                                                    if(!is_null($p->nip))
+                                                    {
+                                                        $count = strlen($p->nip) - 8;
+                                                        $output = substr_replace($p->nip, str_repeat('*', $count), 2, $count);
+                                                    }
+                                                    else 
+                                                    {
+                                                        $output = '-';
+                                                    }
+                                                    echo $output;
 												@endphp
 												</td>
                                                 <td>{{ $p->nama_lengkap }}</td>
@@ -173,7 +166,7 @@
                 <div class="col-md-3 px-0">
                     <div class="block block-rounded block-bordered mb-3">
                         <div class="block-header block-header-default bg-gray-lighter" style="max-height: 50px">
-                            <h3 class="block-title">Info <small>Pelatihan</small></h3>
+                            <h3 class="block-title">Informasi</h3>
                         </div>
                         <div class="block-content">
                             <table class="table table-borderless table-sm font-size-sm">
@@ -241,7 +234,7 @@
                     </div>
                     <div class="block block-rounded block-bordered">
                         <div class="block-header block-header-default bg-gray-lighter" style="min-height: 50px">
-                            <h3 class="block-title">Kontak <small>Pelatihan</small></h3>
+                            <h3 class="block-title">Kontak</h3>
                         </div>
                         <div class="block-content">
                             <p class="font-size-sm">

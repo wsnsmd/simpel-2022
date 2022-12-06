@@ -230,6 +230,19 @@
                         </div>                     
                     </div>
                     <div class="form-group row">
+                        <label class="col-sm-3 col-form-label text-right" for="status">Registrasi Lengkap <span class="text-danger">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="js-select2-min form-control{{ $errors->has('registrasi_lengkap') ? ' is-invalid' : '' }}" id="registrasi_lengkap" name="registrasi_lengkap" style="width: 100%" required>
+                                <option value="" selected>-- Pilih Registrasi Lengkap --</option>
+                                <option value="0" {{ $jadwal->registrasi_lengkap == 0 ? 'selected' : '' }}>Tidak</option>
+                                <option value="1" {{ $jadwal->registrasi_lengkap == 1 ? 'selected' : '' }}>Ya</option>
+                            </select>
+                            @if ($errors->has('status'))
+                            <div class="invalid-feedback">{{ $errors->first('registrasi_lengkap') }}</div>
+                            @endif
+                        </div>                     
+                    </div>
+                    <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="reg_awal">Tanggal Registrasi <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
                             <div class="form-group">

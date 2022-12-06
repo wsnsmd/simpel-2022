@@ -50,6 +50,8 @@
         @endif
 
     </script>
+    
+    @yield('js_sub')
 @endsection
 
 @section('content')
@@ -96,7 +98,7 @@
                 <div class="col-md-3 px-0">
                     <div class="block block-rounded block-bordered mb-3">
                         <div class="block-header block-header-default">
-                            <h3 class="block-title">Info <small>Pelatihan</small></h3>
+                            <h3 class="block-title">Informasi</h3>
                         </div>
                         <div class="block-content">
                             <table class="table table-borderless table-sm font-size-sm">
@@ -157,7 +159,7 @@
                     </div>
                     <div class="block block-rounded block-bordered">
                         <div class="block-header block-header-default">
-                            <h3 class="block-title">Kontak <small>Pelatihan</small></h3>
+                            <h3 class="block-title">Kontak</h3>
                         </div>
                         <div class="block-content">
                             <p class="font-size-sm">

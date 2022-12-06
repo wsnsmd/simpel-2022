@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use App\RandomColor;
 
 /*
@@ -39,6 +38,7 @@ Route::get('/daftar/step1', 'JadwalController@step1')->name('jadwal.daftar.step1
 Route::post('/daftar/step1', 'JadwalController@poststep1')->name('jadwal.daftar.step1');
 Route::get('/daftar/step2', 'JadwalController@step2')->name('jadwal.daftar.step2');
 Route::post('/daftar/step2', 'JadwalController@poststep2')->name('jadwal.daftar.step2');
+Route::post('/daftar/step2simple', 'JadwalController@poststep2simple')->name('jadwal.daftar.step2.simple');
 Route::get('/daftar/step3', 'JadwalController@step3')->name('jadwal.daftar.step3');
 Route::post('/daftar/step3', 'JadwalController@poststep3')->name('jadwal.daftar.step3');
 Route::get('/daftar/konfirmasi/{id}', 'JadwalController@konfirmasi')->name('jadwal.konfirmasi');
@@ -66,12 +66,12 @@ Route::group(['prefix'=>$admin_path,'as'=>$admin_path.'.'], function () {
 
     Route::group(['prefix'=>'master','as'=>'master.'], function () {
         Route::resource('agama', 'Master\AgamaController');
-        Route::resource('instansi', 'Master\InstansiController');      
+        Route::resource('instansi', 'Master\InstansiController');
         Route::post('instansi/sort', 'Master\InstansiController@sort')->name('instansi.sort');
         Route::resource('lokasi', 'Master\LokasiController');
         Route::resource('opd', 'Master\OpdController');
         Route::resource('pangkat', 'Master\PangkatController');
-        Route::resource('tahun', 'Master\TahunController');                
+        Route::resource('tahun', 'Master\TahunController');
     });
 
     Route::group(['prefix'=>'diklat','as'=>'diklat.'], function () {
@@ -112,19 +112,22 @@ Route::group(['prefix'=>$admin_path,'as'=>$admin_path.'.'], function () {
         Route::post('jadwal/peserta', 'Diklat\JadwalController@peserta')->name('jadwal.peserta');
 
         // Peserta
-        Route::get('peserta/{jadwal}/{slug}/create', 'Diklat\PesertaController@create')->name('peserta.create');        
+        Route::get('peserta/{jadwal}/{slug}/create', 'Diklat\PesertaController@create')->name('peserta.create');
         Route::post('peserta/{jadwal}', 'Diklat\PesertaController@store')->name('peserta.store');
         Route::get('peserta/{jadwal}/{slug}/{peserta}/edit', 'Diklat\PesertaController@edit')->name('peserta.edit');
         Route::patch('peserta/{peserta}', 'Diklat\PesertaController@update')->name('peserta.update');
         Route::delete('peserta/{peserta}', 'Diklat\PesertaController@destroy')->name('peserta.destroy');
         Route::post('peserta/{peserta}/verifikasi', 'Diklat\PesertaController@verifikasi')->name('peserta.verifikasi');
         Route::post('peserta/{peserta}/konfirmasi', 'Diklat\PesertaController@konfirmasi')->name('peserta.konfirmasi');
-        Route::post('peserta/{peserta}/batal', 'Diklat\PesertaController@batal')->name('peserta.batal');        
+        Route::post('peserta/{peserta}/batal', 'Diklat\PesertaController@batal')->name('peserta.batal');
         Route::post('peserta/export/data', 'Diklat\PesertaController@export')->name('peserta.export');
         Route::post('peserta/{jadwal}/import', 'Diklat\PesertaController@import')->name('peserta.import');
         Route::post('peserta/{jadwal}/import/preview', 'Diklat\PesertaController@importPreview')->name('peserta.import.preview');
         Route::post('peserta/{jadwal}/import/simpan', 'Diklat\PesertaController@importSimpan')->name('peserta.import.simpan');
         Route::get('peserta/{jadwal}/{slug}/back', 'Diklat\PesertaController@backToJadwal')->name('peserta.back');
+        Route::post('peserta/{jadwal}/simple', 'Diklat\PesertaController@storeSimple')->name('peserta.store.simple');
+        Route::patch('peserta/{peserta}/simple', 'Diklat\PesertaController@updateSimple')->name('peserta.update.simple');
+        Route::post('peserta/konfirmasi/jadwal', 'Diklat\PesertaController@konfirmasiJadwal')->name('peserta.konfirmasi.jadwal');
 
         // Checklist
         Route::post('checklist', 'Diklat\ChecklistController@index')->name('checklist.index');
@@ -162,7 +165,7 @@ Route::group(['prefix'=>$admin_path,'as'=>$admin_path.'.'], function () {
         Route::delete('seminar/kelompok/anggota/{id}', 'Diklat\SeminarController@destroyAnggota')->name('seminar.anggota.destroy');
 
         Route::post('seminar/kelompok/{id}/cetakform', 'Diklat\SeminarController@printForm')->name('seminar.print.form');
-        
+
         Route::get('seminar/jadwal/{jadwal}/peserta/ajax', 'Diklat\SeminarController@ajaxPeserta')->name('seminar.ajax.peserta');
     });
 
@@ -192,7 +195,7 @@ Route::group(['prefix'=>'ajax','as'=>'ajax.'], function () {
         $id = $request->nip;
         $client = new Client(['http_errors' => false, 'verify' => false]);
 
-        try 
+        try
         {
             $req_pegawai = $client->get(env('SIMPEG_PNS') . $id . '/?api_token=' . env('SIMPEG_KEY'));
 
@@ -240,12 +243,12 @@ Route::group(['prefix'=>'ajax','as'=>'ajax.'], function () {
                         'satker_nama' => $satker['unit_kerja'][0]['skpd'],
                         'satker_telp' => $satker['unit_kerja'][0]['no_telp'],
                         'satker_alamat' => $satker['unit_kerja'][0]['alamat_skpd'],
-                    );              
-                    
+                    );
+
                     foreach($arr_pegawai as $key => $value) {
                         if(empty($value) && $key != 'email')
                             $arr_pegawai[$key] = '(kosong)';
-                        
+
                         if(empty($value) && $key === 'email')
                             $arr_pegawai[$key] = 'kosong@kosong';
                     }
@@ -266,14 +269,14 @@ Route::group(['prefix'=>'ajax','as'=>'ajax.'], function () {
     })->name('caripegawai')->middleware('auth');
 
     Route::post('carifasilitator', function (Request $request) {
-        
+
         $fator = DB::table('fasilitator')->select('nama')->where('nama', 'like', '%'. $request->search . '%')->get();
         return response()->json($fator, 200);
 
     })->name('carifasilitator')->middleware('auth');
 
     Route::get('widyaiswara', function (Request $request) {
-        
+
         $search = $request->search;
 
         $data = DB::table('fasilitator')
@@ -281,12 +284,12 @@ Route::group(['prefix'=>'ajax','as'=>'ajax.'], function () {
                     ->where('nama', 'like', '%'.$search.'%')
                     ->orderby('nama', 'asc')
                     ->get();
-        
+
         return response()->json($data, 200);
     })->name('widyaiswara')->middleware('auth');
 
     Route::post('carimapel', function (Request $request) {
-        
+
         $mapel = DB::table('mapel')->select('nama')
                     ->where('kurikulum_id', $request->kurikulum_id)
                     ->where('nama', 'like', '%'. $request->search . '%')
@@ -296,13 +299,13 @@ Route::group(['prefix'=>'ajax','as'=>'ajax.'], function () {
     })->name('carimapel')->middleware('auth');
 
     Route::get('kalendar', function (Request $request) {
-        try 
+        try
         {
             $kalendar = DB::table('v_kalendar')
                         ->whereRaw("
-                            (start BETWEEN '" . $request->start . "' and '". $request->end . "') or 
-                            (end BETWEEN '" . $request->start . "' and '". $request->end . "') or 
-                            ('" . $request->start . "' BETWEEN date(start) and date(end)) or 
+                            (start BETWEEN '" . $request->start . "' and '". $request->end . "') or
+                            (end BETWEEN '" . $request->start . "' and '". $request->end . "') or
+                            ('" . $request->start . "' BETWEEN date(start) and date(end)) or
                             ('". $request->end . "' between date(start) and date(end))
                         ")
                         ->select('title', 'start', 'end')
