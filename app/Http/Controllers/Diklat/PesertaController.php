@@ -12,6 +12,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use App\Jobs\EmailVerifikasiStatusJob;
 use App\Mail\DaftarMailable;
 use App\Mail\VerifikasiStatusMailable;
+use App\Jobs\EmailKonfirmasiJob;
 use Gate;
 use Session;
 use Storage;
@@ -484,7 +485,9 @@ class PesertaController extends Controller
                     break;
                 case 2:
                     $url = \URL::signedRoute('jadwal.konfirmasi', $id);
-                    Mail::to($peserta->email)->send(new DaftarMailable($peserta->nama_lengkap, $url));
+                    // Mail::to($peserta->email)->send(new DaftarMailable($peserta->nama_lengkap, $url));
+                    $job = new EmailKonfirmasiJob($peserta->nama_lengkap, $peserta->email, $jadwal, $url);
+                    $this->dispatch($job);
                     $notifikasi = 'Email konfirmasi telah dikirim ulang ke peserta!';
                     break;
             }

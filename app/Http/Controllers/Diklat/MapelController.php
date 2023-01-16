@@ -25,7 +25,7 @@ class MapelController extends Controller
 
         $this->user = Auth::user();
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -62,14 +62,14 @@ class MapelController extends Controller
         switch($kurikulum->jenis_belajar)
         {
             case 1:
-                $validator = $request->validate([            
+                $validator = $request->validate([
                     'nama' => 'required',
                     'jpk' => 'required|numeric',
                 ]);
                 break;
 
             case 2:
-                $validator = $request->validate([            
+                $validator = $request->validate([
                     'nama' => 'required',
                     'jpk' => 'required|numeric',
                     'jpe' => 'required|numeric',
@@ -79,11 +79,11 @@ class MapelController extends Controller
 
             default:
                 $notifikasi = 'Terjadi kesalahan!';
-                return redirect()->back()->with('error', $notifikasi); 
+                return redirect()->back()->with('error', $notifikasi);
 
         }
-        
-        try 
+
+        try
         {
 
             DB::table('mapel')->insert([
@@ -94,14 +94,14 @@ class MapelController extends Controller
             ]);
 
             $notifikasi = 'Data mata pelatihan pada kurikulum ' . $kurikulum->nama . ' berhasil ditambahkan!';
-            
-            return redirect()->back()->with('success', $notifikasi); 
+
+            return redirect()->back()->with('success', $notifikasi);
         }
         catch(\Exception $e)
         {
             $notifikasi = 'Data mata pelatihan pada kurikulum ' . $kurikulum->nama . ' gagal ditambahkan!';
-            return redirect()->back()->with('error', $notifikasi); 
-        }              
+            return redirect()->back()->with('error', $notifikasi);
+        }
     }
 
     /**
@@ -148,14 +148,14 @@ class MapelController extends Controller
         switch($kurikulum->jenis_belajar)
         {
             case 1:
-                $validator = $request->validate([            
+                $validator = $request->validate([
                     'nama' => 'required',
                     'jpk' => 'required|numeric',
                 ]);
                 break;
 
             case 2:
-                $validator = $request->validate([            
+                $validator = $request->validate([
                     'nama' => 'required',
                     'jpk' => 'required|numeric',
                     'jpe' => 'required|numeric',
@@ -165,11 +165,11 @@ class MapelController extends Controller
 
             default:
                 $notifikasi = 'Terjadi kesalahan!';
-                return redirect()->back()->with('error', $notifikasi); 
+                return redirect()->back()->with('error', $notifikasi);
 
         }
-        
-        try 
+
+        try
         {
 
             DB::table('mapel')->where('id', $id)->update([
@@ -179,14 +179,14 @@ class MapelController extends Controller
             ]);
 
             $notifikasi = 'Data mata pelatihan pada kurikulum ' . $kurikulum->nama . ' berhasil diubah!';
-            
-            return redirect()->back()->with('success', $notifikasi); 
+
+            return redirect()->back()->with('success', $notifikasi);
         }
         catch(\Exception $e)
         {
             $notifikasi = 'Data mata pelatihan pada kurikulum ' . $kurikulum->nama . ' gagal diubah!';
-            return redirect()->back()->with('error', $notifikasi); 
-        }  
+            return redirect()->back()->with('error', $notifikasi);
+        }
     }
 
     /**
@@ -206,11 +206,11 @@ class MapelController extends Controller
         if($delete)
         {
             $notifikasi = 'Data mata pelatihan berhasil dihapus!';
-            return redirect()->back()->with('success', $notifikasi); 
+            return redirect()->back()->with('success', $notifikasi);
         }
 
         $notifikasi = 'Data mata pelatihan gagal dihapus!';
-        return redirect()->back()->with('error', $notifikasi); 
+        return redirect()->back()->with('error', $notifikasi);
     }
 
     public function jadwal($jadwal, $slug, $mapel)
@@ -226,21 +226,21 @@ class MapelController extends Controller
                     ->first();
 
         $max_jp = $jp->jpk + $jp->jpe;
-            
+
         $detail = 'Mata Pelatihan';
         return view('backend.diklat.kurikulum.jadwal', compact('jadwal', 'mapel', 'mapel_jadwal', 'wi', 'max_jp', 'detail'));
     }
 
     public function jadwalStore(Request $request, $jadwal, $mapel)
     {
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'tanggal' => 'required|date',
             'jam_mulai' => 'required',
             'jam_akhir' => 'required',
             'jp' => 'required|numeric'
         ]);
-        
-        try 
+
+        try
         {
 
             DB::table('mapel_jadwal')->insert([
@@ -253,13 +253,13 @@ class MapelController extends Controller
             ]);
 
             $notifikasi = 'Data jadwal berhasil ditambahkan!';
-            
-            return redirect()->back()->with('success', $notifikasi); 
+
+            return redirect()->back()->with('success', $notifikasi);
         }
         catch(\Exception $e)
         {
             $notifikasi = 'Data jadwal gagal ditambahkan!';
-            return redirect()->back()->with('error', $notifikasi); 
+            return redirect()->back()->with('error', $notifikasi);
         }
     }
 
@@ -271,14 +271,14 @@ class MapelController extends Controller
 
     public function jadwalUpdate(Request $request, $id)
     {
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'tanggal' => 'required|date',
             'jam_mulai' => 'required',
             'jam_akhir' => 'required',
             'jp' => 'required|numeric'
         ]);
 
-        try 
+        try
         {
 
             DB::table('mapel_jadwal')->where('id', $id)->update([
@@ -289,42 +289,63 @@ class MapelController extends Controller
             ]);
 
             $notifikasi = 'Data jadwal berhasil diubah!';
-            
-            return redirect()->back()->with('success', $notifikasi); 
+
+            return redirect()->back()->with('success', $notifikasi);
         }
         catch(\Exception $e)
         {
             $notifikasi = 'Data jadwal gagal diubah!';
-            return redirect()->back()->with('error', $notifikasi); 
+            return redirect()->back()->with('error', $notifikasi);
         }
     }
 
     public function jadwalDestroy($jadwal, $mapel, $id)
     {
-        $delete = DB::table('mapel_jadwal')->where('id', $id)->delete();
+        DB::beginTransaction();
+        $delete1 = DB::table('mapel_fasilitator')->where('jid', $jadwal)->where('mid', $mapel)->delete();
+        $delete2 = DB::table('mapel_jadwal')->where('id', $id)->delete();
 
-        if($delete)
+        if($delete1 and $delete2)
         {
+            DB::commit();
             $notifikasi = 'Data jadwal berhasil dihapus!';
-            return redirect()->back()->with('success', $notifikasi); 
+            return redirect()->back()->with('success', $notifikasi);
         }
 
+        DB::rollBack();
+
         $notifikasi = 'Data jadwal gagal dihapus!';
-        return redirect()->back()->with('error', $notifikasi); 
+        return redirect()->back()->with('error', $notifikasi);
     }
 
     public function wiStore(Request $request, $jadwal, $mapel)
     {
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'fasilitator' => 'required',
             'butir' => 'required|numeric'
         ]);
-        
-        try 
+
+        try
         {
+            $fas = DB::table('v_fasilitator')->find($request->fasilitator);
+            $get_ajar = DB::table('mapel_jadwal')->where('jid', $jadwal)->where('mid', $mapel)->get();
+            foreach($get_ajar as $ajar)
+            {
+                $query = "select * from v_spwi_query where fid=$request->fasilitator and tanggal='$ajar->tanggal' and (('$ajar->jam_mulai' between jam_mulai and jam_akhir) or ('$ajar->jam_akhir' between jam_mulai and jam_akhir))";
+                $cek = DB::select(
+                            DB::raw(
+                                $query
+                            )
+                        );
+                if(!empty($cek))
+                {
+                    $notifikasi = $fas->nama . ' tidak bisa ditambahkan karena memiliki jadwal yang sama pada tanggal dan jam tersebut!';
+                    return redirect()->back()->with('error', $notifikasi);
+                }
+            }
+
             DB::beginTransaction();
 
-            $fas = DB::table('v_fasilitator')->find($request->fasilitator);
             $nosurat = DB::table('nosurat')->where('modul', 'mapel_fasilitator')->where('tahun', $this->tahun)->first();
             if(is_null($nosurat))
             {
@@ -335,7 +356,7 @@ class MapelController extends Controller
                     'tahun' => $this->tahun,
                 ]);
             }
-            else 
+            else
             {
                 $nomor = $nosurat->nomor + 1;
                 DB::table('nosurat')->where('modul', 'mapel_fasilitator')->where('tahun', $this->tahun)->update([
@@ -362,7 +383,7 @@ class MapelController extends Controller
                     'tahun' => $this->tahun,
                 ]);
             }
-            else 
+            else
             {
                 $pangkat = DB::table('pangkat')->find($fas->pangkat_id);
                 DB::table('mapel_fasilitator')->insert([
@@ -383,13 +404,13 @@ class MapelController extends Controller
             DB::commit();
 
             $notifikasi = 'Data Widyaiswara berhasil ditambahkan!';
-            
-            return redirect()->back()->with('success', $notifikasi); 
+
+            return redirect()->back()->with('success', $notifikasi);
         }
         catch(\Exception $e)
         {
             $notifikasi = 'Data Widyaiswara gagal ditambahkan!';
-            return redirect()->back()->with('error', $notifikasi); 
+            return redirect()->back()->with('error', $notifikasi);
         }
     }
 
@@ -401,14 +422,30 @@ class MapelController extends Controller
 
     public function wiUpdate(Request $request, $id)
     {
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'fasilitator' => 'required',
             'butir' => 'required|numeric'
         ]);
 
-        try 
+        try
         {
+            $mapel = DB::table('mapel_fasilitator')->where('id', $id)->first();
             $fas = DB::table('v_fasilitator')->find($request->fasilitator);
+            $get_ajar = DB::table('mapel_jadwal')->where('jid', $mapel->jid)->where('mid', $mapel->mid)->get();
+            foreach($get_ajar as $ajar)
+            {
+                $query = "select * from v_spwi_query where fid=$request->fasilitator and tanggal='$ajar->tanggal' and (('$ajar->jam_mulai' between jam_mulai and jam_akhir) or ('$ajar->jam_akhir' between jam_mulai and jam_akhir))";
+                $cek = DB::select(
+                            DB::raw(
+                                $query
+                            )
+                        );
+                if(!empty($cek))
+                {
+                    $notifikasi = $fas->nama . ' tidak bisa diubah karena memiliki jadwal yang sama pada tanggal dan jam tersebut!';
+                    return redirect()->back()->with('error', $notifikasi);
+                }
+            }
 
             if(is_null($fas->pangkat_id) || $fas->pangkat_id == 0)
             {
@@ -422,9 +459,9 @@ class MapelController extends Controller
                     'butir' => $request->butir,
                 ]);
             }
-            else 
+            else
             {
-                $pangkat = DB::table('pangkat')->find($fas->pangkat_id);                        
+                $pangkat = DB::table('pangkat')->find($fas->pangkat_id);
                 DB::table('mapel_fasilitator')->where('id', $id)->update([
                     'fid' => $request->fasilitator,
                     'nip' => $fas->nip,
@@ -437,13 +474,13 @@ class MapelController extends Controller
             }
 
             $notifikasi = 'Data Widyaiswara berhasil diubah! ' . $fas->pangkat_id;
-            
-            return redirect()->back()->with('success', $notifikasi); 
+
+            return redirect()->back()->with('success', $notifikasi);
         }
         catch(\Exception $e)
         {
             $notifikasi = 'Data Widyaiswara gagal diubah!';
-            return redirect()->back()->with('error', $notifikasi); 
+            return redirect()->back()->with('error', $notifikasi);
         }
 
     }
@@ -455,11 +492,11 @@ class MapelController extends Controller
         if($delete)
         {
             $notifikasi = 'Data Widyaiswara berhasil dihapus!';
-            return redirect()->back()->with('success', $notifikasi); 
+            return redirect()->back()->with('success', $notifikasi);
         }
 
         $notifikasi = 'Data Widyaiswara gagal dihapus!';
-        return redirect()->back()->with('error', $notifikasi); 
+        return redirect()->back()->with('error', $notifikasi);
     }
 
     public function wiCetak($id)
@@ -503,7 +540,7 @@ class MapelController extends Controller
 
     public function wiRekap($id)
     {
-        $surat = DB::table('v_spwi_report')->where('jid', $id)->orderby('nomor')->get();
+        $surat = DB::table('v_spwi_report2')->where('jid', $id)->orderby('nomor')->get();
         $jadwal = DB::table('v_jadwal_detail')->where('id', $id)->first();
         $data = [];
         $data['surat'] = json_encode($surat);
@@ -520,7 +557,7 @@ class MapelController extends Controller
 
     public function TandaTanganUpdate(Request $request, $jadwal)
     {
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'tempat' => 'required',
             'tanggal' => 'required|date',
             'an' => 'required',
@@ -532,8 +569,8 @@ class MapelController extends Controller
 
         $jadwal = DB::table('v_jadwal_detail')->where('id', $jadwal)->first();
 
-        try 
-        {          
+        try
+        {
             DB::table('mapel_tt')->updateOrInsert(['jid' => $jadwal->id], [
                 'jid' => $jadwal->id,
                 'tempat' => $request->tempat,
@@ -549,7 +586,7 @@ class MapelController extends Controller
                 'paraf2_jabatan' => $request->paraf2_jabatan,
             ]);
 
-            $notifikasi = 'Data tanda tangan berhasil disimpan!';                    
+            $notifikasi = 'Data tanda tangan berhasil disimpan!';
 
             return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'mata-pelatihan'])
                         ->with([
@@ -584,7 +621,7 @@ class MapelController extends Controller
         {
             return true;
         }
-        
+
         abort(403);
     }
 }

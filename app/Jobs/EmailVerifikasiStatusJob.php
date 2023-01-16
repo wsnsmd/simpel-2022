@@ -50,7 +50,7 @@ class EmailVerifikasiStatusJob implements ShouldQueue
             'api_key' => 'api-EFC7EA4860E811ED8F3CF23C91C88F4E',
             'sender' => 'SIMPel BPSDM Kaltim <no-reply@bpsdmkaltim.net>',
             'to' => [
-                $this->nama . ' <' . $this->email . '>'
+                '<' . $this->email . '>'
             ],
             'template_id' => '6180399',
             'template_data' => [

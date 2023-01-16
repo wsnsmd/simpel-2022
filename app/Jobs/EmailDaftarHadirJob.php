@@ -50,7 +50,7 @@ class EmailDaftarHadirJob implements ShouldQueue
             'api_key' => 'api-EFC7EA4860E811ED8F3CF23C91C88F4E',
             'sender' => 'SIMPel BPSDM Kaltim <no-reply@bpsdmkaltim.net>',
             'to' => [
-                $this->nama . ' <' . $this->email . '>'
+                '<' . $this->email . '>'
             ],
             'template_id' => '1693885',
             'template_data' => [

@@ -14,8 +14,8 @@ class EmailKonfirmasiJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 10;
-    public $timeout = 180;
+    public $tries = 1;
+    public $timeout = 10;
 
     public $nama;
     public $email;
@@ -51,7 +51,7 @@ class EmailKonfirmasiJob implements ShouldQueue
             'api_key' => 'api-EFC7EA4860E811ED8F3CF23C91C88F4E',
             'sender' => 'SIMPel BPSDM Kaltim <no-reply@bpsdmkaltim.net>',
             'to' => [
-                $this->nama . ' <' . $this->email . '>'
+                '<' . $this->email . '>'
             ],
             'template_id' => '9474095',
             'template_data' => [
