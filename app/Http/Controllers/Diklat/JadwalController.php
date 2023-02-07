@@ -526,7 +526,7 @@ class JadwalController extends Controller
             $email = DB::table('sertifikat_email')->where('sertifikat_id', $sertifikat->id)->first();
             return view('backend.diklat.jadwal.detail_sertifikat', compact('jadwal', 'sertifikat', 'sertPeserta', 'email'));
         }
-        $template = DB::table('sertifikat_template')->orderBy('nama')->get();
+        $template = DB::table('sertifikat_template')->where('is_tampil', true)->orderBy('nama')->get();
 
         return view('backend.diklat.jadwal.detail_sertifikat', compact('jadwal', 'sertifikat', 'template'));
     }

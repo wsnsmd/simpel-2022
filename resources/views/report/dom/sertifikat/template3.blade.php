@@ -73,7 +73,7 @@
         hr.style2 {
             margin: 2px 200px 0px 200px;
             border-bottom: 2px solid;
-            color: #6D1FA6;
+            color: #00923F;
         }
 
         .page_break {
@@ -113,7 +113,7 @@
                 <td style="text-align: center">
                     <span style="font-weight: bold; font-size: 14pt; font-family: bookman">BADAN PENGEMBANGAN SUMBER DAYA MANUSIA</span><br>
                     <span style="font-weight: bold; font-size: 14pt; font-family: bookman">PROVINSI KALIMANTAN TIMUR</span><br>
-                    <span style="color: red; font-weight: bold; font-size: 24pt; font-family: bookman">SERTIFIKAT</span><br>
+                    <span style="font-weight: bold; font-size: 24pt; font-family: bookman">SERTIFIKAT</span><br>
                     <span style="font-size: 11pt; font-family: bookman">Nomor : {!! $sertPeserta->nomor !!}</span>
                 </td>
             </tr>
@@ -130,7 +130,7 @@
                                 style="padding: 2px 0 2px 0px;" class="mdiklat">
                                 <tbody>
                                     <tr>
-                                        <td style="text-align: center"><span style="color: red; font-weight: bold; font-size: 14pt; font-family: bookman">DIBERIKAN KEPADA</span></td>
+                                        <td style="text-align: center"><span style="font-weight: bold; font-size: 14pt; font-family: bookman">DIBERIKAN KEPADA</span></td>
                                     </tr>
                                     <tr>
                                         <td style="text-align: center; padding-top: 20px;">

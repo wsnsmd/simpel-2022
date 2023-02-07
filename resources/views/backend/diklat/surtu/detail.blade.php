@@ -439,8 +439,8 @@
                                         <label for="template" class="control-label">Template</label>
                                         <select class="form-control" id="template" name="template" style="width: 100%;" required>
                                             <option value="" selected>-- Pilih Template --</option>
-                                            <option value="1">Template 1</option>
-                                            <option value="2">Template 2</option>
+                                            <option value="1">Individu</option>
+                                            <option value="2">Team/Panitia</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
