@@ -16,7 +16,7 @@ class JadwalController extends Controller
     public function __construct()
     {
 
-        $this->middleware('auth');        
+        $this->middleware('auth');
         $this->middleware(function ($request, $next) {
             $this->tahun = Session::get('apps_tahun');
 
@@ -24,7 +24,7 @@ class JadwalController extends Controller
         });
         $this->user = Auth::user();
     }
-    
+
     public function index()
     {
         $level = $this->checkLevel();
@@ -39,7 +39,7 @@ class JadwalController extends Controller
                             ->orderby('tgl_awal', 'desc')
                             ->get();
                 break;
-            
+
             case 'user':
                 $jadwal = DB::table('v_jadwal_detail')
                             ->where('usergroup', $this->user->usergroup)
@@ -47,7 +47,7 @@ class JadwalController extends Controller
                             ->orderby('tgl_awal', 'desc')
                             ->get();
                 break;
-            
+
             case 'kontribusi':
                 $instansi = DB::table('instansi')->where('id', $this->user->instansi_id)->first();
                 $jadwal = DB::table('v_jadwal_detail')
@@ -55,7 +55,7 @@ class JadwalController extends Controller
                             ->where('tahun', $this->tahun)
                             ->orderby('tgl_awal', 'desc')
                             ->get();
-                break;            
+                break;
         }
 
         return view('backend.diklat.jadwal.index', compact('jadwal'));
@@ -63,7 +63,7 @@ class JadwalController extends Controller
 
     public function create()
     {
-        if (Gate::denies('isUser')) 
+        if (Gate::denies('isUser'))
         {
             abort(403);
         }
@@ -77,12 +77,12 @@ class JadwalController extends Controller
 
     public function store(Request $request)
     {
-        if (Gate::denies('isUser')) 
+        if (Gate::denies('isUser'))
         {
             abort(403);
         }
 
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'nama' => 'required',
             'jenis_diklat' => 'required',
             'kurikulum' => 'required',
@@ -98,19 +98,19 @@ class JadwalController extends Controller
             'panitia_email' => 'required',
             'status' => 'required',
         ]);
-        
-        try 
+
+        try
         {
             $created_at = date('Y-m-d H:i:s');
             $created_by = Auth::user()->name;
             $usergroup = Auth::user()->usergroup;
             $tahun = $this->tahun;
             $path_lampiran = null;
-            
+
             if(isset($request->lampiran))
             {
                 $lampiran = $request->file('lampiran');
-                $nama_file = time()."_".$lampiran->getClientOriginalName();    
+                $nama_file = time()."_".$lampiran->getClientOriginalName();
                 $path_lampiran = $request->lampiran->storeAs('public/files/lampiran', $nama_file);
             }
 
@@ -120,7 +120,7 @@ class JadwalController extends Controller
                 'lokasi_id' => $request->lokasi,
                 'nama' => $request->nama,
                 'tipe' => $request->tipe,
-                'kuota' => $request->kuota,                
+                'kuota' => $request->kuota,
                 'tgl_awal' => $request->tgl_awal,
                 'tgl_akhir' => $request->tgl_akhir,
                 'tahun' => $tahun,
@@ -146,20 +146,20 @@ class JadwalController extends Controller
 
             if(isset($request->add))
                 return redirect()->route('backend.diklat.jadwal.index')->with('success', $notifikasi);
-            
-            return redirect()->back()->with('success', $notifikasi); 
+
+            return redirect()->back()->with('success', $notifikasi);
         }
         catch(\Exception $e)
         {
             $notifikasi = 'Data jadwal diklat gagal ditambahkan!';
-            // return redirect()->back()->with('error', $e->getMessage()); 
-            return redirect()->back()->with('error', $notifikasi); 
-        }        
+            // return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $notifikasi);
+        }
     }
 
     public function show($id)
     {
-        
+
     }
 
     public function edit($id)
@@ -175,14 +175,14 @@ class JadwalController extends Controller
         $kelas = DB::table('instansi')->orderBy('nama')->get();
         $kurikulum = DB::table('kurikulum')->where('id', $jadwal->kurikulum_id)->first();
 
-        return view('backend.diklat.jadwal.edit', compact('jadwal', 'jdiklat', 'lokasi', 'kelas', 'kurikulum'));   
+        return view('backend.diklat.jadwal.edit', compact('jadwal', 'jdiklat', 'lokasi', 'kelas', 'kurikulum'));
     }
 
     public function update(Request $request, $id)
     {
         $this->checkAuth($id);
 
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'nama' => 'required',
             'jenis_diklat' => 'required',
             'kurikulum' => 'required',
@@ -199,21 +199,21 @@ class JadwalController extends Controller
             'status' => 'required',
         ]);
 
-        try 
+        try
         {
             $updated_at = date('Y-m-d H:i:s');
             $updated_by = Auth::user()->name;
             $usergroup = Auth::user()->usergroup;
             $tahun = $this->tahun;
             $path_lampiran = null;
-            
+
             if(isset($request->lampiran))
             {
                 $lampiran = $request->file('lampiran');
-                $nama_file = time()."_".$lampiran->getClientOriginalName();    
+                $nama_file = time()."_".$lampiran->getClientOriginalName();
                 $path_lampiran = $request->lampiran->storeAs('public/files/lampiran', $nama_file);
             }
-            else 
+            else
             {
                 $path_lampiran = $request->lampiran_lama;
             }
@@ -224,7 +224,7 @@ class JadwalController extends Controller
                 'lokasi_id' => $request->lokasi,
                 'nama' => $request->nama,
                 'tipe' => $request->tipe,
-                'kuota' => $request->kuota,                
+                'kuota' => $request->kuota,
                 'tgl_awal' => $request->tgl_awal,
                 'tgl_akhir' => $request->tgl_akhir,
                 'tahun' => $tahun,
@@ -253,14 +253,14 @@ class JadwalController extends Controller
         catch(\Exception $e)
         {
             $notifikasi = 'Data jadwal diklat gagal diubah!';
-            // return redirect()->back()->with('error', $e->getMessage()); 
-            return redirect()->back()->with('error', $notifikasi); 
-        }   
+            // return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $notifikasi);
+        }
 
     }
 
     public function destroy($id)
-    {        
+    {
         $this->checkAuth($id);
 
         $delete = DB::table('diklat_jadwal')->where('id', $id)->delete();
@@ -281,7 +281,7 @@ class JadwalController extends Controller
 
         $jadwal = [];
 
-        switch($id) 
+        switch($id)
         {
             case 2:
                 switch($level)
@@ -291,7 +291,7 @@ class JadwalController extends Controller
                                     ->where('tahun', $this->tahun)
                                     ->get();
                         break;
-                    
+
                     case 'user':
                         $jadwal = DB::table('v_jadwal_datang')
                                     ->where('tahun', $this->tahun)
@@ -306,8 +306,8 @@ class JadwalController extends Controller
                                     ->where('tahun', $this->tahun)
                                     ->get();
                         break;
-                        
-                }                
+
+                }
                 break;
 
             case 3:
@@ -318,7 +318,7 @@ class JadwalController extends Controller
                                     ->where('tahun', $this->tahun)
                                     ->get();
                         break;
-                    
+
                     case 'user':
                         $jadwal = DB::table('v_jadwal_berjalan')
                                     ->where('tahun', $this->tahun)
@@ -332,7 +332,7 @@ class JadwalController extends Controller
                                     ->where('kelas', $instansi->nama)
                                     ->where('tahun', $this->tahun)
                                     ->get();
-                        break;                
+                        break;
                 }
                 break;
 
@@ -344,7 +344,7 @@ class JadwalController extends Controller
                                     ->where('tahun', $this->tahun)
                                     ->get();
                         break;
-                    
+
                     case 'user':
                         $jadwal = DB::table('v_jadwal_selesai')
                                     ->where('tahun', $this->tahun)
@@ -370,7 +370,7 @@ class JadwalController extends Controller
                                     ->where('tahun', $this->tahun)
                                     ->get();
                         break;
-                    
+
                     case 'user':
                         $jadwal = DB::table('v_jadwal_batal')
                                     ->where('tahun', $this->tahun)
@@ -387,7 +387,7 @@ class JadwalController extends Controller
                         break;
                 }
                 break;
-                
+
             default:
                 switch($level)
                 {
@@ -405,7 +405,7 @@ class JadwalController extends Controller
                                     ->orderby('tgl_awal', 'desc')
                                     ->get();
                         break;
-                    
+
                     case 'kontribusi':
                         $instansi = DB::table('instansi')->where('id', $this->user->instansi_id)->first();
                         $jadwal = DB::table('v_jadwal_detail')
@@ -431,10 +431,10 @@ class JadwalController extends Controller
                     ->get();
 
         $page = '';
-        
+
         if(\Request::has('page'))
             $page = \Request::query('page');
-        
+
         switch($page)
         {
             case 'peserta':
@@ -443,17 +443,17 @@ class JadwalController extends Controller
 
             case 'sertifikat':
                 return $this->sertifikat($jadwal, $peserta);
-            break;            
+            break;
 
             case 'cetak':
                 return $this->cetak($jadwal, $peserta);
             break;
 
             case 'checklist':
-                return $this->checklist($jadwal, $peserta);
+                return $this->checklist($jadwal);
             break;
 
-            case 'mata-pelatihan':                
+            case 'mata-pelatihan':
                 return $this->mapel($jadwal);
             break;
 
@@ -461,12 +461,16 @@ class JadwalController extends Controller
                 return $this->seminar($jadwal);
             break;
 
+            case 'surat-tugas':
+                return $this->surtu($jadwal);
+            break;
+
             default:
                 return view('backend.diklat.jadwal.detail', compact('jadwal', 'peserta'));
-        }        
+        }
     }
 
-    public function peserta($jadwal, $peserta) 
+    public function peserta($jadwal, $peserta)
     {
         $pes_verif = DB::table('peserta')
                     ->where('diklat_jadwal_id', $jadwal->id)
@@ -490,7 +494,7 @@ class JadwalController extends Controller
                     ->where('diklat_jadwal_id', $jadwal->id)
                     ->where('verifikasi', 2)
                     ->where('batal', false)
-                    ->get();                    
+                    ->get();
         $pes_batal = DB::table('peserta')
                     ->where('diklat_jadwal_id', $jadwal->id)
                     ->where('batal', true)
@@ -498,7 +502,7 @@ class JadwalController extends Controller
 
         if(!$jadwal->registrasi_lengkap)
             return view('backend.diklat.jadwal.detail_peserta_s', compact('jadwal', 'pes_verif', 'pes_noverif', 'pes_confirm', 'pes_batal', 'pes_tolak'));
-        
+
         return view('backend.diklat.jadwal.detail_peserta', compact('jadwal', 'pes_verif', 'pes_noverif', 'pes_confirm', 'pes_batal', 'pes_tolak'));
     }
 
@@ -508,12 +512,12 @@ class JadwalController extends Controller
         return view('backend.diklat.jadwal.detail_cetak', compact('jadwal', 'peserta', 'umum'));
     }
 
-    public function checklist($jadwal, $peserta)
-    {  
+    public function checklist($jadwal)
+    {
         return view('backend.diklat.jadwal.detail_checklist', compact('jadwal'));
     }
 
-    public function sertifikat($jadwal, $peserta) 
+    public function sertifikat($jadwal, $peserta)
     {
         $sertifikat = DB::table('sertifikat')->where('diklat_jadwal_id', $jadwal->id)->first();
         if(!is_null($sertifikat))
@@ -544,12 +548,17 @@ class JadwalController extends Controller
                         ->select('seminar.*', 'f1.nama as coach', 'f2.nama as penguji')
                         ->where('seminar.jid', $jadwal->id)
                         ->get();
-        
+
         $cetak = DB::table('seminar_form')->where('djid', $jadwal->diklat_jenis_id)->orderBy('nama')->get();
 
         $detail = 'Seminar';
 
         return view('backend.diklat.jadwal.detail_seminar', compact('jadwal', 'seminar', 'cetak', 'detail'));
+    }
+
+    public function surtu($jadwal)
+    {
+        return view('backend.diklat.jadwal.detail_surtu', compact('jadwal'));
     }
 
     public function checkAuth($id)
@@ -570,12 +579,12 @@ class JadwalController extends Controller
         {
             return true;
         }
-        else 
+        else
         {
             if(Gate::allows('isKelasKontribusi', $data))
                 return true;
         }
-        
+
         abort(403);
     }
 }

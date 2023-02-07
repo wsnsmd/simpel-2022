@@ -20277,7 +20277,7 @@ function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/johnchampsas/Desktop/Projects/Dashmix - Laravel Starter Kit/resources/assets/js/dashmix/app.js */"./resources/assets/js/dashmix/app.js");
+module.exports = __webpack_require__(/*! W:\software\xampp\htdocs\pkt\resources\assets\js\dashmix\app.js */"./resources/assets/js/dashmix/app.js");
 
 
 /***/ })

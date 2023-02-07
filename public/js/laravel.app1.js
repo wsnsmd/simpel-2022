@@ -31583,16 +31583,16 @@ if (token) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/johnchampsas/Desktop/Projects/Dashmix - Laravel Starter Kit/resources/assets/js/laravel/app.js */"./resources/assets/js/laravel/app.js");
-__webpack_require__(/*! /Users/johnchampsas/Desktop/Projects/Dashmix - Laravel Starter Kit/resources/assets/sass/main.scss */"./resources/assets/sass/main.scss");
-__webpack_require__(/*! /Users/johnchampsas/Desktop/Projects/Dashmix - Laravel Starter Kit/resources/assets/sass/dashmix/themes/xeco.scss */"./resources/assets/sass/dashmix/themes/xeco.scss");
-__webpack_require__(/*! /Users/johnchampsas/Desktop/Projects/Dashmix - Laravel Starter Kit/resources/assets/sass/dashmix/themes/xinspire.scss */"./resources/assets/sass/dashmix/themes/xinspire.scss");
-__webpack_require__(/*! /Users/johnchampsas/Desktop/Projects/Dashmix - Laravel Starter Kit/resources/assets/sass/dashmix/themes/xmodern.scss */"./resources/assets/sass/dashmix/themes/xmodern.scss");
-__webpack_require__(/*! /Users/johnchampsas/Desktop/Projects/Dashmix - Laravel Starter Kit/resources/assets/sass/dashmix/themes/xsmooth.scss */"./resources/assets/sass/dashmix/themes/xsmooth.scss");
-__webpack_require__(/*! /Users/johnchampsas/Desktop/Projects/Dashmix - Laravel Starter Kit/resources/assets/sass/dashmix/themes/xwork.scss */"./resources/assets/sass/dashmix/themes/xwork.scss");
-__webpack_require__(/*! /Users/johnchampsas/Desktop/Projects/Dashmix - Laravel Starter Kit/resources/assets/sass/dashmix/themes/xdream.scss */"./resources/assets/sass/dashmix/themes/xdream.scss");
-__webpack_require__(/*! /Users/johnchampsas/Desktop/Projects/Dashmix - Laravel Starter Kit/resources/assets/sass/dashmix/themes/xpro.scss */"./resources/assets/sass/dashmix/themes/xpro.scss");
-module.exports = __webpack_require__(/*! /Users/johnchampsas/Desktop/Projects/Dashmix - Laravel Starter Kit/resources/assets/sass/dashmix/themes/xplay.scss */"./resources/assets/sass/dashmix/themes/xplay.scss");
+__webpack_require__(/*! W:\software\xampp\htdocs\pkt\resources\assets\js\laravel\app.js */"./resources/assets/js/laravel/app.js");
+__webpack_require__(/*! W:\software\xampp\htdocs\pkt\resources\assets\sass\main.scss */"./resources/assets/sass/main.scss");
+__webpack_require__(/*! W:\software\xampp\htdocs\pkt\resources\assets\sass\dashmix\themes\xeco.scss */"./resources/assets/sass/dashmix/themes/xeco.scss");
+__webpack_require__(/*! W:\software\xampp\htdocs\pkt\resources\assets\sass\dashmix\themes\xinspire.scss */"./resources/assets/sass/dashmix/themes/xinspire.scss");
+__webpack_require__(/*! W:\software\xampp\htdocs\pkt\resources\assets\sass\dashmix\themes\xmodern.scss */"./resources/assets/sass/dashmix/themes/xmodern.scss");
+__webpack_require__(/*! W:\software\xampp\htdocs\pkt\resources\assets\sass\dashmix\themes\xsmooth.scss */"./resources/assets/sass/dashmix/themes/xsmooth.scss");
+__webpack_require__(/*! W:\software\xampp\htdocs\pkt\resources\assets\sass\dashmix\themes\xwork.scss */"./resources/assets/sass/dashmix/themes/xwork.scss");
+__webpack_require__(/*! W:\software\xampp\htdocs\pkt\resources\assets\sass\dashmix\themes\xdream.scss */"./resources/assets/sass/dashmix/themes/xdream.scss");
+__webpack_require__(/*! W:\software\xampp\htdocs\pkt\resources\assets\sass\dashmix\themes\xpro.scss */"./resources/assets/sass/dashmix/themes/xpro.scss");
+module.exports = __webpack_require__(/*! W:\software\xampp\htdocs\pkt\resources\assets\sass\dashmix\themes\xplay.scss */"./resources/assets/sass/dashmix/themes/xplay.scss");
 
 
 /***/ })

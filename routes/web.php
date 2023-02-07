@@ -167,6 +167,18 @@ Route::group(['prefix'=>$admin_path,'as'=>$admin_path.'.'], function () {
         Route::post('seminar/kelompok/{id}/cetakform', 'Diklat\SeminarController@printForm')->name('seminar.print.form');
 
         Route::get('seminar/jadwal/{jadwal}/peserta/ajax', 'Diklat\SeminarController@ajaxPeserta')->name('seminar.ajax.peserta');
+
+        // Surat Tugas
+        Route::post('surat-tugas', 'Diklat\SurtuController@index')->name('surtu.index');
+        Route::post('surat-tugas/load', 'Diklat\SurtuController@loadSurtu')->name('surtu.load');
+        Route::post('surat-tugas/store', 'Diklat\SurtuController@store')->name('surtu.store');
+        Route::get('surat-tugas/{jadwal}/{slug}/{id}/detail', 'Diklat\SurtuController@detail')->name('surtu.detail');
+        Route::post('surat-tugas/load/pegawai', 'Diklat\SurtuController@loadPegawai')->name('surtu.load.pegawai');
+        Route::post('surat-tugas/pegawai/add', 'Diklat\SurtuController@addPegawai')->name('surtu.pegawai.add');
+        Route::patch('surat-tugas/{id}', 'Diklat\SurtuController@update')->name('surtu.update');
+        Route::delete('surat-tugas/{id}', 'Diklat\SurtuController@destroy')->name('surtu.destroy');
+        Route::delete('surat-tugas/pegawai/{id}', 'Diklat\SurtuController@delPegawai')->name('surtu.pegawai.del');
+        Route::post('surat-tugas/cetak/{id}', 'Diklat\SurtuController@cetak')->name('surtu.cetak');
     });
 
     // Route::resource('user', 'UserController');
@@ -287,6 +299,19 @@ Route::group(['prefix'=>'ajax','as'=>'ajax.'], function () {
 
         return response()->json($data, 200);
     })->name('widyaiswara')->middleware('auth');
+
+    Route::get('pegawai', function (Request $request) {
+
+        $search = $request->search;
+
+        $data = DB::table('fasilitator')
+                    ->select('id', 'nama as text')
+                    ->where('nama', 'like', '%'.$search.'%')
+                    ->orderby('nama', 'asc')
+                    ->get();
+
+        return response()->json($data, 200);
+    })->name('pegawai')->middleware('auth');
 
     Route::post('carimapel', function (Request $request) {
 

@@ -47,14 +47,14 @@
                     <span class="nav-main-link-name">Kembali</span>
                     {{-- <span class="nav-main-link-badge badge badge-pill badge-success">10</span> --}}
                 </a>
-            </li>                                          
+            </li>
             <li class="nav-main-heading">Jadwal Detail</li>
             <li class="nav-main-item">
                 <a class="nav-main-link" href="{{ route('backend.diklat.jadwal.detail', ['jadwal' => $jadwal->id, 'slug' => str_slug($jadwal->nama)]) }}">
                     <i class="nav-main-link-icon fa fa-align-justify"></i>
                     <span class="nav-main-link-name">Detail</span>
                 </a>
-            </li> 
+            </li>
             <li class="nav-main-item">
                 <a class="nav-main-link" href="{{ route('backend.diklat.jadwal.detail', ['jadwal' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'peserta']) }}">
                     <i class="nav-main-link-icon fa fa-users"></i>
@@ -76,11 +76,17 @@
             </li>
             @endcan
             <li class="nav-main-item">
+                <a class="nav-main-link" href="{{ route('backend.diklat.jadwal.detail', ['jadwal' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'surat-tugas']) }}">
+                    <i class="nav-main-link-icon fa fa-file-alt"></i>
+                    <span class="nav-main-link-name">Surat Tugas</span>
+                </a>
+            </li>
+            <li class="nav-main-item">
                 <a class="nav-main-link" href="{{ route('backend.diklat.jadwal.detail', ['jadwal' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'sertifikat']) }}">
                     <i class="nav-main-link-icon fa fa-certificate"></i>
                     <span class="nav-main-link-name">Lola SiKembangKol</span>
                 </a>
-            </li>            
+            </li>
             <li class="nav-main-item">
                 <a class="nav-main-link" href="{{ route('backend.diklat.jadwal.detail', ['jadwal' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'cetak']) }}">
                     <i class="nav-main-link-icon fa fa-print"></i>
@@ -92,7 +98,7 @@
                     <i class="nav-main-link-icon fa fa-check"></i>
                     <span class="nav-main-link-name">PAKAR</span>
                 </a>
-            </li>                  
+            </li>
         </ul>
     </div>
     <!-- END Side Navigation -->
