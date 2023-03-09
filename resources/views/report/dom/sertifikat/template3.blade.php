@@ -1,3 +1,9 @@
+@php
+$date_awal = date_create($jadwal->tgl_awal);
+$date_akhir = date_create($jadwal->tgl_akhir);
+$jum_hari = date_diff($date_awal, $date_akhir);
+@endphp
+
 <html>
 
 <head>
@@ -113,7 +119,7 @@
                 <td style="text-align: center">
                     <span style="font-weight: bold; font-size: 14pt; font-family: bookman">BADAN PENGEMBANGAN SUMBER DAYA MANUSIA</span><br>
                     <span style="font-weight: bold; font-size: 14pt; font-family: bookman">PROVINSI KALIMANTAN TIMUR</span><br>
-                    <span style="font-weight: bold; font-size: 24pt; font-family: bookman">SERTIFIKAT</span><br>
+                    <span style="font-weight: bold; font-size: 22pt; font-family: bookman">SERTIFIKAT</span><br>
                     <span style="font-size: 11pt; font-family: bookman">Nomor : {!! $sertPeserta->nomor !!}</span>
                 </td>
             </tr>
@@ -122,7 +128,7 @@
 
     <div id="container">
         <div style="text-align: center; margin-left: 0px; margin-right: 0px; margin-top: 20px">
-			<table width="100%" cellspacing="0" cellpadding="0" class="info" style="margin: 30px 0; font-weight: bold; font-size: 12pt;">
+			<table width="100%" cellspacing="0" cellpadding="0" class="info" style="margin: 10px 0; font-weight: bold; font-size: 12pt;">
                 <tbody>
                     <tr>
                         <td style="vertical-align: top">
@@ -138,7 +144,11 @@
                                                 {!! $sertPeserta->nama_lengkap !!} <br />
                                             </span>
                                             <hr class="style2" />
+                                            @if(!empty($sertPeserta->sebagai))
                                             <span style="font-weight: bold; font-size: 14pt; font-family: bookman">Sebagai {!! $sertPeserta->sebagai !!}</span>
+                                            @else
+                                            <span style="font-weight: bold; font-size: 14pt; font-family: bookman">Sebagai Peserta</span>
+                                            @endif
                                         </td>
                                     </tr>
                                 </tbody>
@@ -147,7 +157,11 @@
                     </tr>
                 </tbody>
             </table>
+            @if($jum_hari->d == 0)
 			<p>Dalam {!! $jadwal->nama !!} Tahun {!! $jadwal->tahun !!} yang dilaksanakan oleh Badan Pengembangan Sumber Daya Manusia Provinsi Kalimantan Timur pada tanggal {!! formatTanggal($jadwal->tgl_awal) !!} sebanyak {!! $jadwal->total_jp !!} Jam Pelajaran (JP).</p>
+            @else
+            <p>Dalam {!! $jadwal->nama !!} Tahun {!! $jadwal->tahun !!} yang dilaksanakan oleh Badan Pengembangan Sumber Daya Manusia Provinsi Kalimantan Timur pada tanggal {!! formatTanggal($jadwal->tgl_awal) !!} sampai dengan {!! formatTanggal($jadwal->tgl_akhir) !!} sebanyak {!! $jadwal->total_jp !!} Jam Pelajaran (JP).</p>
+            @endif
         </div>
         <div id="tt1">
             <table cellspacing="0" cellpadding="0" class="mdiklat" width="100%">

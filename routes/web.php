@@ -33,6 +33,8 @@ Route::resource('/jadwal', 'JadwalController', [
 
 Route::post('/jadwal', 'JadwalController@cari')->name('jadwal.cari');
 Route::get('/jadwal/{jadwal}/{slug}/detail', 'JadwalController@detail')->name('jadwal.detail');
+Route::get('/jadwal/widyaiswara', 'JadwalController@wi')->name('jadwal.wi');
+Route::post('/jadwal/widyaiswara', 'JadwalController@postWi')->name('jadwal.wi.post');
 Route::post('/daftar', 'JadwalController@daftar')->name('jadwal.daftar');
 Route::get('/daftar/step1', 'JadwalController@step1')->name('jadwal.daftar.step1');
 Route::post('/daftar/step1', 'JadwalController@poststep1')->name('jadwal.daftar.step1');

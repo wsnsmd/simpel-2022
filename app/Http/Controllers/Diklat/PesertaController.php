@@ -361,6 +361,7 @@ class PesertaController extends Controller
             $updated_at = date('Y-m-d H:i:s');
 
             DB::table('peserta')->where('id', $id)->update([
+                'nip' => $request->nip,
                 'nama_lengkap' => $request->nama_lengkap,
                 'jk' => $request->jk,
                 'hp' => $request->hp,

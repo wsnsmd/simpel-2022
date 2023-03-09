@@ -12,6 +12,7 @@
     <script src="{{ asset('js/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
 
     <script>
         jQuery(function() {
@@ -72,13 +73,13 @@
         <div class="content content-full py-1">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center">
                 <h1 class="flex-sm-fill font-size-sm text-uppercase font-w700 mt-2 mb-0 mb-sm-2">
-                    <i class="fa fa-angle-right fa-fw text-primary"></i> Jadwal Pelatihan
+                    <i class="fa fa-angle-right fa-fw text-primary"></i> Jadwal Widyaiswara
                 </h1>
                 <nav class="flex-sm-00-auto ml-sm-3 font-size-sm" aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><i class="fa fa-home"></i></li>
                         <li class="breadcrumb-item">Jadwal</i></li>
-                        <li class="breadcrumb-item active" aria-current="page">Pelatihan</li>
+                        <li class="breadcrumb-item active" aria-current="page">Widyaiswara</li>
                     </ol>
                 </nav>
             </div>
@@ -90,46 +91,39 @@
         <div class="bg-white-90">
             <div class="content invisible" data-toggle="appear">
                 <div class="text-center py-3">
-                    <h1 class="h3 font-w700 mb-2">Jadwal Pelatihan {{$tahun}}</h1>
-                    <h2 class="h5 font-w400 text-muted">Silahkan isi form dibawah untuk melakukan pencarian pelatihan!</h2>
+                    <h1 class="h3 font-w700 mb-2">Jadwal Widyaiswara {{$tahun}}</h1>
+                    <h2 class="h5 font-w400 text-muted">Silahkan isi form dibawah untuk melihat jadwal Widyaiswara!</h2>
                 </div>
-                <form id="form-cari" action="{{ route('jadwal.cari') }}" method="POST" autocomplete="off">
+                <form id="form-cari" action="{{ route('jadwal.wi.post') }}" method="POST" autocomplete="off">
                     @csrf
-                    <div class="form-group">
-                        <input type="text" class="form-control form-control-lg py-3 text-center" id="nama" name="nama" placeholder="Nama Pelatihan...">
-                    </div>
                     <div class="form-group row items-push mb-0">
-                        <div class="col-md-4">
-                            <div class="input-daterange input-group" data-date-format="yyyy-mm-dd" data-week-start="1" data-autoclose="true" data-today-highlight="true">
-                                <input type="text" class="form-control border-right-0 border-2x font-size-base" id="tgl_awal" name="tgl_awal" placeholder="Tanggal Mulai..." data-week-start="1" data-autoclose="true" data-today-highlight="true">
-                                <div class="input-group-prepend input-group-append">
-                                    <span class="input-group-text bg-white border-2x border-left-0 border-right-0 font-w600">
-                                        <i class="fa fa-fw fa-angle-double-right font-size-base text-muted"></i>
-                                    </span>
-                                </div>
-                                <input type="text" class="form-control border-left-0 border-2x font-size-base" id="tgl_akhir" name="tgl_akhir" placeholder="Tanggal Akhir..." data-week-start="1" data-autoclose="true" data-today-highlight="true">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <select class="custom-select" id="waktu" name="waktu">
-                                <option value="">Waktu...</option>
-                                <option value="">Semua</option>
-                                <option value="1">Berjalan</option>
-                                <option value="2">Akan Datang</option>
-                                <option value="3">Selesai</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <select class="custom-select" id="jenis" name="jenis">
-                                <option value="">Jenis...</option>
-                                <option value="0">Semua</option>
-                                @foreach ($jenis as $j)
-                                <option value="{{ $j->id }}">{{ $j->nama }}</option>
+                        <div class="col-md-6">
+                            <select class="custom-select" id="widyaiswara" name="widyaiswara" style="width: 100%;" required>
+                                <option value="">Widyaiswara...</option>
+                                @foreach ($wi as $w)
+                                <option value="{{ $w->id }}">{{ $w->nama }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <button type="submit" class="btn btn-block btn-primary"><i class="fa fa-search mr-1"></i> Cari</button>
+                            <select class="custom-select" id="bulan" name="bulan" required>
+                                <option value="">Bulan...</option>
+                                <option value="1">Januari</option>
+                                <option value="2">Februari</option>
+                                <option value="3">Maret</option>
+                                <option value="4">April</option>
+                                <option value="5">Mei</option>
+                                <option value="6">Juni</option>
+                                <option value="7">Juli</option>
+                                <option value="8">Agustus</option>
+                                <option value="9">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Desember</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-block btn-primary"><i class="fa fa-search mr-1"></i> Lihat</button>
                         </div>
                         <div class="col-md-2">
                             <button type="reset" class="btn btn-block btn-dark">Reset</button>
@@ -146,7 +140,7 @@
                 <div class="block block-rounded block-bordered" style="width: 100%">
                     <div class="block-content block-content-full">
                         <div class="table-responsive" id="div-data">
-                            @include('frontend.jadwal_cari')
+                            @include('frontend.wi_cari')
                         </div>
                     </div>
                 </div>

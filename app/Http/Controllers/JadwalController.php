@@ -347,6 +347,7 @@ class JadwalController extends Controller
         try
         {
             $token = str_random(40);
+            $nip = session('nip');
 
             $jadwal = DB::table('v_front_jadwal')->where('id', session('jadwal_id'))->first();
             $bulan = date('m');
@@ -363,6 +364,7 @@ class JadwalController extends Controller
 
             $id = DB::table('peserta')->insertGetId([
                 'kode' => $kode,
+                'nip' => $nip,
                 'nama_lengkap' => $request->nama_lengkap,
                 'nama_panggil' => $request->nama_panggil,
                 'jk' => $request->jk,
@@ -541,5 +543,34 @@ class JadwalController extends Controller
         $peserta = DB::table('peserta')->where('id', 1)->first();
         $jadwal = DB::table('v_front_jadwal')->where('id', $peserta->diklat_jadwal_id)->first();
         return view('frontend.daftar.finish', compact('jadwal', 'peserta'));
+    }
+
+    public function wi()
+    {
+        $wi = DB::table('fasilitator')->where('internal', true)->orderBy('nama')->get();
+        $jadwal = [];
+        $tahun = $this->tahun;
+
+        return view('frontend.wi', compact('wi', 'tahun', 'jadwal'));
+    }
+
+    public function postWi(Request $request)
+    {
+        $validator = $request->validate([
+            'widyaiswara' => 'required',
+            'bulan' => 'required',
+        ]);
+        $sql = "SELECT * FROM `v_spwi_query`";
+        $where = array();
+        $where[] = " `fid`=" . $request->widyaiswara;
+        $where[] = " MONTH(`tanggal`)=" . $request->bulan;
+        $where[] = " `tahun`=" . $this->tahun;
+
+        if(count($where) > 0)
+            $sql .= " WHERE" . implode(" AND", $where);
+
+        $sql .= ' ORDER BY tanggal ASC';
+        $jadwal = DB::select($sql);
+        return view('frontend.wi_cari', compact('jadwal'));
     }
 }

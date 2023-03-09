@@ -47,24 +47,24 @@ class CetakController extends Controller
                 break;
             case 2:
                 $peserta = DB::table('v_peserta')
-                            ->select('nip', 'nama_lengkap', 'satker_nama', 'hp', 'tmp_lahir', 'tgl_lahir', 'jabatan', 'pangkat', 'golongan', 'foto')
+                            ->select('nip', 'nama_lengkap', 'satker_nama', 'hp', 'tmp_lahir', 'tgl_lahir', 'jabatan', 'pangkat', 'golongan', 'email', 'foto')
                             ->where('diklat_jadwal_id', $jadwal_id)
                             ->orderby('nama_lengkap')
                             ->get();
-                foreach ($peserta as $key => &$value) 
+                foreach ($peserta as $key => &$value)
                 {
                     if(!is_null($peserta[$key]->foto))
                     {
                         $peserta[$key]->foto = asset(\Storage::url($peserta[$key]->foto));
                     }
-                    else 
+                    else
                     {
                         $peserta[$key]->foto = asset('media/avatars/avatar8.jpg');
                     }
-                }    
+                }
                 $data['peserta'] = json_encode($peserta);
                 $report = $cetak->template;
-                break;                
+                break;
             case 3:
                 $peserta = DB::table('v_peserta')
                             ->select('nip', 'nama_lengkap', 'satker_singkat')
@@ -92,7 +92,7 @@ class CetakController extends Controller
         return view($report, $data);
     }
 
-    public function modal($id) 
+    public function modal($id)
     {
         return view('backend.cetak.modal.' . $id);
     }

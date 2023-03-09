@@ -18,7 +18,7 @@ class KurikulumController extends Controller
 
         $this->user = Auth::user();
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -37,11 +37,11 @@ class KurikulumController extends Controller
                                 ->join('diklat_jenis', 'kurikulum.diklat_jenis_id', '=', 'diklat_jenis.id')
                                 ->select('kurikulum.*', 'diklat_jenis.nama as jenis_diklat')
                                 ->orderBy('kurikulum.nama')
-                                ->get();                
+                                ->get();
                 break;
             case 'user':
                 $kurikulum = DB::table('kurikulum')
-                                ->join('diklat_jenis', 'kurikulum.diklat_jenis_id', '=', 'diklat_jenis.id')                                
+                                ->join('diklat_jenis', 'kurikulum.diklat_jenis_id', '=', 'diklat_jenis.id')
                                 ->select('kurikulum.*', 'diklat_jenis.nama as jenis_diklat')
                                 ->where('kurikulum.usergroup', $this->user->usergroup)
                                 ->orderBy('kurikulum.nama')
@@ -59,7 +59,7 @@ class KurikulumController extends Controller
      */
     public function create()
     {
-        if (Gate::denies('isUser')) 
+        if (Gate::denies('isUser'))
         {
             abort(403);
         }
@@ -77,19 +77,19 @@ class KurikulumController extends Controller
      */
     public function store(Request $request)
     {
-        if (Gate::denies('isUser')) 
+        if (Gate::denies('isUser'))
         {
             abort(403);
         }
 
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'nama' => 'required',
             'j_diklat' => 'required',
             'j_belajar' => 'required',
             'jp' => 'required|numeric',
         ]);
-        
-        try 
+
+        try
         {
             $usergroup = Auth::user()->usergroup;
 
@@ -105,13 +105,13 @@ class KurikulumController extends Controller
 
             if(isset($request->add))
                 return redirect()->route('backend.diklat.kurikulum.index')->with('success', $notifikasi);
-            
-            return redirect()->back()->with('success', $notifikasi); 
+
+            return redirect()->back()->with('success', $notifikasi);
         }
         catch(\Exception $e)
         {
             $notifikasi = 'Data kurikulum gagal ditambahkan!';
-            return redirect()->back()->with('error', $notifikasi); 
+            return redirect()->back()->with('error', $notifikasi);
         }
     }
 
@@ -153,14 +153,14 @@ class KurikulumController extends Controller
     {
         $this->checkAuth($id);
 
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'nama' => 'required',
             'j_diklat' => 'required',
             'j_belajar' => 'required',
             'jp' => 'required|numeric',
         ]);
-        
-        try 
+
+        try
         {
             $usergroup = Auth::user()->usergroup;
 
@@ -176,14 +176,14 @@ class KurikulumController extends Controller
 
             if(isset($request->add))
                 return redirect()->route('backend.diklat.kurikulum.index')->with('success', $notifikasi);
-            
-            return redirect()->back()->with('success', $notifikasi); 
+
+            return redirect()->back()->with('success', $notifikasi);
         }
         catch(\Exception $e)
         {
             $notifikasi = 'Data kurikulum gagal diubah!';
-            return redirect()->back()->with('error', $notifikasi); 
-        }          
+            return redirect()->back()->with('error', $notifikasi);
+        }
     }
 
     /**
@@ -251,7 +251,7 @@ class KurikulumController extends Controller
         {
             return true;
         }
-        
+
         abort(403);
     }
 }

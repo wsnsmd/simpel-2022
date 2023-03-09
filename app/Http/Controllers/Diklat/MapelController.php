@@ -57,6 +57,7 @@ class MapelController extends Controller
         $this->checkAuth($kurikulum_id);
 
         $kurikulum = DB::table('kurikulum')->where('id', $kurikulum_id)->first();
+        $jpk = 0;
         $jpe = 0;
 
         switch($kurikulum->jenis_belajar)
@@ -66,12 +67,22 @@ class MapelController extends Controller
                     'nama' => 'required',
                     'jpk' => 'required|numeric',
                 ]);
+                $jpk = $request->jpk;
                 break;
 
             case 2:
                 $validator = $request->validate([
                     'nama' => 'required',
                     'jpk' => 'required|numeric',
+                    'jpe' => 'required|numeric',
+                ]);
+                $jpk = $request->jpk;
+                $jpe = $request->jpe;
+                break;
+
+            case 3:
+                $validator = $request->validate([
+                    'nama' => 'required',
                     'jpe' => 'required|numeric',
                 ]);
                 $jpe = $request->jpe;
@@ -89,7 +100,7 @@ class MapelController extends Controller
             DB::table('mapel')->insert([
                 'kurikulum_id' => $kurikulum_id,
                 'nama' => $request->nama,
-                'jpk' => $request->jpk,
+                'jpk' => $jpk,
                 'jpe' => $jpe,
             ]);
 

@@ -27,9 +27,9 @@
         @yield('css_before')
         <link rel="stylesheet" id="css-main" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700">
         <link rel="stylesheet" id="css-theme" href="{{ asset('css/dashmix.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/themes/' . setting()->get('app_tema') . '.css') }}"> 
+        <link rel="stylesheet" href="{{ asset('css/themes/' . setting()->get('app_tema') . '.css') }}">
 
-        @yield('css_after')      
+        @yield('css_after')
 
         <!-- Scripts -->
         <script>window.Laravel = {!! json_encode(['csrfToken' => csrf_token(),]) !!};</script>
@@ -79,10 +79,24 @@
                             </a>
                         </li>
                         <li class="nav-main-item">
-                            <a class="nav-main-link" href="{{ route('jadwal.index') }}">
+                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                 <i class="nav-main-link-icon fa fa-calendar-alt"></i>
                                 <span class="nav-main-link-name">Jadwal</span>
                             </a>
+                            <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link" href="{{ route('jadwal.index') }}">
+                                        <i class="nav-main-link-icon fa fa-calendar-alt"></i>
+                                        <span class="nav-main-link-name">Pelatihan</span>
+                                    </a>
+                                </li>
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link" href="{{ route('jadwal.wi') }}">
+                                        <i class="nav-main-link-icon fa fa-users"></i>
+                                        <span class="nav-main-link-name">Widyaiswara</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('alumni.index') }}">
@@ -95,18 +109,18 @@
                                 <i class="nav-main-link-icon fa fa-info-circle"></i>
                                 <span class="nav-main-link-name">Informasi</span>
                             </a>
-                        </li>               
+                        </li>
                         <li class="nav-main-item">
                             <a class="nav-main-link" href="{{ route('login') }}">
                                 <i class="nav-main-link-icon fa fa-sign-in-alt"></i>
                                 <span class="nav-main-link-name">Login</span>
                             </a>
-                        </li>                        
+                        </li>
                     </ul>
                 </div>
                 <!-- END Side Navigation -->
             </nav>
-            <!-- END Sidebar -->            
+            <!-- END Sidebar -->
 
             <!-- Header -->
             <header id="page-header">
@@ -135,10 +149,24 @@
                                     </a>
                                 </li>
                                 <li class="nav-main-item">
-                                    <a class="nav-main-link" href="{{ route('jadwal.index') }}">
+                                    <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="false" href="#">
                                         <i class="nav-main-link-icon fa fa-calendar-alt"></i>
                                         <span class="nav-main-link-name">Jadwal</span>
                                     </a>
+                                    <ul class="nav-main-submenu">
+                                        <li class="nav-main-item">
+                                            <a class="nav-main-link" href="{{ route('jadwal.index') }}">
+                                                <i class="nav-main-link-icon fa fa-calendar-alt"></i>
+                                                <span class="nav-main-link-name">Pelatihan</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-main-item">
+                                            <a class="nav-main-link" href="{{ route('jadwal.wi') }}">
+                                                <i class="nav-main-link-icon fa fa-users"></i>
+                                                <span class="nav-main-link-name">Widyaiswara</span>
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
                                 <li class="nav-main-item">
                                     <a class="nav-main-link" href="{{ route('alumni.index') }}">
@@ -157,7 +185,7 @@
                                         <i class="nav-main-link-icon fa fa-sign-in-alt"></i>
                                         <span class="nav-main-link-name">Login</span>
                                     </a>
-                                </li>                                
+                                </li>
                             </ul>
                             <!-- END Menu -->
                         </div>
@@ -204,7 +232,7 @@
                                     @foreach ($berita as $b)
                                     <li>
                                         <a class="font-w400 text-gray-darker" href="{{ $b->get_permalink() }}" target="_blank">
-                                            <i class="fa fa-fw fa-globe text-gray-darker mr-1"></i> 
+                                            <i class="fa fa-fw fa-globe text-gray-darker mr-1"></i>
                                             {!! $b->get_title() !!}
                                         </a>
                                     </li>
