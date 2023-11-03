@@ -20,14 +20,14 @@ class SertifikatController extends Controller
         $this->middleware('auth');
     }
 
-    public function store(Request $request) 
-    {   
+    public function store(Request $request)
+    {
         $is_generate = $request->is_generate;
 
         if($is_generate)
         {
             $validator = $request->validate([
-                'tsid' => 'required',    
+                'tsid' => 'required',
                 'jadwal_id' => 'required',
                 'is_generate' => 'required',
                 'is_upload' => 'required',
@@ -43,9 +43,9 @@ class SertifikatController extends Controller
                 'spesimen' => 'nullable|mimes:png|max:512'
             ]);
         }
-        else 
+        else
         {
-            $validator = $request->validate([            
+            $validator = $request->validate([
                 'jadwal_id' => 'required',
                 'is_generate' => 'required',
                 'is_upload' => 'required|gt:0',
@@ -59,19 +59,20 @@ class SertifikatController extends Controller
 
         DB::beginTransaction();
 
-        try 
+        try
         {
             $created_at = date('Y-m-d H:i:s');
             if($request->has('spesimen'))
             {
                 $file = $input['spesimen'];
-                $nama_file = time()."_".$file->getClientOriginalName(); 
+                $nama_file = time()."_".$file->getClientOriginalName();
                 $spesimen_path = $input['spesimen']->storeAs('public/files/spesimen', $nama_file);
             }
 
             DB::table('sertifikat')->insert([
                 'diklat_jadwal_id' => $input['jadwal_id'],
                 'tsid' => $input['tsid'],
+                'fasilitasi' => $input['fasilitasi'],
                 'is_generate' => $input['is_generate'],
                 'is_upload' => $input['is_upload'],
                 'barcode' => $input['barcode'],
@@ -88,7 +89,7 @@ class SertifikatController extends Controller
                 'created_at' => $created_at
             ]);
         }
-        catch (\Exception $e) 
+        catch (\Exception $e)
         {
             DB::rollback();
             throw $e;
@@ -113,7 +114,7 @@ class SertifikatController extends Controller
                     ->get();
 
         $jadwal = DB::table('v_jadwal_detail')->find($id);
-        
+
         $sertifikat = DB::table('sertifikat')->where('diklat_jadwal_id', $id)->first();
 
         return view('backend.diklat.sertifikat.buat_peserta', compact('jadwal', 'peserta', 'sertifikat'));
@@ -138,7 +139,7 @@ class SertifikatController extends Controller
                     ->where('tahun', $tahun)
                     ->where('bidang', $jadwal->usergroup)
                     ->max('no');
-        
+
         $kiri = null;
         $bawah = null;
         if(!is_null($sertifikat->tsid))
@@ -152,20 +153,20 @@ class SertifikatController extends Controller
 
         try
         {
-            foreach($pid as $p) 
-            {   
+            foreach($pid as $p)
+            {
                 $peserta = DB::table('v_peserta')
                             ->where('id', $p)
                             ->where('diklat_jadwal_id', $id)
                             ->exists();
-                
+
                 if($peserta)
                 {
-                    $no = ++$result; 
+                    $no = ++$result;
                     if(!$sertifikat->is_generate && $sertifikat->is_upload)
                         $no_sertifikat = $request['pid_nomor_' . $p];
-                    else 
-                    {                   
+                    else
+                    {
                         $nomor = sprintf("%05s", $no);
                         $replace = array($nomor, $bulan, $tahun);
                         $no_sertifikat = str_replace($search, $replace, $format);
@@ -183,13 +184,13 @@ class SertifikatController extends Controller
                         'created_at' => $created_at,
                     ]);
                 }
-                else 
+                else
                 {
                     throw new \Exception('Simpan data sertifikat gagal, data peserta tidak sesuai!');
                 }
             }
         }
-        catch (\Exception $e) 
+        catch (\Exception $e)
         {
             DB::rollback();
             throw $e;
@@ -198,7 +199,7 @@ class SertifikatController extends Controller
         DB::commit();
 
         $notifikasi = 'Data sertifikat peserta berhasil dibuat!';
-        
+
         return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'sertifikat'])
                     ->with([
                         'success' => $notifikasi,
@@ -208,12 +209,12 @@ class SertifikatController extends Controller
     public function cetak(Request $request, $id)
     {
         $sertPeserta = DB::table('v_sertifikat')
-                        ->select('nip', 'nama_lengkap', 'tmp_lahir', 'tgl_lahir', 'jabatan', 'foto', 'instansi', 'satker_nama', 'sebagai', 'diklat_jadwal_id', 'pangkat', 'golongan', 'nomor', 'sertifikat_id', 'spesimen_kiri', 'spesimen_bawah') 
+                        ->select('nip', 'nama_lengkap', 'tmp_lahir', 'tgl_lahir', 'jabatan', 'foto', 'instansi', 'satker_nama', 'sebagai', 'diklat_jadwal_id', 'pangkat', 'golongan', 'nomor', 'sertifikat_id', 'spesimen_kiri', 'spesimen_bawah')
                         ->where('spid', $id)
                         ->first();
 
         $sertifikat = DB::table('sertifikat')
-                        ->select('tempat', 'tanggal', 'jabatan', 'nama', 'pangkat', 'nip', 'diklat_jadwal_id', 'spesimen', 'tsid')
+                        ->select('tempat', 'tanggal', 'jabatan', 'nama', 'pangkat', 'nip', 'diklat_jadwal_id', 'spesimen', 'tsid', 'fasilitasi')
                         ->where('id', $sertPeserta->sertifikat_id)
                         ->first();
 
@@ -221,14 +222,14 @@ class SertifikatController extends Controller
                         ->select('nama', 'tahun', 'tipe', 'tgl_awal', 'tgl_akhir', 'kelas', 'total_jp', 'lokasi', 'lokasi_kota')
                         ->where('id', $sertifikat->diklat_jadwal_id)
                         ->first();
-        
+
         $template = DB::table('sertifikat_template')->where('id', $sertifikat->tsid)->first();
 
         if(!is_null($sertPeserta->foto))
         {
             $sertPeserta->foto = asset(\Storage::url($sertPeserta->foto));
         }
-        else 
+        else
         {
             $sertPeserta->foto = asset('media/avatars/avatar8.jpg');
         }
@@ -266,9 +267,9 @@ class SertifikatController extends Controller
         return response()->json($data, 200);
     }
 
-    public function postSpesimenPos(Request $request, $id) 
+    public function postSpesimenPos(Request $request, $id)
     {
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'jadwal_id' => 'required',
             'kiri' => 'required|numeric|between:0.0,20.0',
             'bawah' => 'required|numeric|between:0.0,20.0',
@@ -278,7 +279,7 @@ class SertifikatController extends Controller
 
         DB::beginTransaction();
 
-        try 
+        try
         {
             $updated_at = date('Y-m-d H:i:s');
 
@@ -291,7 +292,7 @@ class SertifikatController extends Controller
                     'updated_at' => $updated_at
                 ]);
             }
-            else 
+            else
             {
                 DB::table('sertifikat_peserta')->where('id', $id)->update([
                     'spesimen_kiri' => $input['kiri'],
@@ -300,7 +301,7 @@ class SertifikatController extends Controller
                 ]);
             }
         }
-        catch (\Exception $e) 
+        catch (\Exception $e)
         {
             DB::rollback();
             throw $e;
@@ -320,7 +321,7 @@ class SertifikatController extends Controller
 
     public function emailTemplate(Request $request, $id)
     {
-        $jadwal = DB::table('v_jadwal_detail')->find($id);   
+        $jadwal = DB::table('v_jadwal_detail')->find($id);
         $sertifikat = DB::table('sertifikat')->where('diklat_jadwal_id', $id)->first();
         $email = DB::table('sertifikat_email')->where('sertifikat_id', $sertifikat->id)->first();
 
@@ -338,7 +339,7 @@ class SertifikatController extends Controller
 
         DB::beginTransaction();
 
-        try 
+        try
         {
             $at = date('Y-m-d H:i:s');
 
@@ -347,7 +348,7 @@ class SertifikatController extends Controller
                 ['sertifikat_id' => $sertifikat->id, 'konten' => $request->konten]
             );
         }
-        catch (\Exception $e) 
+        catch (\Exception $e)
         {
             DB::rollback();
             throw $e;
@@ -374,13 +375,13 @@ class SertifikatController extends Controller
         $email = DB::table('sertifikat_email')->where('sertifikat_id', $sertifikat->id)->first();
         $search = array('http://{sertifikat}', '{nama}');
 
-        try 
+        try
         {
             foreach($peserta as $pes)
             {
                 if($sertifikat->is_upload && is_null($pes->upload))
                     continue;
-                    
+
                 $url_sertifikat = route('sertifikat.show', [
                     'peserta' => $pes->id,
                     'jadwal' => $pes->diklat_jadwal_id,
@@ -392,7 +393,7 @@ class SertifikatController extends Controller
 
                 $job = new KirimEmailSertifikatJob($pes->email, $pes->nama_lengkap, $jadwal, $konten, $sertifikat);
                 $this->dispatch($job);
-                
+
                 // Mail::to($pes->email)->send(new KirimSertifikatMailable($pes->nama_lengkap, $jadwal, $konten, $sertifikat));
 
                 $at = date('Y-m-d H:i:s');
@@ -419,9 +420,9 @@ class SertifikatController extends Controller
         }
     }
 
-    public function postUpload(Request $request, $id) 
+    public function postUpload(Request $request, $id)
     {
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'jadwal_id' => 'required',
             'file' => 'required|mimetypes:application/pdf|max:1024'
         ]);
@@ -432,14 +433,14 @@ class SertifikatController extends Controller
 
         DB::beginTransaction();
 
-        try 
+        try
         {
             $updated_at = date('Y-m-d H:i:s');
-            if(!is_null($sertifikat->upload)) 
+            if(!is_null($sertifikat->upload))
                 $file_old = $sertifikat->upload;
 
             $file = $input['file'];
-            $nama_file = time()."_".$file->getClientOriginalName(); 
+            $nama_file = time()."_".$file->getClientOriginalName();
             $path = $input['file']->storeAs('public/files/sertifikat/upload', $nama_file);
 
             DB::table('sertifikat_peserta')->where('id', $id)->update([
@@ -447,7 +448,7 @@ class SertifikatController extends Controller
                 'updated_at' => $updated_at
             ]);
         }
-        catch (\Exception $e) 
+        catch (\Exception $e)
         {
             DB::rollback();
             throw $e;
@@ -487,7 +488,7 @@ class SertifikatController extends Controller
         $struktural = $input['struktural'];
         $jenis= $input['jenis'];
 
-        try 
+        try
         {
             foreach($peserta as $pes)
             {
@@ -529,5 +530,38 @@ class SertifikatController extends Controller
                         'page' => 'peserta'
                     ]);
         }
+    }
+
+    public function destroy($id)
+    {
+        $sertifikat = DB::table('sertifikat')->where('id', '=', $id)->first();
+        $jadwal = DB::table('v_jadwal_detail')->where('id', $sertifikat->diklat_jadwal_id)->first();
+
+        DB::beginTransaction();
+
+        try
+        {
+            $email = DB::table('sertifikat_email')->where('sertifikat_id', '=', $id)->delete();
+            $peserta = DB::table('sertifikat_peserta')->where('sertifikat_id', '=', $id)->delete();
+            $sertifikat = DB::table('sertifikat')->where('id', '=', $id)->delete();
+        }
+        catch (\Exception $e)
+        {
+            DB::rollback();
+            $notifikasi = 'Hapus sertifikat gagal!';
+            return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'sertifikat'])
+                    ->with([
+                        'error' => $notifikasi,
+                    ]);
+        }
+
+        DB::commit();
+
+        $notifikasi = 'Hapus sertifikat berhasil!';
+
+        return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'sertifikat'])
+                    ->with([
+                        'success' => $notifikasi,
+                    ]);
     }
 }

@@ -1,3 +1,9 @@
+@php
+$date_awal = date_create($jadwal->tgl_awal);
+$date_akhir = date_create($jadwal->tgl_akhir);
+$jum_hari = date_diff($date_awal, $date_akhir);
+@endphp
+
 <html>
 
 <head>
@@ -45,7 +51,7 @@
 
         table.mdiklat td {
             font-family: bookman;
-            font-size: 10pt;
+            font-size: 11pt;
         }
 
         div {
@@ -54,9 +60,26 @@
 
         p {
             font-family: bookman;
-            font-size: 10pt;
+            font-size: 11pt;
             margin: 0;
             text-align: justify;
+        }
+
+        hr.style1 {
+            border-top: 1px solid;
+            border: none;
+            height: 1px;
+            /* Set the hr color */
+            color: #000;
+            /* old IE */
+            background-color: #000;
+            /* Modern Browsers */
+        }
+
+        hr.style2 {
+            margin: 2px 200px 0px 200px;
+            border-bottom: 2px solid;
+            color: #00923F;
         }
 
         .page_break {
@@ -69,7 +92,6 @@
 
         #tt1 {
             padding-top: 0.5cm;
-            padding-left: 15cm;
         }
 
         @if(!is_null($sertifikat->spesimen))
@@ -82,7 +104,7 @@
     </style>
 </head>
 
-<body>
+<body style='background-image: url("/media/images/template3.jpg"); background-size: contain; background-repeat: no-repeat;'>
     <table width="100%" cellspacing="0" cellpadding="0" class="header" style="padding-top: 0.5cm;">
         <tbody>
             <tr>
@@ -95,15 +117,17 @@
         <tbody>
             <tr>
                 <td style="text-align: center">
-                    <span style="font-weight: bold; font-size: 14pt; font-family: bookman">SURAT TANDA TAMAT PELATIHAN</span><br>
-                    <span style="font-size: 10pt; font-family: bookman">Nomor : {!! $sertPeserta->nomor !!}</span></td>
+                    <span style="font-weight: bold; font-size: 14pt; font-family: bookman">BADAN PENGEMBANGAN SUMBER DAYA MANUSIA</span><br>
+                    <span style="font-weight: bold; font-size: 14pt; font-family: bookman">PROVINSI KALIMANTAN TIMUR</span><br>
+                    <span style="font-weight: bold; font-size: 22pt; font-family: bookman">SERTIFIKAT</span><br>
+                    <span style="font-size: 11pt; font-family: bookman">Nomor : {!! $sertPeserta->nomor !!}</span>
+                </td>
             </tr>
         </tbody>
     </table>
 
     <div id="container">
         <div style="text-align: center; margin-left: 0px; margin-right: 0px; margin-top: 20px">
-			<p>Badan Pengembangan Sumber Daya Manusia Provinsi Kalimantan Timur berdasarkan Peraturan Pemerintah Republik Indonesia Nomor 11 Tahun 2017 tentang Manajemen Pegawai Negeri Sipil serta ketentuan pelaksanaannya, menyatakan bahwa:</p>
 			<table width="100%" cellspacing="0" cellpadding="0" class="info" style="margin: 10px 0; font-weight: bold; font-size: 12pt;">
                 <tbody>
                     <tr>
@@ -112,47 +136,20 @@
                                 style="padding: 2px 0 2px 0px;" class="mdiklat">
                                 <tbody>
                                     <tr>
-                                        <td rowspan="6" width="18%" style="vertical-align: middle; text-align: center;"><img style="border: 2px solid;" src="{{ $sertPeserta->foto }}" height="160px" /></td>
-                                        <td width="20%">Nama</td>
-                                        <td width="2%">:</td>
-                                        <td width="60%">{!! $sertPeserta->nama_lengkap !!}</td>
+                                        <td style="text-align: center"><span style="font-weight: bold; font-size: 14pt; font-family: bookman">DIBERIKAN KEPADA</span></td>
                                     </tr>
                                     <tr>
-                                        <td style="vertical-align: top">Tempat dan Tanggal Lahir</td>
-                                        <td style="vertical-align: top">:</td>
-                                        <td style="vertical-align: top">{!! $sertPeserta->tmp_lahir !!}, {!! formatTanggal($sertPeserta->tgl_lahir) !!}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>NIP</td>
-                                        <td>:</td>
-                                        <td>
-                                            @if(is_null($sertPeserta->nip))
-                                                -
+                                        <td style="text-align: center; padding-top: 20px;">
+                                            <span style="font-weight: bold; font-size: 16pt; font-family: bookman">
+                                                {!! $sertPeserta->nama_lengkap !!} <br />
+                                            </span>
+                                            <hr class="style2" />
+                                            @if(!empty($sertPeserta->sebagai))
+                                            <span style="font-weight: bold; font-size: 14pt; font-family: bookman">Sebagai {!! $sertPeserta->sebagai !!}</span>
                                             @else
-                                            {!! formatNIP($sertPeserta->nip) !!}
+                                            <span style="font-weight: bold; font-size: 14pt; font-family: bookman">Sebagai Peserta</span>
                                             @endif
                                         </td>
-                                    </tr>
-									<tr>
-                                        <td>Pangkat / Golongan</td>
-                                        <td>:</td>
-                                        <td>
-                                            @if(is_null($sertPeserta->pangkat))
-                                                -
-                                            @else
-                                            {!! $sertPeserta->pangkat !!}, {!! $sertPeserta->golongan !!}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align: top">Jabatan</td>
-                                        <td style="vertical-align: top">:</td>
-                                        <td style="vertical-align: top">{!! $sertPeserta->jabatan !!}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="vertical-align: top">Instansi</td>
-                                        <td style="vertical-align: top">:</td>
-                                        <td style="vertical-align: top; text-transform: uppercase">{!! $sertPeserta->instansi !!}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -160,10 +157,14 @@
                     </tr>
                 </tbody>
             </table>
-			<p>pada Pelatihan {!! $jadwal->nama !!} Tahun {!! $jadwal->tahun !!} yang diselenggarakan oleh Badan Pengembangan Sumber Daya Manusia Provinsi Kalimantan Timur dari tanggal {!! formatTanggal($jadwal->tgl_awal) !!} sampai dengan {!! formatTanggal($jadwal->tgl_akhir) !!} di {!! $jadwal->lokasi_kota !!} yang meliputi {!! $jadwal->total_jp !!} jam pelajaran.</p>
+            @if($jum_hari->d == 0)
+			<p>Dalam {!! $jadwal->nama !!} Tahun {!! $jadwal->tahun !!} yang diselenggarakan oleh {!! $sertifikat->fasilitasi !!} bekerja sama dengan Badan Pengembangan Sumber Daya Manusia Provinsi Kalimantan Timur pada tanggal {!! formatTanggal($jadwal->tgl_awal) !!} sebanyak {!! $jadwal->total_jp !!} Jam Pelajaran (JP).</p>
+            @else
+            <p>Dalam {!! $jadwal->nama !!} Tahun {!! $jadwal->tahun !!} yang dilaksanakan oleh {!! $sertifikat->fasilitasi !!} bekerja sama dengan Badan Pengembangan Sumber Daya Manusia Provinsi Kalimantan Timur pada tanggal {!! formatTanggal($jadwal->tgl_awal) !!} sampai dengan {!! formatTanggal($jadwal->tgl_akhir) !!} sebanyak {!! $jadwal->total_jp !!} Jam Pelajaran (JP).</p>
+            @endif
         </div>
         <div id="tt1">
-            <table cellspacing="0" cellpadding="0" class="mdiklat">
+            <table cellspacing="0" cellpadding="0" class="mdiklat" width="100%">
                 <tr>
                     <td style="text-align: center; text-transform: uppercase; padding-bottom: 30px">{!! $sertifikat->tempat !!}, {!! formatTanggal($sertifikat->tanggal) !!}</td>
                 </tr>
@@ -178,6 +179,9 @@
                 </tr>
                 <tr>
                     <td style="text-align: center; font-weight: bold; text-decoration: underline;">{!! $sertifikat->nama !!}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center">{!! $sertifikat->pangkat !!}</td>
                 </tr>
                 <tr>
                     <td style="text-align: center">NIP. {!! formatNIP($sertifikat->nip) !!}</td>

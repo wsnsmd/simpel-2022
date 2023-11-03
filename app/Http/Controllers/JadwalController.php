@@ -29,6 +29,7 @@ class JadwalController extends Controller
         $jadwal = DB::table('v_front_jadwal')
                     //->where('tahun', $this->tahun)
                     ->where('status_jadwal', '<', 3)
+                    ->where('status', '=', 1)
                     ->orderBy('tgl_awal')->get();
         $tahun = $this->tahun;
 

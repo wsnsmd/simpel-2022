@@ -528,7 +528,9 @@ class MapelController extends Controller
                 ->where('diklat_jadwal.id', $fasilitator->jid)
                 ->first();
         $tandatangan = DB::table('mapel_tt')->where('jid', $fasilitator->jid)->first();
-        $nomor = '090.1 / ' . $fasilitator->nomor . ' / III / BPSDM / ' . $fasilitator->tahun;
+        $group = DB::table('ugroup')->where('kode', $this->user->usergroup)->first();
+        $no_format = sprintf("%05s", $fasilitator->nomor);
+        $nomor = '800.1.11.1 / ' . $no_format . ' / BPSDM-' . $group->romawi;
 
         if(is_null($tandatangan))
         {

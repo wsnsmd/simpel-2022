@@ -6,7 +6,7 @@
 
 @section('css_before')
     <!-- Page JS Plugins CSS -->
-    <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}">    
+    <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
 @endsection
 
@@ -18,7 +18,7 @@
     <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jquery-validation/additional-methods.js') }}"></script>
-    <script>        
+    <script>
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -26,8 +26,37 @@
         });
 
         jQuery(function(){
-            Dashmix.helpers(['datepicker', 'validation']); 
+            Dashmix.helpers(['datepicker', 'validation']);
         });
+
+        function showAlert(form) {
+            var e = Swal.mixin({
+                        buttonsStyling: !1,
+                        customClass: {
+                            confirmButton: "btn btn-success m-1",
+                            cancelButton: "btn btn-danger m-1",
+                            input: "form-control"
+                        }
+                    });
+
+            e.fire({
+                title: 'Apakah anda yakin',
+                text: 'Anda tidak akan dapat mengembalikan data anda',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                customClass: {
+                    confirmButton: "btn btn-danger m-1",
+                    cancelButton: "btn btn-secondary m-1"
+                },
+                html: !1
+            }).then((result) => {
+                if(result.value) {
+                    form.submit();
+                }
+            });
+        }
 
         @if (session('success'))
         $.notify({
@@ -55,7 +84,7 @@
         });
         @endif
 
-        jQuery(document).ready(function () { 
+        jQuery(document).ready(function () {
             jQuery.extend(jQuery.validator.messages, {
                 required: "Wajib diisi.",
             });
@@ -80,7 +109,7 @@
 				}
             });
 
-            $('#mdl-buat').on('hidden.bs.modal', function() {        
+            $('#mdl-buat').on('hidden.bs.modal', function() {
                 form_buat.resetForm();
                 $('#mdl-buat-form').trigger('reset');
                 // $('textarea[name=keterangan]').val('');
@@ -111,8 +140,8 @@
                     $('#simpeg_struktural').prop('selectedIndex', 0);
                 }
             })
-        })        
-        
+        })
+
         function showBuat() {
             action = 'add';
             $('#mdl-buat').modal('show');
@@ -197,8 +226,8 @@
                         <p class="font-w600 font-size-sm text-uppercase">Impor Peserta</p>
                     </div>
                 </a>
-            </div>            
-            @else            
+            </div>
+            @else
             <div class="col-6 col-md-4 col-xl-2">
                 <a class="block block-rounded block-link-pop text-center d-flex align-items-center" href="javascript:;" onclick="event.preventDefault(); document.getElementById('buat-peserta-form').submit();">
                     <div class="block-content">
@@ -209,7 +238,7 @@
                     </div>
                 </a>
                 <form id="buat-peserta-form" action="{{ route('backend.diklat.sertifikat.buat.peserta', ['jadwal' => $jadwal->id]) }}" method="post" style="display: none;">
-                    @csrf                
+                    @csrf
                 </form>
             </div>
             <div class="col-6 col-md-4 col-xl-2">
@@ -232,7 +261,7 @@
                     </div>
                 </a>
                 <form id="email-template-form" action="{{ route('backend.diklat.sertifikat.email.template', ['jadwal' => $jadwal->id]) }}" method="post" style="display: none;">
-                    @csrf                
+                    @csrf
                 </form>
             </div>
             @if(!is_null($email))
@@ -246,22 +275,38 @@
                     </div>
                 </a>
                 <form id="kirim-email-form" action="{{ route('backend.diklat.sertifikat.kirim.email', ['jadwal' => $jadwal->id]) }}" method="post" style="display: none;">
-                    @csrf 
-                    <input type="hidden" name="sertifikat_id" value="{{ $sertifikat->id }}" />               
+                    @csrf
+                    <input type="hidden" name="sertifikat_id" value="{{ $sertifikat->id }}" />
+                </form>
+            </div>
+            @endif
+            @if(Gate::check('isAdmin'))
+            <div class="col-6 col-md-4 col-xl-2">
+                <a class="block block-rounded block-link-pop text-center d-flex align-items-center" href="javascript:;" onclick="return showAlert(document.getElementById('hapus-form'));">
+                    <div class="block-content">
+                        <p class="mb-2 d-sm-block">
+                            <i class="fa fa-trash text-danger fa-2x"></i>
+                        </p>
+                        <p class="font-w600 font-size-sm text-uppercase">Hapus</p>
+                    </div>
+                </a>
+                <form id="hapus-form" action="{{ route('backend.diklat.sertifikat.destroy', $sertifikat->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
                 </form>
             </div>
             @endif
             @endif
-            @endif   
+            @endif
         </div>
     </div>
     @endif
-    <!-- END Quick Menu --> 
+    <!-- END Quick Menu -->
 
     <!-- Page Content -->
     <div class="content">
         @if($sertifikat)
-        <!-- Sertifikat Peserta -->        
+        <!-- Sertifikat Peserta -->
         <div class="block block-bordered block-themed">
             <div class="block-header">
                 <h3 class="block-title">Daftar Sertifikat</h3>
@@ -273,8 +318,8 @@
                             <tr>
                                 <th class="font-w700 text-center" style="width: 30px; vertical-align: middle;" rowspan="2">#</th>
                                 <th class="font-w700 text-center" style="width: 60px; vertical-align: middle;" rowspan="2">Nomor</th>
-                                <th class="font-w700 text-center" style="width: 12%; vertical-align: middle;" rowspan="2">NIP</th>   
-                                <th class="font-w700 text-center" style="vertical-align: middle;" rowspan="2">Nama</th>                         
+                                <th class="font-w700 text-center" style="width: 12%; vertical-align: middle;" rowspan="2">NIP</th>
+                                <th class="font-w700 text-center" style="vertical-align: middle;" rowspan="2">Nama</th>
                                 <th class="font-w700 text-center" style="vertical-align: middle;" rowspan="2">Satuan Kerja</th>
                                 <th class="font-w700 text-center" style="vertical-align: middle;" rowspan="2">Instansi</th>
                                 <th class="font-w700 text-center" colspan="2">Status Kirim</th>
@@ -298,10 +343,10 @@
                                 </td>
                                 <td class="font-w600">
                                     {{ $sp->nama_lengkap }}
-                                </td>             
+                                </td>
                                 <td class="font-w600">
                                     {{ $sp->satker_nama }}
-                                </td>          
+                                </td>
                                 <td class="font-w600">
                                     {{ $sp->instansi }}
                                 </td>
@@ -318,9 +363,9 @@
                                     @else
                                     <span class="badge badge-success">Sudah</span>
                                     @endif
-                                </td>           
+                                </td>
                                 <td class="text-center fs-base">
-                                    <div class="d-flex justify-content-center">                                   
+                                    <div class="d-flex justify-content-center">
                                     @if($sertifikat->is_generate)
                                         <form action="{{ route('backend.diklat.sertifikat.cetak', $sp->spid) }}" method="POST" target="_cetak">
                                             @csrf
@@ -340,7 +385,7 @@
                                         </button>
                                         @if (!is_null($sp->upload))
                                         <a href="{{ asset(\Storage::url($sp->upload)) }}" class="btn btn-sm btn-success mx-1" title="Lihat" target="_blank">
-                                            <i class="fa fa-eye"></i> 
+                                            <i class="fa fa-eye"></i>
                                         </a>
                                         @endif
                                     @endif
@@ -371,7 +416,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="block-content" id="mdl-form-content">                                    
+                            <div class="block-content" id="mdl-form-content">
                                 <div class="form-group form-row">
                                     <div class="col-6">
                                         <label for="kiri" class="control-label">Kiri <span class="text-danger">*</span></label>
@@ -419,7 +464,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="block-content" id="mdl-form-content">                                    
+                            <div class="block-content" id="mdl-form-content">
                                 <div class="form-group">
                                     <label for="file" class="control-label">File <span class="text-danger">*</span></label>
                                     <input type="file" class="form-control" id="file" name="file" accept="application/pdf" required>
@@ -453,7 +498,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="block-content" id="mdl-form-content">                                    
+                            <div class="block-content" id="mdl-form-content">
                                 <div class="form-group">
                                     <label for="simpeg_jenis" class="control-label">Jenis Pelatihan <span class="text-danger">*</span></label>
                                     <select class="form-control" id="simpeg_jenis" name="jenis" style="width: 100%;" required>
@@ -548,7 +593,7 @@
                                             <label for="format_nomor" class="control-label">Format Nomor <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="format_nomor" name="format_nomor" placeholder="Cth. {N}/{m}/{y}" value="" required>
                                         </div>
-                                    </div>   
+                                    </div>
                                     <div class="form-group form-row">
                                         <div class="col-6">
                                             <label for="barcode" class="control-label">Barcode <span class="text-danger">*</span></label>
@@ -566,7 +611,13 @@
                                                 <option value="1">Ya</option>
                                             </select>
                                         </div>
-                                    </div>                                                          
+                                    </div>
+                                    <div class="form-group form-row">
+                                        <div class="col-6">
+                                            <label for="fasilitasi" class="control-label">Fasilitasi</label>
+                                            <input type="text" class="form-control" id="fasilitasi" name="fasilitasi" placeholder="Fasilitasi..." value="">
+                                        </div>
+                                    </div>
                                     <h2 class="content-heading pt-0 mb-3">Pejabat Penandatangan</h2>
                                     <div class="form-group form-row">
                                         <div class="col-6">
@@ -593,8 +644,8 @@
                                             <label for="spesimen" class="control-label">Spesimen</label>
                                             <input type="file" class="form-control" id="spesimen" name="spesimen" accept="image/png">
                                         </div>
-                                    </div>    
-                                </div>                           
+                                    </div>
+                                </div>
                             </div>
                             <div class="block-content block-content-full text-right bg-light">
                                 <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Batal</button>
@@ -608,5 +659,5 @@
         <!-- END Modal Buat -->
         @endif
     </div>
-    <!-- END Page Content -->     
+    <!-- END Page Content -->
 @endsection
