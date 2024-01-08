@@ -48,7 +48,6 @@
         "classmap": [
             "database/seeds",
             "database/factories",
-            "vendor/soundasleep/html2text/src/Html2Text.php"
         ],
         "files" : ["app/Helper.php"]
     },
