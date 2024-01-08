@@ -203,7 +203,8 @@ class JadwalController extends Controller
                         if($data_pegawai['status']['kode'] != 200)
                             return redirect()->back()->with('error', $data_pegawai['keterangan']);
 
-                        $req_satker = $client->get(env('SIMPEG_SATKER') . $data_pegawai['id_skpd'] . '/?api_token=' . env('SIMPEG_KEY'));
+                        //$req_satker = $client->get(env('SIMPEG_SATKER') . $data_pegawai['id_skpd'] . '/?api_token=' . env('SIMPEG_KEY'));
+                        $req_satker = $client->get(env('SIMPEG_SATKER') . '/?id_skpd=' . $data_pegawai['id_skpd'] . '&api_token=' . env('SIMPEG_KEY'));
 
                         if($req_satker->getStatusCode() == 200)
                         {

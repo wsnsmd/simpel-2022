@@ -219,7 +219,7 @@ Route::group(['prefix'=>'ajax','as'=>'ajax.'], function () {
                 $res_pegawai = $req_pegawai->getBody();
                 $pegawai = json_decode($res_pegawai, true);
 
-                $req_satker = $client->get(env('SIMPEG_SATKER') . $pegawai['id_skpd'] . '/?api_token=' . env('SIMPEG_KEY'));
+                $req_satker = $client->get(env('SIMPEG_SATKER') . '/?id_skpd=' . $pegawai['id_skpd'] . '&api_token=' . env('SIMPEG_KEY'));
 
                 if($req_satker->getStatusCode() == 200)
                 {
