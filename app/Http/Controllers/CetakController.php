@@ -43,7 +43,6 @@ class CetakController extends Controller
                             ->orderby('nama_lengkap')
                             ->get();
                 $data['peserta'] = json_encode($peserta);
-                dd($data);
                 $report = $cetak->template;
                 break;
             case 2:
