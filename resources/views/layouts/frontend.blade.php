@@ -1,7 +1,3 @@
-@php
-    $feed = Feeds::make('https://bpsdm.kaltimprov.go.id/v2/feed/', 5);
-    $berita = $feed->get_items(0, 5);
-@endphp
 <!doctype html>
 <html lang="{{ config('app.locale') }}">
     <head>
@@ -227,17 +223,14 @@
                                 </div>
                             </div> --}}
                             <div class="col-md-8">
-                                <h3 class="h5 font-w700 border-bottom pb-2">Berita Terbaru</h3>
-                                <ul class="list list-simple-mini">
-                                    @foreach ($berita as $b)
-                                    <li>
-                                        <a class="font-w400 text-gray-darker" href="{{ $b->get_permalink() }}" target="_blank">
-                                            <i class="fa fa-fw fa-globe text-gray-darker mr-1"></i>
-                                            {!! $b->get_title() !!}
-                                        </a>
-                                    </li>
-                                    @endforeach
-                                </ul>
+                                <h3 class="h5 font-w700 border-bottom pb-2">Kontak</h3>
+                                <div>
+                                    Jl. H.A.M.M Riffadin No. 88, Kelurahan Harapan Baru, Kecamatan Samarinda Seberang <br>
+                                    Kota Samarinda, Provinsi Kalimantan Timur <br>
+                                    <abbr title="Telepon">Telp:</abbr> 0541 7270201 <br>
+                                    <a href="mailto:bpsdm@kaltimprov.go.id" class="link-fx">bpsdm@kaltimprov.go.id</a><br>
+                                    <a href="mailto:bpsdm.kaltimprov@gmail.com" class="link-fx">bpsdm.kaltimprov@gmail.com</a>
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <h3 class="h5 font-w700 border-bottom pb-2">Tentang Kami</h3>

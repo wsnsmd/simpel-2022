@@ -31,8 +31,7 @@
                     <div>
                         Jl. H.A.M.M Riffadin No. 88, Kelurahan Harapan Baru, Kecamatan Samarinda Seberang <br>
                         Kota Samarinda, Provinsi Kalimantan Timur <br>
-                        <abbr title="Telepon">Telp:</abbr> 0541 7270207 <br>
-                        <abbr title="Fax">Fax:</i></abbr> 0541 7270208 <br>
+                        <abbr title="Telepon">Telp:</abbr> 0541 7270201 <br>
                         <a href="mailto:bpsdm@kaltimprov.go.id" class="link-fx">bpsdm@kaltimprov.go.id</a><br>
                         <a href="mailto:bpsdm.kaltimprov@gmail.com" class="link-fx">bpsdm.kaltimprov@gmail.com</a>
                     </div>
