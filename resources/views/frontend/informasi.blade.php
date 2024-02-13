@@ -26,23 +26,13 @@
                 width="100%" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
             </div>
             <div class="row items-push font-size-sm py-4 invisible" data-toggle="appear">
-                <div class="col-md-8">
-                    <h3 class="h5 font-w700 border-bottom pb-2">Alamat</h3>
-                    <div>
-                        Jl. H.A.M.M Riffadin No. 88, Kelurahan Harapan Baru, Kecamatan Samarinda Seberang <br>
-                        Kota Samarinda, Provinsi Kalimantan Timur <br>
-                        <abbr title="Telepon">Telp:</abbr> 0541 7270201 <br>
-                        <a href="mailto:bpsdm@kaltimprov.go.id" class="link-fx">bpsdm@kaltimprov.go.id</a><br>
-                        <a href="mailto:bpsdm.kaltimprov@gmail.com" class="link-fx">bpsdm.kaltimprov@gmail.com</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
+                <div class="col-md-12">
                     <h3 class="h5 font-w700 border-bottom pb-2">Jam Kerja</h3>
                     <div>
                         <span class="font-w700">Senin - Kamis</span> <br>
-                        07.30 - 16.00 WITA (12.00 - 13.00 Istirahat) <br>
+                        07.30 - 16.30 WITA (12.00 - 13.00 Istirahat) <br>
                         <span class="font-w700">Jumat</span> <br>
-                        07.30 - 11.30 WITA <br>
+                        07.30 - 12.00 WITA <br>
                         <span class="font-w700">Libur</span> <br>
                         Sabtu, Minggu dan hari libur Nasional
                     </div>

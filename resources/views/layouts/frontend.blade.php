@@ -225,7 +225,7 @@
                             <div class="col-md-8">
                                 <h3 class="h5 font-w700 border-bottom pb-2">Kontak</h3>
                                 <div>
-                                    Jl. H.A.M.M Riffadin No. 88, Kelurahan Harapan Baru, Kecamatan Samarinda Seberang <br>
+                                    Jl. H.A.M.M Riffadin No. 88, Kelurahan Harapan Baru, Kecamatan Loa Janan Ilir <br>
                                     Kota Samarinda, Provinsi Kalimantan Timur <br>
                                     <abbr title="Telepon">Telp:</abbr> 0541 7270201 <br>
                                     <a href="mailto:bpsdm@kaltimprov.go.id" class="link-fx">bpsdm@kaltimprov.go.id</a><br>
