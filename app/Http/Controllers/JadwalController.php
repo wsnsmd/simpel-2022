@@ -298,27 +298,53 @@ class JadwalController extends Controller
 
     public function poststep2(Request $request)
     {
-        $validator = $request->validate([
-            'foto' => 'image|max:512',
-            'nip' => 'required|min:18|max:18',
-            'ktp' => 'required|min:16|max:16',
-            'nama_lengkap' => 'required',
-            'nama_panggil' => 'required',
-            'alamat' => 'required',
-            'jk' => 'required',
-            'tmp_lahir' => 'required',
-            'tgl_lahir' => 'required|date',
-            'agama' => 'required',
-            'marital' => 'required',
-            'hp' => 'required',
-            'email' => 'required|email',
-            'pangkat' => 'required',
-            'jabatan' => 'required',
-            'instansi' => 'required',
-            'satker_nama' => 'required',
-            'satker_alamat' => 'required',
-            //'satker_telp' => 'required',
-        ]);
+        if(session('status_asn') == 1 || session('status_asn') ==2)
+        {
+            $validator = $request->validate([
+                'foto' => 'image|max:512',
+                'nip' => 'required|min:18|max:18',
+                'ktp' => 'required|min:16|max:16',
+                'nama_lengkap' => 'required',
+                'nama_panggil' => 'required',
+                'alamat' => 'required',
+                'jk' => 'required',
+                'tmp_lahir' => 'required',
+                'tgl_lahir' => 'required|date',
+                'agama' => 'required',
+                'marital' => 'required',
+                'hp' => 'required',
+                'email' => 'required|email',
+                'pangkat' => 'required',
+                'jabatan' => 'required',
+                'instansi' => 'required',
+                'satker_nama' => 'required',
+                'satker_alamat' => 'required',
+                //'satker_telp' => 'required',
+            ]);
+        }
+        else 
+        {
+            $validator = $request->validate([
+                'foto' => 'image|max:512',
+                'ktp' => 'required|min:16|max:16',
+                'nama_lengkap' => 'required',
+                'nama_panggil' => 'required',
+                'alamat' => 'required',
+                'jk' => 'required',
+                'tmp_lahir' => 'required',
+                'tgl_lahir' => 'required|date',
+                'agama' => 'required',
+                'marital' => 'required',
+                'hp' => 'required',
+                'email' => 'required|email',
+                'pangkat' => 'required',
+                'jabatan' => 'required',
+                'instansi' => 'required',
+                'satker_nama' => 'required',
+                'satker_alamat' => 'required',
+                //'satker_telp' => 'required',
+            ]);
+        }
 
         $time = time();
         $request->session()->put('peserta', $request->except('foto'));
