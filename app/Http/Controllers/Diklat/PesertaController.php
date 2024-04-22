@@ -753,11 +753,10 @@ class PesertaController extends Controller
                         $foto = Storage::url($p->foto);
                         $ext = pathinfo($foto, PATHINFO_EXTENSION);
                         $filefoto = $p->nama_lengkap . '.' . $ext;
-                        dd($zip->addFile(public_path($foto), $filefoto));
                     }
 
                     // $zip->addFile($value, $relativeNameInZipFile);
-                    $zip->close();
+                    // $zip->close();
                 }
 
                 return response()->download($fileName)->deleteFileAfterSend(true);
