@@ -743,9 +743,7 @@ class PesertaController extends Controller
                                 ->get();
 
                 $zip = new ZipArchive;
-                $fileName = storage_path() . DIRECTORY_SEPARATOR . 'foto-'. $jadwal->nama . '-' . time() . '.zip';
-
-                dd($fileName);
+                $fileName = storage_path() . DIRECTORY_SEPARATOR . 'foto-' . time() . '.zip';
 
                 $res = $zip->open($fileName, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
