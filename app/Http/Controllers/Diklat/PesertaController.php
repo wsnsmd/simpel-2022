@@ -745,15 +745,12 @@ class PesertaController extends Controller
                 $zip = new ZipArchive;
                 $fileName = storage_path() . DIRECTORY_SEPARATOR . 'foto-'. $jadwal->nama . '-' . time() . '.zip';
 
-                $res = $zip->open($fileName, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+                dd($fileName);
 
-                dd($res);
+                $res = $zip->open($fileName, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
                 if ($res)
                 {
-                    // $value = './peserta.xlsx';
-                    // $relativeNameInZipFile = basename($value);
-
                     foreach ($peserta as $p) {
                         $foto = Storage::url($p->foto);
                         $basename = basename($foto);
