@@ -751,10 +751,9 @@ class PesertaController extends Controller
                 {
                     foreach ($peserta as $p) {
                         $foto = Storage::url($p->foto);
-                        $basename = basename($foto);
                         $ext = pathinfo($foto, PATHINFO_EXTENSION);
                         $filefoto = $p->nama_lengkap . '.' . $ext;
-                        $zip->addFile(public_path($foto), $filefoto);
+                        dd($zip->addFile(public_path($foto), $filefoto));
                     }
 
                     // $zip->addFile($value, $relativeNameInZipFile);
