@@ -154,6 +154,8 @@ Route::group(['prefix'=>$admin_path,'as'=>$admin_path.'.'], function () {
         Route::post('sertifikat/kirim/simpeg', 'Diklat\SertifikatController@kirimSimpeg')->name('sertifikat.kirim.simpeg');
         Route::post('sertifikat/{id}/upload', 'Diklat\SertifikatController@postUpload')->name('sertifikat.upload');
         Route::delete('sertifikat/{id}', 'Diklat\SertifikatController@destroy')->name('sertifikat.destroy');
+        Route::get('sertifikat/simasn/kategori/{id}', 'Diklat\SertifikatController@simasnKategori')->name('sertifikat.simasn.kategori');
+        Route::get('sertifikat/simasn/sub-kategori', 'Diklat\SertifikatController@simasnSubKategori')->name('sertifikat.simasn.subkategori');
 
         // Seminar
         Route::get('seminar/{jadwal}/{slug}/kelompok/create', 'Diklat\SeminarController@createKelompok')->name('seminar.kelompok.create');

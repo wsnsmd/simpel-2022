@@ -8,6 +8,7 @@
     <!-- Page JS Plugins CSS -->
     <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('js/plugins/select2/css/select2.min.css') }}">
 @endsection
 
 @section('js_after')
@@ -18,6 +19,7 @@
     <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jquery-validation/additional-methods.js') }}"></script>
+    <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
     <script>
         $.ajaxSetup({
             headers: {
@@ -26,7 +28,7 @@
         });
 
         jQuery(function(){
-            Dashmix.helpers(['datepicker', 'validation']);
+            Dashmix.helpers(['datepicker', 'validation', 'select2']);
         });
 
         function showAlert(form) {
@@ -119,7 +121,14 @@
 
             $('#mdl-simpeg').on('hidden.bs.modal', function() {
                 $('#mdl-simpeg-form').trigger('reset');
-                $('#simpeg').addClass('d-none');
+                $('#simpeg_kategori_id').empty();
+                $('#simpeg_sub_kategori_id').empty();
+                var option1 = document.createElement("option");
+                var option2 = document.createElement("option");
+                option1.text = '-- Pilih Jenis Dulu --';
+                $('#simpeg_kategori_id').append(option1);
+                option2.text = '-- Pilih Kategori Dulu --';
+                $('#simpeg_sub_kategori_id').append(option2);
             });
 
             $('#is_generate').on('change', function () {
@@ -132,12 +141,58 @@
             });
 
             $('#simpeg_jenis').on('change', function () {
-                if($('#simpeg_jenis').val() == true) {
-                    $('#simpeg').removeClass('d-none');
+                $('#simpeg_kategori_id').empty();
+                $('#simpeg_sub_kategori_id').empty();
+                id = $('#simpeg_jenis').val();
+                var url_kategori = "{{ route('backend.diklat.sertifikat.simasn.kategori', ':id') }}";
+                url_kategori = url_kategori.replace(':id', id);
+
+                $.ajax({
+                type: 'GET',
+                url: url_kategori,
+                success: function(data) {
+                    data.forEach(function(item) {
+                        var option = document.createElement("option");
+                        option.value = item.id;
+                        option.text = item.kategori_diklat;
+                        $('#simpeg_kategori_id').append(option);
+                    });
+                    if($('#simpeg_jenis').val() == 1) {
+                        $('#simpeg_sub_kategori_id').empty();
+                        var text_kategori = $('#simpeg_kategori_id option:selected').text();
+                        var option = document.createElement("option");
+                        option.value = $('#simpeg_kategori_id').val();
+                        option.text = text_kategori;
+                        $('#simpeg_sub_kategori_id').append(option);
+                    }
                 }
-                else {
-                    $('#simpeg').addClass('d-none');
-                    $('#simpeg_struktural').prop('selectedIndex', 0);
+            });
+
+                if($('#simpeg_jenis').val() == 2) {
+                    var url_sub = "{{ route('backend.diklat.sertifikat.simasn.subkategori') }}";
+                    $.ajax({
+                        type: 'GET',
+                        url: url_sub,
+                        success: function(data) {
+                            data.forEach(function(item) {
+                                var option = document.createElement("option");
+                                option.value = item.id;
+                                option.text = item.sub_kategori_diklat;
+                                $('#simpeg_sub_kategori_id').append(option);
+                            });
+                        }
+                    });
+                }
+            })
+
+            $('#simpeg_kategori_id').on('change', function () {
+                if($('#simpeg_jenis').val() == 1) {
+                    $('#simpeg_sub_kategori_id').empty();
+                    var text_kategori = $('#simpeg_kategori_id option:selected').text();
+                    var option = document.createElement("option");
+                    option.value = $('#simpeg_kategori_id').val();
+                    option.text = text_kategori;
+                    $('#simpeg_sub_kategori_id').append(option);
                 }
             })
         })
@@ -247,7 +302,7 @@
                         <p class="mb-2 d-sm-block">
                             <i class="fa fa-users text-info fa-2x"></i>
                         </p>
-                        <p class="font-w600 font-size-sm text-uppercase">Upload Simpeg</p>
+                        <p class="font-w600 font-size-sm text-uppercase">Upload SIMASN BKD</p>
                     </div>
                 </a>
             </div>
@@ -483,7 +538,7 @@
         @endif
 
         <!-- Modal Simpeg -->
-        <div class="modal fade" id="mdl-simpeg" tabindex="-1" role="dialog" aria-labelledby="mdl-simpeg" aria-hidden="true">
+        <div class="modal fade" id="mdl-simpeg"role="dialog" aria-labelledby="mdl-simpeg" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-popin" role="document">
                 <form id="mdl-simpeg-form" method="POST" action="{{ route('backend.diklat.sertifikat.kirim.simpeg') }}" autocomplete="off">
                     @csrf
@@ -491,7 +546,7 @@
                     <div class="modal-content">
                         <div class="block block-themed block-transparent mb-0">
                             <div class="block-header bg-primary-dark">
-                                <h3 class="block-title">Upload Simpeg</h3>
+                                <h3 class="block-title">Upload SIMASN BKD</h3>
                                 <div class="block-options">
                                     <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
                                         <i class="fa fa-fw fa-times"></i>
@@ -504,21 +559,22 @@
                                     <select class="form-control" id="simpeg_jenis" name="jenis" style="width: 100%;" required>
                                         <option value="" selected>-- Pilih Jenis --</option>
                                         <option value="1">Struktural</option>
-                                        <option value="2">Fungsional</option>
-                                        <option value="3">Teknis</option>
-                                        <option value="4">Seminar</option>
+                                        <option value="2">Non Struktural</option>
                                     </select>
                                 </div>
-                                <div id="simpeg" class="option-target d-none">
+                                <div id="simpeg_kategori" class="option-target">
                                     <div class="form-group">
-                                        <label for="simpeg_struktural" class="control-label">Jenis Struktural <span class="text-danger">*</span></label>
-                                        <select class="form-control" id="simpeg_struktural" name="struktural" style="width: 100%;">
-                                            <option value="" selected>-- Pilih Jenis Struktural --</option>
-                                            <option value="2">PKP / DIKLAT PIM IV / SEPADA / SEPALA/ ADUM / ADUMLA </option>
-                                            <option value="3">PKA / DIKLAT PIM III / SEPADYA / SEPAMA / </option>
-                                            <option value="4">DIKLAT PIM II / SESPA / SEPAMEN</option>
-                                            <option value="5">DIKLAT PIM I</option>
-                                            <option value="6">LEMHANAS</option>
+                                        <label for="simpeg_kategori_id" class="control-label">Kategori <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="simpeg_kategori_id" name="kategori" style="width: 100%;">
+                                            <option value="" selected>-- Pilih Jenis Dulu --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="simpeg_sub_kategori" class="option-target">
+                                    <div class="form-group">
+                                        <label for="simpeg_sub_kategori_id" class="control-label">Sub Kategori <span class="text-danger">*</span></label>
+                                        <select class="js-select2 form-control" id="simpeg_sub_kategori_id" name="sub_kategori" style="width: 100%;">
+                                            <option value="">-- Pilih Kategori Dulu --</option>
                                         </select>
                                     </div>
                                 </div>
@@ -618,7 +674,7 @@
                                             <input type="text" class="form-control" id="fasilitasi" name="fasilitasi" placeholder="Fasilitasi..." value="">
                                         </div>
                                     </div>
-                                    <h2 class="content-heading pt-0 mb-3">Pejabat Penandatangan</h2>
+                                    <h2 class="content-heading pt-0 mb-3">Pejabat Penandatangan-1</h2>
                                     <div class="form-group form-row">
                                         <div class="col-6">
                                             <label for="jabatan" class="control-label">Jabatan <span class="text-danger">*</span></label>
@@ -643,6 +699,33 @@
                                         <div class="col-6">
                                             <label for="spesimen" class="control-label">Spesimen</label>
                                             <input type="file" class="form-control" id="spesimen" name="spesimen" accept="image/png">
+                                        </div>
+                                    </div>
+                                    <h2 class="content-heading pt-0 mb-3">Pejabat Penandatangan-2</h2>
+                                    <div class="form-group form-row">
+                                        <div class="col-6">
+                                            <label for="jabatan2" class="control-label">Jabatan</label>
+                                            <input type="text" class="form-control" id="jabatan2" name="jabatan2" placeholder="Cth. Kepala Bidang...">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="nip2" class="control-label">NIP</label>
+                                            <input type="text" class="form-control" id="nip2" name="nip2" placeholder="NIP..." min="18" maxlength="18">
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-row">
+                                        <div class="col-6">
+                                            <label for="nama2" class="control-label">Nama</label>
+                                            <input type="text" class="form-control" id="nama2" name="nama2" placeholder="Nama...">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="pangkat2" class="control-label">Pangkat</label>
+                                            <input type="text" class="form-control" id="pangkat2" name="pangkat2" placeholder="Pangkat...">
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-row">
+                                        <div class="col-6">
+                                            <label for="spesimen2" class="control-label">Spesimen</label>
+                                            <input type="file" class="form-control" id="spesimen2" name="spesimen2" accept="image/png">
                                         </div>
                                     </div>
                                 </div>

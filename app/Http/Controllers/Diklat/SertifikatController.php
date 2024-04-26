@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\KirimSertifikatMailable;
 use App\Jobs\UploadSimpegJob;
 use App\Jobs\KirimEmailSertifikatJob;
+use GuzzleHttp\Client;
 
 use App;
 use DB;
@@ -56,6 +57,7 @@ class SertifikatController extends Controller
 
         $input = $request->all();
         $spesimen_path = null;
+        $spesimen2_path = null;
 
         DB::beginTransaction();
 
@@ -67,6 +69,12 @@ class SertifikatController extends Controller
                 $file = $input['spesimen'];
                 $nama_file = time()."_".$file->getClientOriginalName();
                 $spesimen_path = $input['spesimen']->storeAs('public/files/spesimen', $nama_file);
+            }
+            if($request->has('spesimen2'))
+            {
+                $file = $input['spesimen2'];
+                $nama_file2 = time()."_".$file->getClientOriginalName();
+                $spesimen2_path = $input['spesimen2']->storeAs('public/files/spesimen', $nama_file);
             }
 
             DB::table('sertifikat')->insert([
@@ -85,6 +93,10 @@ class SertifikatController extends Controller
                 'nip' => $input['nip'],
                 'nama' => $input['nama'],
                 'pangkat' => $input['pangkat'],
+                'jabatan2' => $input['jabatan2'],
+                'nip2' => $input['nip2'],
+                'nama2' => $input['nama2'],
+                'pangkat2' => $input['pangkat2'],
                 'spesimen' => $spesimen_path,
                 'created_at' => $created_at
             ]);
@@ -122,7 +134,6 @@ class SertifikatController extends Controller
 
     public function buatPesertaSimpan(Request $request, $id)
     {
-        // dd($request->all());
         $pid = $request->pid;
         $pid_nomor = $request->pid_nomor;
 
@@ -163,6 +174,8 @@ class SertifikatController extends Controller
                 if($peserta)
                 {
                     $no = ++$result;
+                    $kualifikasi =  $request['pid_kualifikasi_' . $p];
+                    $status =  $request['pid_status_' . $p];
                     if(!$sertifikat->is_generate && $sertifikat->is_upload)
                         $no_sertifikat = $request['pid_nomor_' . $p];
                     else
@@ -176,6 +189,8 @@ class SertifikatController extends Controller
                         'no' => $no,
                         'peserta_id' => $p,
                         'sertifikat_id' => $sertifikat->id,
+                        'kualifikasi' => $kualifikasi,
+                        'status' => $status,
                         'nomor' => $no_sertifikat,
                         'tahun' => $tahun,
                         'bidang' => $jadwal->usergroup,
@@ -209,29 +224,39 @@ class SertifikatController extends Controller
     public function cetak(Request $request, $id)
     {
         $sertPeserta = DB::table('v_sertifikat')
-                        ->select('nip', 'nama_lengkap', 'tmp_lahir', 'tgl_lahir', 'jabatan', 'foto', 'instansi', 'satker_nama', 'sebagai', 'diklat_jadwal_id', 'pangkat', 'golongan', 'nomor', 'sertifikat_id', 'spesimen_kiri', 'spesimen_bawah')
+                        ->select('nip', 'nama_lengkap', 'tmp_lahir', 'tgl_lahir', 'jabatan', 'foto', 'instansi', 'satker_nama', 'sebagai', 'diklat_jadwal_id', 'pangkat', 'golongan', 'nomor', 'kualifikasi', 'status', 'sertifikat_id', 'spesimen_kiri', 'spesimen_bawah')
                         ->where('spid', $id)
                         ->first();
 
         $sertifikat = DB::table('sertifikat')
-                        ->select('tempat', 'tanggal', 'jabatan', 'nama', 'pangkat', 'nip', 'diklat_jadwal_id', 'spesimen', 'tsid', 'fasilitasi')
+                        ->select('tempat', 'tanggal', 'jabatan', 'nama', 'pangkat', 'nip', 'jabatan2', 'nama2', 'pangkat2', 'nip2', 'diklat_jadwal_id', 'spesimen', 'spesimen2', 'tsid', 'fasilitasi')
                         ->where('id', $sertPeserta->sertifikat_id)
                         ->first();
 
         $jadwal = DB::table('v_jadwal_detail')
-                        ->select('nama', 'tahun', 'tipe', 'tgl_awal', 'tgl_akhir', 'kelas', 'total_jp', 'lokasi', 'lokasi_kota')
+                        ->select('nama', 'tahun', 'tipe', 'tgl_awal', 'tgl_akhir', 'kelas', 'total_jp', 'lokasi', 'lokasi_kota', 'kurikulum_id')
                         ->where('id', $sertifikat->diklat_jadwal_id)
                         ->first();
+        
+        $kurikulum = DB::table('mapel')
+                        ->select('nama', 'jpk', 'jpe')
+                        ->where('kurikulum_id', $jadwal->kurikulum_id)
+                        ->get();
 
         $template = DB::table('sertifikat_template')->where('id', $sertifikat->tsid)->first();
 
-        if(!is_null($sertPeserta->foto))
+        // if(!is_null($sertPeserta->foto))
+        // {
+        //     $sertPeserta->foto = asset(\Storage::url($sertPeserta->foto));
+        // }
+        // else
+        // {
+        //     $sertPeserta->foto = asset('media/avatars/avatar8.jpg');
+        // }
+
+        if(is_null($sertPeserta->foto))
         {
-            $sertPeserta->foto = asset(\Storage::url($sertPeserta->foto));
-        }
-        else
-        {
-            $sertPeserta->foto = asset('media/avatars/avatar8.jpg');
+            $sertPeserta->foto = 'media/avatars/avatar8.jpg';
         }
 
         // $temp = [];
@@ -252,7 +277,7 @@ class SertifikatController extends Controller
         //$filename = 'Surat Tugas - ' . $fasilitator->nama . '-' . time();
         $filename = 'Sertifikat - ' . $sertPeserta->nomor;
 
-        $view = view('report.dom.sertifikat.' . $template->file, compact('sertPeserta', 'sertifikat', 'jadwal'));
+        $view = view('report.dom.sertifikat.' . $template->file, compact('sertPeserta', 'sertifikat', 'jadwal', 'kurikulum'));
         $pdf = App::make('dompdf.wrapper');
         $pdf->setOptions(['dpi' => '120', 'isRemoteEnabled' => true ]);
         $pdf->loadHTML($view);
@@ -474,7 +499,8 @@ class SertifikatController extends Controller
         $validator = $request->validate([
             'jadwal_id' => 'required',
             'jenis' => 'required',
-            'struktural' => 'required_if:jenis,==,1',
+            'kategori' => 'required',
+            'sub_kategori' => 'required_if:jenis,==,2',
         ]);
 
         $input = $request->all();
@@ -485,8 +511,11 @@ class SertifikatController extends Controller
                     ->whereNull('simpeg_at')
                     ->get();
         $instansi = DB::table('instansi')->find(1);
-        $struktural = $input['struktural'];
-        $jenis= $input['jenis'];
+        $jenis = $input['jenis'];
+        $kategori = $input['kategori'];
+        $sub = null;
+        if(!empty($input['sub_kategori']))
+            $sub = $input['sub_kategori'];
 
         try
         {
@@ -505,7 +534,7 @@ class SertifikatController extends Controller
                     'email' => str_slug($pes->email)
                 ]);
 
-                $job = new UploadSimpegJob($pes, $jadwal, $sertifikat, $struktural, $jenis, $url_sertifikat);
+                $job = new UploadSimpegJob($pes, $jadwal, $sertifikat, $jenis, $kategori, $sub, $url_sertifikat);
                 $this->dispatch($job);
 
                 $at = date('Y-m-d H:i:s');
@@ -514,7 +543,7 @@ class SertifikatController extends Controller
                 // ]);
             }
 
-            $notifikasi = 'Data simpeg berhasil dikirim!';
+            $notifikasi = 'Data SIMASN berhasil dikirim!';
 
             return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'sertifikat'])
                         ->with([
@@ -523,7 +552,8 @@ class SertifikatController extends Controller
         }
         catch(\Exception $e)
         {
-            $notifikasi = 'Data simpeg gagal dikirim!';
+            dd($e);
+            $notifikasi = 'Data SIMASN gagal dikirim!';
             return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'sertifikat'])
                     ->with([
                         'error' => $notifikasi,
@@ -563,5 +593,53 @@ class SertifikatController extends Controller
                     ->with([
                         'success' => $notifikasi,
                     ]);
+    }
+
+    public function simasnKategori($id)
+    {
+        $client = new Client(['http_errors' => false, 'verify' => false]);
+        $headers = [
+            'Authorization' => 'Bearer ' . env('SIMASN_BEARER')
+        ];
+
+        $request = $client->get(env('SIMASN_KATEGORI'), ['headers' => $headers, 'timeout' => 120]);
+
+        if($request->getStatusCode() == 200)
+        {
+            $result = $request->getBody();
+            $json = json_decode($result->getContents(), true);
+            $data = $json['data'];
+            $selected = [];
+
+            foreach($data as $d)
+            {
+                if($d['jenis_diklat_id'] === $id)
+                    array_push($selected, $d);
+            }
+
+            return response()->json($selected);
+        }
+
+        return response()->json(['error' => 'Unable to communicate'], 500);
+    }
+
+    public function simasnSubKategori()
+    {
+        $client = new Client(['http_errors' => false, 'verify' => false]);
+        $headers = [
+            'Authorization' => 'Bearer ' . env('SIMASN_BEARER')
+        ];
+
+        $request = $client->get(env('SIMASN_SUBKATEGORI'), ['headers' => $headers, 'timeout' => 120]);
+
+        if($request->getStatusCode() == 200)
+        {
+            $result = $request->getBody();
+            $json = json_decode($result->getContents(), true);
+            $data = $json['data'];
+            return response()->json($data);
+        }
+
+        return response()->json(['error' => 'Unable to communicate'], 500);
     }
 }

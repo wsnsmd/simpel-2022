@@ -16,14 +16,16 @@ class UploadSimpegJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 1;
-    public $timeout = 1;
+    public $tries = 3;
+    public $timeout = 120;
 
     public $peserta;
     public $jadwal;
     public $sertifikat;
-    public $struktural;
     public $jenis;
+    public $kategori;
+    public $sub;
+
     public $url_sertifikat;
 
     /**
@@ -31,13 +33,14 @@ class UploadSimpegJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($peserta, $jadwal, $sertifikat, $struktural, $jenis, $url_sertifikat)
+    public function __construct($peserta, $jadwal, $sertifikat, $jenis, $kategori, $sub, $url_sertifikat)
     {
         $this->peserta = $peserta;
         $this->jadwal = $jadwal;
         $this->sertifikat = $sertifikat;
-        $this->struktural = $struktural;
         $this->jenis = $jenis;
+        $this->kategori = $kategori;
+        $this->sub = $sub;
         $this->url_sertifikat = $url_sertifikat;
     }
 
@@ -48,22 +51,10 @@ class UploadSimpegJob implements ShouldQueue
      */
     public function handle()
     {
-        $url = null;
-        switch($this->jenis)
-        {
-            case 1:
-                $url = 'https://api-simpeg.kaltimbkd.info/pns/tambah-riwayat-diklat/diklat-struktural/?api_token=d7c91613809ddc815a262a2fdfa54415';
-                break;
-            case 2:
-                $url = 'https://api-simpeg.kaltimbkd.info/pns/tambah-riwayat-diklat/diklat-fungsional/?api_token=d7c91613809ddc815a262a2fdfa54415';
-                break;
-            case 3:
-                $url = 'https://api-simpeg.kaltimbkd.info/pns/tambah-riwayat-diklat/diklat-teknis/?api_token=d7c91613809ddc815a262a2fdfa54415';
-                break;
-            case 4:
-                $url = 'https://api-simpeg.kaltimbkd.info/pns/tambah-riwayat-seminar/?api_token=d7c91613809ddc815a262a2fdfa54415';
-                break;
-        }
+        $headers = [
+            'Authorization' => 'Bearer ' . env('SIMASN_BEARER')
+        ];
+        $url = env('SIMASN_KIRIM_DIKLAT');
 
         $client = new \GuzzleHttp\Client();
         $res = $client->get($this->url_sertifikat);
@@ -77,61 +68,57 @@ class UploadSimpegJob implements ShouldQueue
                     'contents' => $this->peserta->nip
                 ],
                 [
-                    'name' => ($this->jenis != 4 ? 'nama_diklat' : 'nama_seminar'),
+                    'name' => 'jenis_diklat',
+                    'contents' => $this->jenis
+                ],
+                [
+                    'name' => 'kategori_diklat',
+                    'contents' => $this->kategori
+                ],
+                [
+                    'name' => 'sub_kategori_diklat',
+                    'contents' => $this->sub
+                ],
+                [
+                    'name' => 'nama_diklat',
                     'contents' => $this->jadwal->nama
                 ],
                 [
-                    'name' => ($this->jenis != 4 ? 'tempat_diklat' : 'tempat_seminar'),
-                    'contents' => $this->jadwal->lokasi_kota
+                    'name' => 'nomor_sertifikat',
+                    'contents' => $this->peserta->nomor
                 ],
                 [
-                    'name' => 'penyelenggara',
-                    'contents' => $this->jadwal->lokasi
-                ],
-                [
-                    'name' => 'angkatan',
-                    'contents' => ''
-                ],
-                [
-                    'name' => 'tgl_mulai',
+                    'name' => 'tgl_awal_diklat',
                     'contents' => $this->jadwal->tgl_awal
                 ],
                 [
-                    'name' => 'tgl_selesai',
+                    'name' => 'tgl_akhir_diklat',
                     'contents' => $this->jadwal->tgl_akhir
+                ],
+                [
+                    'name' => 'instansi_diklat',
+                    'contents' => $this->jadwal->lokasi
                 ],
                 [
                     'name' => 'jumlah_jam',
                     'contents' => $this->jadwal->total_jp
                 ],
                 [
-                    'name' => 'no_sertifikat',
-                    'contents' => $this->peserta->nomor
-                ],
-                [
-                    'name' => 'tgl_sertifikat',
-                    'contents' => $this->sertifikat->tanggal
-                ],
-                [
-                    'name' => 'id_jenis_diklat_struktural',
-                    'contents' => $this->struktural
-                ],
-                [
-                    'name' => 'file',
+                    'name' => 'sertifikat',
                     'contents' => $content,
-                    'filename' => '/sertifikat.pdf',
+                    'filename' => '/sertifikat-'. time() . '.pdf',
                     'headers'  => [
                       'Content-Type' => '<Content-type header>'
                     ]
                 ],
             ]
         ];
-        $request = new \GuzzleHttp\Psr7\Request('POST', $url);
+        $request = new \GuzzleHttp\Psr7\Request('POST', $url, $headers);
         $res = $client->sendAsync($request, $options)->wait();
 
         $body = json_decode($res->getBody());
 
-        if($body->kode == 200 && $body->valid)
+        if($body->success)
         {
             $at = date('Y-m-d H:i:s');
             DB::table('sertifikat_peserta')->where('id', $this->peserta->spid)->update([

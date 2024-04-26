@@ -62,6 +62,10 @@
                                 @if(!$sertifikat->is_generate && $sertifikat->is_upload)
                                 <th class="font-w700" style="width: 20%;">Nomor Sertifikat</th>
                                 @endif
+                                @if(!$sertifikat->kualifikasi)
+                                <th class="font-w700" style="width: 15%;">Kualifikasi</th>
+                                @endif
+                                <th class="font-w700" style="width: 13%;">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -93,6 +97,22 @@
                                     <input type="text" class="form-control" id="row_nomor_{{$loop->iteration}}" name="pid_nomor_{{$p->id}}" value="">
                                 </td>
                                 @endif
+                                @if(!$sertifikat->kualifikasi)
+                                <td class="d-none d-sm-table-cell">
+                                    <select class="form-control" id="row_kualifikasi_{{$loop->iteration}}" name="pid_kualifikasi_{{$p->id}}">
+                                        <option value="-">-</option>
+                                        <option value="Cukup Memuaskan">Cukup Memuaskan</option>
+                                        <option value="Memuaskan">Memuaskan</option>
+                                        <option value="Sangat Memuaskan">Sangat Memuaskan</option>                                        
+                                    </select>
+                                </td>
+                                @endif
+                                <td class="d-none d-sm-table-cell">
+                                    <select class="form-control" id="row_kualifikasi_{{$loop->iteration}}" name="pid_status_{{$p->id}}" required>
+                                        <option value="Telah Mengikuti">Telah Mengikuti</option>
+                                        <option value="Lulus">Lulus</option>
+                                    </select>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
