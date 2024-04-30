@@ -97,7 +97,7 @@
     <table width="100%" cellspacing="0" cellpadding="0" class="header" style="padding-top: 0.5cm;">
         <tbody>
             <tr>
-                <td width="15%" style="text-align: center"><img src=""
+                <td width="15%" style="text-align: center"><img src="{{ imageToBase64(public_path('/media/images/garuda.png')) }}"
                         height="120" width="120"></td>
             </tr>
         </tbody>
