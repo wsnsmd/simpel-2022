@@ -186,6 +186,66 @@
         </div>
         @endif
     </div>
+    <div class="page_break"></div>
+    <div id="container2">
+        <table width="100%" cellspacing="0" cellpadding="0" class="header" style="margin-top: 2cm;">
+            <tbody>
+                <tr>
+                    <td style="text-align: center">
+                        <span style="font-weight: bold; font-size: 11pt; font-family: bookman; line-height: 1.0;">AGENDA KEGIATAN</span><br>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="90%" cellspacing="0" cellpadding="2" class="header" style="margin: 30px auto; border: 2px solid;">
+            <thead>
+                <tr>
+                    <th width="5%" style="border-right: 2px solid; border-bottom: 2px solid; padding-top: 15px; padding-bottom: 15px; vertical-align: center; text-align: center"><span style="font-weight: bold;">No.</span></th>
+                    <th style="border-bottom: 2px solid; padding-top: 15px; padding-bottom: 15px; vertical-align: center; text-align: center"><span style="font-weight: bold;">Materi</span></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach($kurikulum as $k)
+                <tr>
+                    <td style="border-right: 2px solid; text-align: center">
+                        <span style="font-weight: bold; line-height: 1.0;">{{ $loop->iteration }}.</span>
+                    </td>
+                    <td style="padding-left: 10px; padding-right: 10px">
+                        {{ $k->nama }}
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+        <div id="tt3">
+            <table cellspacing="0" cellpadding="0" class="mdiklat">
+                <tr>
+                    <td style="">{!! $sertifikat->tempat !!}, {!! formatTanggal($sertifikat->tanggal) !!}</td>
+                </tr>
+                <tr>
+                    <td style="">{!! $sertifikat->jabatan2 !!}</td>
+                </tr>
+                @if(!is_null($sertifikat->spesimen2))
+                <tr>
+                    <td  style="padding-left: -75px"><img style="" src="{{ storage_path('app/' . $sertifikat->spesimen2) }}" height="150" /></td>
+                </tr>
+                @else
+                <tr>
+                    <td  style="padding-bottom: 100pxp">&nbsp;</td>
+                </tr>
+                @endif
+                <tr>
+                    <td style="">{!! $sertifikat->nama2 !!}</td>
+                </tr>
+                <tr>
+                    <td style="">{!! $sertifikat->pangkat2 !!}</td>
+                </tr>
+                <tr>
+                    <td style="">NIP. {!! formatNIP($sertifikat->nip2) !!}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </body>
 
 </html>
