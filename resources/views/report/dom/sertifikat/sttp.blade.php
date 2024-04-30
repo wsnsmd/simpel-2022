@@ -124,7 +124,7 @@
                                 style="padding: 0;" class="mdiklat">
                                 <tbody>
                                     <tr>
-                                        <td rowspan="8" width="14%" style="vertical-align: top; text-align: center;"><img style="border: 2px solid;" src="" height="200px" /></td>
+                                        <td rowspan="8" width="14%" style="vertical-align: top; text-align: center;"><img style="border: 2px solid;" src="{{ storage_path('app/' . $sertPeserta->foto) }}" height="200px" /></td>
                                         <td width="22%">Nama</td>
                                         <td width="2%">:</td>
                                         <td width="62%">{!! $sertPeserta->nama_lengkap !!}</td>
