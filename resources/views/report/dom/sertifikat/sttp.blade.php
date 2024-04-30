@@ -250,7 +250,7 @@
                     <td style="">{!! $sertifikat->jabatan2 !!}</td>
                 </tr>
                 <tr>
-                    <td  style="padding-left: -75px"><img style="" src="" height="150" /></td>
+                    <td  style="padding-left: -75px"><img style="" src="{{ storage_path('app/' . $sertifikat->spesimen2) }}" height="150" /></td>
                 </tr>
                 <tr>
                     <td style="">{!! $sertifikat->nama2 !!}</td>
