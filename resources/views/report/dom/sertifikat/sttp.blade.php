@@ -97,7 +97,7 @@
     <table width="100%" cellspacing="0" cellpadding="0" class="header" style="padding-top: 0.5cm;">
         <tbody>
             <tr>
-                <td width="15%" style="text-align: center"><img src="{{ imageToBase64(public_path('/media/images/garuda.png')) }}"
+                <td width="15%" style="text-align: center"><img src=""
                         height="120" width="120"></td>
             </tr>
         </tbody>
@@ -206,7 +206,7 @@
         </div>
         @if(!is_null($sertifikat->spesimen))
         <div id="tt2">
-            <img src="{{ storage_path('app/' . $sertifikat->spesimen) }}" height="200" />
+            <img src="" height="200" />
         </div>
         @endif
     </div>
@@ -250,7 +250,7 @@
                     <td style="">{!! $sertifikat->jabatan2 !!}</td>
                 </tr>
                 <tr>
-                    <td  style="padding-left: -75px"><img style="" src="{{ storage_path('app/' . $sertifikat->spesimen2) }}" height="150" /></td>
+                    <td  style="padding-left: -75px"><img style="" src="" height="150" /></td>
                 </tr>
                 <tr>
                     <td style="">{!! $sertifikat->nama2 !!}</td>
