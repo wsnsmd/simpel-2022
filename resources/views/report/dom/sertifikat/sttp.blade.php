@@ -177,6 +177,7 @@
                                 </tbody>
                             </table>
                         </td>
+                        <td colspan="4" style="font-weight: bold; font-size: 12pt; padding-top: 15px; padding-bottom: 10px; vertical-align: middle; text-align: center; text-transform: uppercase">{!! is_null($sertPeserta->status) ? 'Telah Mengikuti' : $sertPeserta->status !!}</td>
                     </tr>
                 </tbody>
             </table>
