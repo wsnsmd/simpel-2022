@@ -120,7 +120,7 @@
                 <tbody>
                     <tr>
                         <td style="vertical-align: top">
-                            <table width="100%" cellspacing="0" border="1"
+                            <table width="100%" cellspacing="0" border="0"
                                 style="padding: 0;" class="mdiklat">
                                 <tbody>
                                     <tr>
