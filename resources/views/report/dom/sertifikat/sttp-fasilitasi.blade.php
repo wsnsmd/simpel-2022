@@ -251,11 +251,11 @@
                 </tr>
                 @if(!is_null($sertifikat->spesimen2))
                 <tr>
-                    <td  style="padding-left: -75px"><img style="" src="{{ storage_path('app/' . $sertifikat->spesimen2) }}" height="150" /></td>
+                    <td  style="padding-left: -75px"><img style="" src="{{ storage_path('app/' . $sertifikat->spesimen2) }}" height="100" /></td>
                 </tr>
                 @else
                 <tr>
-                    <td  style="padding-bottom: 100pxp">&nbsp;</td>
+                    <td  style="padding-bottom: 100px">&nbsp;</td>
                 </tr>
                 @endif
                 <tr>
