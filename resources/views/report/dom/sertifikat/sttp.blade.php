@@ -172,12 +172,12 @@
                                         <td style="vertical-align: top;">{!! is_null($sertPeserta->kualifikasi) ? '-' : $sertPeserta->kualifikasi !!}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="4" style="font-weight: bold; font-size: 12pt; padding-top: 15px; padding-bottom: 10px; vertical-align: middle; text-align: center; text-transform: uppercase">{!! is_null($sertPeserta->status) ? 'Telah Mengikuti' : $sertPeserta->status !!}</td>
+                                        <td colspan="3" style="font-weight: bold; font-size: 12pt; padding-top: 15px; padding-bottom: 10px; vertical-align: middle; text-align: center; text-transform: uppercase">{!! is_null($sertPeserta->status) ? 'Telah Mengikuti' : $sertPeserta->status !!}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </td>
-                        <td colspan="4" style="font-weight: bold; font-size: 12pt; padding-top: 15px; padding-bottom: 10px; vertical-align: middle; text-align: center; text-transform: uppercase">{!! is_null($sertPeserta->status) ? 'Telah Mengikuti' : $sertPeserta->status !!}</td>
+                        <td tyle="font-weight: bold; font-size: 12pt; padding-top: 15px; padding-bottom: 10px; vertical-align: middle; text-align: center; text-transform: uppercase">{!! is_null($sertPeserta->status) ? 'Telah Mengikuti' : $sertPeserta->status !!}</td>
                     </tr>
                 </tbody>
             </table>
