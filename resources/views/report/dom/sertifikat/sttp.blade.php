@@ -124,7 +124,7 @@
                                 style="padding: 0;" class="mdiklat">
                                 <tbody>
                                     <tr>
-                                        <td rowspan="8" width="14%" style="vertical-align: top; text-align: center;"><img style="border: 2px solid;" src="{{ storage_path('app/' . $sertPeserta->foto) }}" height="200px" /></td>
+                                        <td rowspan="7" width="14%" style="vertical-align: top; text-align: center;"><img style="border: 2px solid;" src="{{ storage_path('app/' . $sertPeserta->foto) }}" height="200px" /></td>
                                         <td width="22%">Nama</td>
                                         <td width="2%">:</td>
                                         <td width="62%">{!! $sertPeserta->nama_lengkap !!}</td>
@@ -172,7 +172,7 @@
                                         <td style="vertical-align: top;">{!! is_null($sertPeserta->kualifikasi) ? '-' : $sertPeserta->kualifikasi !!}</td>
                                     </tr>
                                     <tr>
-                                        <td colspan="4" style="font-weight: bold; font-size: 12pt; padding-top: 15px; padding-bottom: 10px; vertical-align: middle; text-align: center; text-transform: uppercase">{!! is_null($sertPeserta->status) ? 'Telah Mengikuti' : $sertPeserta->status !!}</td>
+                                        <td colspan="3" style="font-weight: bold; font-size: 12pt; padding-top: 15px; padding-bottom: 10px; vertical-align: middle; text-align: center; text-transform: uppercase">{!! is_null($sertPeserta->status) ? 'Telah Mengikuti' : $sertPeserta->status !!}</td>
                                     </tr>
                                 </tbody>
                             </table>
