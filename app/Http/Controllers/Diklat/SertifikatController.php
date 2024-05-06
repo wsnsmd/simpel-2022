@@ -74,7 +74,7 @@ class SertifikatController extends Controller
             {
                 $file = $input['spesimen2'];
                 $nama_file2 = time()."_".$file->getClientOriginalName();
-                $spesimen2_path = $input['spesimen2']->storeAs('public/files/spesimen', $nama_file);
+                $spesimen2_path = $input['spesimen2']->storeAs('public/files/spesimen', $nama_file2);
             }
 
             DB::table('sertifikat')->insert([
@@ -98,6 +98,7 @@ class SertifikatController extends Controller
                 'nama2' => $input['nama2'],
                 'pangkat2' => $input['pangkat2'],
                 'spesimen' => $spesimen_path,
+                'spesimen2' => $spesimen2_path,
                 'created_at' => $created_at
             ]);
         }
@@ -237,7 +238,7 @@ class SertifikatController extends Controller
                         ->select('nama', 'tahun', 'tipe', 'tgl_awal', 'tgl_akhir', 'kelas', 'total_jp', 'lokasi', 'lokasi_kota', 'kurikulum_id')
                         ->where('id', $sertifikat->diklat_jadwal_id)
                         ->first();
-        
+
         $kurikulum = DB::table('mapel')
                         ->select('nama', 'jpk', 'jpe')
                         ->where('kurikulum_id', $jadwal->kurikulum_id)
