@@ -120,7 +120,7 @@
                 <tbody>
                     <tr>
                         <td style="vertical-align: top">
-                            <table width="100%" cellspacing="0" border="0"
+                            <table width="100%" cellspacing="0" border="1"
                                 style="padding: 0;" class="mdiklat">
                                 <tbody>
                                     <tr>
@@ -177,7 +177,6 @@
                                 </tbody>
                             </table>
                         </td>
-                        <td tyle="font-weight: bold; font-size: 12pt; padding-top: 15px; padding-bottom: 10px; vertical-align: middle; text-align: center; text-transform: uppercase">{!! is_null($sertPeserta->status) ? 'Telah Mengikuti' : $sertPeserta->status !!}</td>
                     </tr>
                 </tbody>
             </table>
