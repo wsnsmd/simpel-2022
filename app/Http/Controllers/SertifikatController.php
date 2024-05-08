@@ -73,7 +73,7 @@ class SertifikatController extends Controller
             //$filename = 'Surat Tugas - ' . $fasilitator->nama . '-' . time();
             $filename = 'Sertifikat - ' . $sertPeserta->nomor;
 
-            $view = view('report.dom.sertifikat.' . $template->file, compact('sertPeserta', 'sertifikat', 'jadwal'));
+            $view = view('report.dom.sertifikat.' . $template->file, compact('sertPeserta', 'sertifikat', 'jadwal', 'kurikulum'));
             $pdf = App::make('dompdf.wrapper');
             $pdf->setOptions(['dpi' => '120', 'isRemoteEnabled' => true ]);
             $pdf->loadHTML($view);
