@@ -29,7 +29,7 @@ class SertifikatController extends Controller
 
             $sertifikat = DB::table('sertifikat')
                         //->select('tempat', 'tanggal', 'jabatan', 'nama', 'pangkat', 'nip', 'diklat_jadwal_id', 'spesimen', 'tsid', 'is_upload', 'fasilitasi')
-                        ->select('tempat', 'tanggal', 'jabatan', 'nama', 'pangkat', 'nip', 'jabatan2', 'nama2', 'pangkat2', 'nip2', 'diklat_jadwal_id', 'spesimen', 'spesimen2', 'tsid', 'fasilitasi')
+                        ->select('tempat', 'tanggal', 'jabatan', 'nama', 'pangkat', 'nip', 'jabatan2', 'nama2', 'pangkat2', 'nip2', 'diklat_jadwal_id', 'spesimen', 'spesimen2', 'tsid', 'is_upload', 'fasilitasi')
                         ->where('id', $sertPeserta->sertifikat_id)
                         ->first();
 
