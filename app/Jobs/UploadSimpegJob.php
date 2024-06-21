@@ -58,8 +58,8 @@ class UploadSimpegJob implements ShouldQueue
 
         $client = new \GuzzleHttp\Client();
         $res = $client->get($this->url_sertifikat);
-        // $content = $res->getBody()->getContents();
-        $content = (string) $res->getBody();
+        $content = $res->getBody()->getContents();
+        // $content = (string) $res->getBody();
         $microtime = microtime(true);
         $microtimeString = str_replace('.', '_', (string)$microtime);
 
