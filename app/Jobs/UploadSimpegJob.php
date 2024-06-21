@@ -58,7 +58,7 @@ class UploadSimpegJob implements ShouldQueue
 
         $client = new \GuzzleHttp\Client();
         $res = $client->get($this->url_sertifikat);
-        $content = (string) $res->getBody();
+        $content = $res->getBody()->getContents();
 
         $client = new Client(['verify' => false]);
         $options = [

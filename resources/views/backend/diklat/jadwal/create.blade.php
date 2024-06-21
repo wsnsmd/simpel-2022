@@ -144,6 +144,7 @@
                                 <option value="Bimtek">Bimtek</option>
                                 <option value="Pelatihan">Pelatihan</option>
                                 <option value="Ujian">Ujian</option>
+                                <option value="Workshop">Workshop</option>
                                 <option value="Seminar">Seminar/Konferensi/Sarasehan</option>
                                 <option value="Lokakarya">Lokakarya</option>
                                 <option value="Kursus">Kursus</option>

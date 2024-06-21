@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('css_before')
-    <!-- Page JS Plugins CSS -->  
+    <!-- Page JS Plugins CSS -->
     <link rel="stylesheet" href="{{ asset('js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
     <link rel="stylesheet" href="{{ asset('js/plugins/select2/css/select2.min.css') }}">
 @endsection
@@ -14,8 +14,8 @@
     <script src="{{ asset('js/plugins/select2/js/select2.full.min.js') }}"></script>
 
     <script>
-        jQuery(function() { 
-            Dashmix.helpers(['datepicker', 'select2']); 
+        jQuery(function() {
+            Dashmix.helpers(['datepicker', 'select2']);
             CKEDITOR.replace('deskripsi');
             CKEDITOR.replace('syarat');
         });
@@ -68,7 +68,7 @@
                 reg_awal.removeAttr('required');
                 reg_akhir.removeAttr('required');
             }
-        });        
+        });
 
         @if (session('success'))
         $.notify({
@@ -112,8 +112,8 @@
             </div>
             <div class="block-content block-content-full border-top">
                 <form class="mb-2" action="{{ route('backend.diklat.jadwal.update', $jadwal->id) }}" method="POST" enctype="multipart/form-data" autocomplete="off">
-                    @csrf 
-                    @method('PATCH')                                      
+                    @csrf
+                    @method('PATCH')
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="nama">Nama Pelatihan <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
@@ -135,7 +135,7 @@
                             @if ($errors->has('jenis_diklat'))
                             <div class="invalid-feedback">{{ $errors->first('jenis_diklat') }}</div>
                             @endif
-                        </div>                     
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="tipe">Tipe <span class="text-danger">*</span></label>
@@ -146,12 +146,16 @@
                                 <option value="Pelatihan" {{ $jadwal->tipe === 'Pelatihan' ? 'selected':'' }}>Pelatihan</option>
                                 <option value="Ujian" {{ $jadwal->tipe === 'Ujian' ? 'selected':'' }}>Ujian</option>
                                 <option value="Workshop" {{ $jadwal->tipe === 'Workshop' ? 'selected':'' }}>Workshop</option>
+                                <option value="Seminar" {{ $jadwal->tipe === 'Seminar' ? 'selected':'' }}>Seminar/Konferensi/Sarasehan</option>
+                                <option value="Lokakarya" {{ $jadwal->tipe === 'Lokakarya' ? 'selected':'' }}>Lokakarya</option>
+                                <option value="Kursus" {{ $jadwal->tipe === 'Kursus' ? 'selected':'' }}>Kursus</option>
+                                <option value="Penataran" {{ $jadwal->tipe === 'Penataran' ? 'selected':'' }}>Penataran</option>
                             </select>
                             @if ($errors->has('tipe'))
                             <div class="invalid-feedback">{{ $errors->first('tipe') }}</div>
                             @endif
-                        </div>                     
-                    </div>                      
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="kurikulum">Kurikulum <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
@@ -161,7 +165,7 @@
                             @if ($errors->has('kurikulum'))
                             <div class="invalid-feedback">{{ $errors->first('kurikulum') }}</div>
                             @endif
-                        </div>                     
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="lokasi">Lokasi <span class="text-danger">*</span></label>
@@ -175,7 +179,7 @@
                             @if ($errors->has('lokasi'))
                             <div class="invalid-feedback">{{ $errors->first('lokasi') }}</div>
                             @endif
-                        </div>                     
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="kelas">Kelas <span class="text-danger">*</span></label>
@@ -189,7 +193,7 @@
                             @if ($errors->has('kelas'))
                             <div class="invalid-feedback">{{ $errors->first('kelas') }}</div>
                             @endif
-                        </div>                     
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="kuota">Kuota <span class="text-danger">*</span></label>
@@ -198,7 +202,7 @@
                             @if ($errors->has('kuota'))
                             <div class="invalid-feedback">{{ $errors->first('kuota') }}</div>
                             @endif
-                        </div>                     
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="tgl_awal">Tanggal Pelaksanaan <span class="text-danger">*</span></label>
@@ -214,8 +218,8 @@
                                     <input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" placeholder="Akhir" data-week-start="1" data-autoclose="true" data-today-highlight="true" value="{{ $jadwal->tgl_akhir }}" required>
                                 </div>
                             </div>
-                        </div>                     
-                    </div>                                            
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="registrasi">Registrasi <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
@@ -227,7 +231,7 @@
                             @if ($errors->has('registrasi'))
                             <div class="invalid-feedback">{{ $errors->first('registrasi') }}</div>
                             @endif
-                        </div>                     
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="status">Registrasi Lengkap <span class="text-danger">*</span></label>
@@ -240,7 +244,7 @@
                             @if ($errors->has('status'))
                             <div class="invalid-feedback">{{ $errors->first('registrasi_lengkap') }}</div>
                             @endif
-                        </div>                     
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="reg_awal">Tanggal Registrasi <span class="text-danger">*</span></label>
@@ -256,8 +260,8 @@
                                     <input type="text" class="form-control" id="reg_akhir" name="reg_akhir" value="{{ $jadwal->reg_akhir }}" placeholder="Akhir" data-week-start="1" data-autoclose="true" data-today-highlight="true" {{ $jadwal->registrasi == 0 ? 'disabled' : '' }}>
                                 </div>
                             </div>
-                        </div>                     
-                    </div>                        
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="panitia_nama">Nama Panitia <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
@@ -265,8 +269,8 @@
                             @if ($errors->has('panitia_nama'))
                             <div class="invalid-feedback">{{ $errors->first('panitia_nama') }}</div>
                             @endif
-                        </div>                     
-                    </div>    
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="panitia_telp">Telepon Panitia <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
@@ -274,8 +278,8 @@
                             @if ($errors->has('panitia_telp'))
                             <div class="invalid-feedback">{{ $errors->first('panitia_telp') }}</div>
                             @endif
-                        </div>                     
-                    </div>    
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="panitia_email">Email Panitia <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
@@ -283,7 +287,7 @@
                             @if ($errors->has('panitia_email'))
                             <div class="invalid-feedback">{{ $errors->first('panitia_email') }}</div>
                             @endif
-                        </div>                     
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="var_1">Link Group</span></label>
@@ -292,8 +296,8 @@
                             @if ($errors->has('var_1'))
                             <div class="invalid-feedback">{{ $errors->first('var_1') }}</div>
                             @endif
-                        </div>                     
-                    </div>                    
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="deskripsi">Deskripsi</label>
                         <div class="col-sm-9">
@@ -304,7 +308,7 @@
                         <label class="col-sm-3 col-form-label text-right" for="syarat">Syarat</label>
                         <div class="col-sm-9">
                             <textarea id="syarat" name="syarat">{{ $jadwal->syarat }}</textarea>
-                        </div>                     
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="lampiran">Lampiran</label>
@@ -317,11 +321,11 @@
                                 <a href="{{ asset(Storage::url($jadwal->lampiran)) }}" target="_blank"><i class="fas fa-download"></i> {{ basename($jadwal->lampiran) }}</a>
                                 <input type="hidden" name="lampiran_lama" value="{{ $jadwal->lampiran }}">
                                 </div>
-                            @endif      
+                            @endif
                             @if ($errors->has('lampiran'))
                             <div class="invalid-feedback d-block">{{ $errors->first('lampiran') }}</div>
                             @endif
-                        </div>                     
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="status">Status <span class="text-danger">*</span></label>
@@ -334,8 +338,8 @@
                             @if ($errors->has('status'))
                             <div class="invalid-feedback">{{ $errors->first('status') }}</div>
                             @endif
-                        </div>                     
-                    </div>                    
+                        </div>
+                    </div>
                     <div class="form-group mt-4 row">
                         <label class="col-sm-3 col-form-label text-right">&nbsp;</label>
                         <div class="col-sm-9">
