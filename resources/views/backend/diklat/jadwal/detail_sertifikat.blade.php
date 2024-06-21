@@ -374,6 +374,7 @@
                                 <th class="font-w700 text-center" style="width: 30px; vertical-align: middle;" rowspan="2">#</th>
                                 <th class="font-w700 text-center" style="width: 60px; vertical-align: middle;" rowspan="2">Nomor</th>
                                 <th class="font-w700 text-center" style="width: 12%; vertical-align: middle;" rowspan="2">NIP</th>
+                                <th class="font-w700 text-center" style="vertical-align: middle;" rowspan="2">ASN</th>
                                 <th class="font-w700 text-center" style="vertical-align: middle;" rowspan="2">Nama</th>
                                 <th class="font-w700 text-center" style="vertical-align: middle;" rowspan="2">Satuan Kerja</th>
                                 <th class="font-w700 text-center" style="vertical-align: middle;" rowspan="2">Instansi</th>
@@ -395,6 +396,15 @@
                                 </td>
                                 <td class="font-w600">
                                     {{ $sp->nip }}
+                                </td>
+                                <td class="font-w600">
+                                    @if($sp->status_asn == 1)
+                                        PNS
+                                    @elseif($sp->status_asn == 2)
+                                        PPPK
+                                    @else
+                                        Non-PNS
+                                    @endif
                                 </td>
                                 <td class="font-w600">
                                     {{ $sp->nama_lengkap }}
