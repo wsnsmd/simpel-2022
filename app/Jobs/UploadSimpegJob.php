@@ -59,6 +59,8 @@ class UploadSimpegJob implements ShouldQueue
         $client = new \GuzzleHttp\Client();
         $res = $client->get($this->url_sertifikat);
         $content = $res->getBody()->getContents();
+        $microtime = microtime(true);
+        $microtimeString = str_replace('.', '_', (string)$microtime);
 
         $client = new Client(['verify' => false]);
         $options = [
@@ -106,7 +108,7 @@ class UploadSimpegJob implements ShouldQueue
                 [
                     'name' => 'sertifikat',
                     'contents' => $content,
-                    'filename' => '/sertifikat-'. time() . '.pdf',
+                    'filename' => '/sertifikat-'. $microtimeString . '.pdf',
                     'headers'  => [
                       'Content-Type' => '<Content-type header>'
                     ]
