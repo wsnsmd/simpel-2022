@@ -535,8 +535,6 @@ class SertifikatController extends Controller
                     'email' => str_slug($pes->email)
                 ]);
 
-                dd($url_sertifikat);
-
                 $job = new UploadSimpegJob($pes, $jadwal, $sertifikat, $jenis, $kategori, $sub, $url_sertifikat);
                 $this->dispatch($job);
 
