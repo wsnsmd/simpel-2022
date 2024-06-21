@@ -525,7 +525,7 @@ class SertifikatController extends Controller
                 if($sertifikat->is_upload && is_null($pes->upload))
                     continue;
 
-                if($pes->instansi != $instansi->nama || !is_null($pes->simpeg_at))
+                if($pes->instansi != $instansi->nama || !is_null($pes->simpeg_at) || $pes->status_asn != 1)
                     continue;
 
                 $url_sertifikat = route('sertifikat.show', [
