@@ -5,7 +5,7 @@
 @endsection
 
 @section('css_before')
-    <!-- Page JS Plugins CSS -->  
+    <!-- Page JS Plugins CSS -->
     <link rel="stylesheet" href="{{ asset('js/plugins/summernote/summernote-bs4.css') }}">
 @endsection
 
@@ -13,9 +13,9 @@
     <!-- Page JS Plugins -->
     <script src="{{ asset('js/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <script>
-        jQuery(function(){ 
-            Dashmix.helpers(['summernote']); 
-        });   
+        jQuery(function(){
+            Dashmix.helpers(['summernote']);
+        });
     </script>
 @endsection
 
@@ -44,6 +44,18 @@
                 <h3 class="block-title">Sertifikat Email Template</h3>
             </div>
             <div class="block-content block-content-full">
+            @if(count($errors) > 0 )
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <ul class="p-0 m-0" style="list-style: none;">
+                    @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
                 <form action="{{ route('backend.diklat.sertifikat.email.template.simpan', ['jadwal' => $jadwal->id]) }}" method="POST" autocomplete="off">
                     @csrf
                     <div class="alert alert-info alert-dismissable" role="alert">
@@ -53,6 +65,10 @@
                         <h3 class="alert-heading font-size-h4 my-2">Helper</h3>
                         <p class="mb-0"><strong>{nama}</strong> : Nama Peserta</p>
                         <p class="mb-0"><strong>{sertifikat}</strong> : URL/Link Sertifikat</p>
+                    </div>
+                    <div class="block-content block-content-full">
+                        <label for="bcc" class="control-label">BCC Email</label>
+                        <input type="email" class="form-control" id="bcc" name="bcc" value="{!! $email->bcc !!}" placeholder="BCC Email">
                     </div>
                     <div class="block-content block-content-full">
                         <textarea class="js-summernote" name="konten">
@@ -66,7 +82,7 @@
                             <div class="col-12">
                                 <button type="submit" class="btn btn-block btn-primary">
                                     Simpan
-                                </button>                                        
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -74,8 +90,8 @@
             </div>
         </div>
         <!-- END Dynamic Table Full -->
-        
-        
+
+
     </div>
     <!-- END Page Content -->
 @endsection

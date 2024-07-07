@@ -148,7 +148,7 @@ Route::group(['prefix'=>$admin_path,'as'=>$admin_path.'.'], function () {
         Route::post('sertifikat/{id}/cetak', 'Diklat\SertifikatController@cetak')->name('sertifikat.cetak');
         Route::get('sertifikat/{id}/spesimen/posisi', 'Diklat\SertifikatController@getSpesimenPos')->name('sertifikat.spesimen.posisi');
         Route::post('sertifikat/{id}/spesimen/posisi', 'Diklat\SertifikatController@postSpesimenPos')->name('sertifikat.spesimen.posisi.update');
-        Route::post('sertifikat/{jadwal}/email', 'Diklat\SertifikatController@emailTemplate')->name('sertifikat.email.template');
+        Route::get('sertifikat/{jadwal}/email', 'Diklat\SertifikatController@emailTemplate')->name('sertifikat.email.template');
         Route::post('sertifikat/{jadwal}/email/simpan', 'Diklat\SertifikatController@emailTemplateSimpan')->name('sertifikat.email.template.simpan');
         Route::post('sertifikat/{jadwal}/kirim/email', 'Diklat\SertifikatController@kirimEmail')->name('sertifikat.kirim.email');
         Route::post('sertifikat/kirim/simpeg', 'Diklat\SertifikatController@kirimSimpeg')->name('sertifikat.kirim.simpeg');

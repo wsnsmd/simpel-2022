@@ -232,6 +232,10 @@
         function showSimpeg() {
             $('#mdl-simpeg').modal('show');
         }
+
+        function showTesEmail() {
+            $('#mdl-tes-email').modal('show');
+        }
     </script>
 @endsection
 
@@ -315,7 +319,7 @@
                         <p class="font-w600 font-size-sm text-uppercase">Template Email</p>
                     </div>
                 </a>
-                <form id="email-template-form" action="{{ route('backend.diklat.sertifikat.email.template', ['jadwal' => $jadwal->id]) }}" method="post" style="display: none;">
+                <form id="email-template-form" action="{{ route('backend.diklat.sertifikat.email.template', ['jadwal' => $jadwal->id]) }}" method="get" style="display: none;">
                     @csrf
                 </form>
             </div>
@@ -333,6 +337,16 @@
                     @csrf
                     <input type="hidden" name="sertifikat_id" value="{{ $sertifikat->id }}" />
                 </form>
+            </div>
+            <div class="col-6 col-md-4 col-xl-2">
+                <a class="block block-rounded block-link-pop text-center d-flex align-items-center" href="javascript:;" onclick="showTesEmail()">
+                    <div class="block-content">
+                        <p class="mb-2 d-sm-block">
+                            <i class="fa fa-paper-plane text-warning fa-2x"></i>
+                        </p>
+                        <p class="font-w600 font-size-sm text-uppercase">Tes Kirim Email</p>
+                    </div>
+                </a>
             </div>
             @endif
             @if(Gate::check('isAdmin'))
@@ -599,6 +613,41 @@
             </div>
         </div>
         <!-- END Modal Simpeg -->
+
+        @if(!is_null($email))
+        <!-- Modal Tes Kirim Email -->
+        <div class="modal fade" id="mdl-tes-email"role="dialog" aria-labelledby="mdl-tes-email" aria-hidden="true">
+            <div class="modal-dialog modal-md modal-dialog-popin" role="document">
+                <form id="mdl-tes-email-form" method="POST" action="{{ route('backend.diklat.sertifikat.kirim.email', ['jadwal' => $jadwal->id]) }}" autocomplete="off">
+                    @csrf
+                    <input type="hidden" name="sertifikat_id" value="{{ $sertifikat->id }}" />
+                    <div class="modal-content">
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">Tes Kirim Email</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-fw fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content" id="mdl-form-content">
+                                <div class="form-group">
+                                    <label for="email_alamat" class="control-label">Alamat Email <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="email_alamat" name="email_alamat" placeholder="xyz@domain.com" required>
+                                </div>
+                            </div>
+                            <div class="block-content block-content-full text-right bg-light">
+                                <button type="button" class="btn btn-sm btn-light" data-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-sm btn-primary btn-submit"></i> Kirim</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- END Tes Kirim Email -->
+         @endif
 
         @else
         <!-- Modal Buat -->

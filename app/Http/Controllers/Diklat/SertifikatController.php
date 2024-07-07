@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Diklat;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
@@ -358,6 +359,7 @@ class SertifikatController extends Controller
     {
         $validator = $request->validate([
             'konten' => 'required',
+            'bcc' => 'nullable|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'
         ]);
 
         $jadwal = DB::table('v_jadwal_detail')->find($id);
@@ -371,7 +373,7 @@ class SertifikatController extends Controller
 
             DB::table('sertifikat_email')->updateOrInsert(
                 ['sertifikat_id' => $sertifikat->id],
-                ['sertifikat_id' => $sertifikat->id, 'konten' => $request->konten]
+                ['sertifikat_id' => $sertifikat->id, 'konten' => $request->konten, 'bcc' => $request->bcc]
             );
         }
         catch (\Exception $e)
@@ -393,56 +395,100 @@ class SertifikatController extends Controller
     public function kirimEmail(Request $request, $id)
     {
         $sertifikat = DB::table('sertifikat')->where('diklat_jadwal_id', $id)->first();
-        $peserta = DB::table('v_sertifikat')
-                    ->where('sertifikat_id', $sertifikat->id)
-                    ->whereNull('email_at')
-                    ->get();
         $jadwal = DB::table('v_jadwal_detail')->find($id);
         $email = DB::table('sertifikat_email')->where('sertifikat_id', $sertifikat->id)->first();
         $search = array('http://{sertifikat}', '{nama}');
 
-        try
+        if($request->has('email_alamat'))
         {
-            foreach($peserta as $pes)
+            $request->validate([
+                'email_alamat' => ['required', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/']
+            ]);
+            $peserta = DB::table('v_sertifikat')
+                        ->where('sertifikat_id', $sertifikat->id)
+                        ->first();
+            if($sertifikat->is_upload && is_null($peserta->upload))
             {
-                if($sertifikat->is_upload && is_null($pes->upload))
-                    continue;
-
-                $url_sertifikat = route('sertifikat.show', [
-                    'peserta' => $pes->id,
-                    'jadwal' => $pes->diklat_jadwal_id,
-                    'sertifikat' => $pes->spid,
-                    'email' => str_slug($pes->email)
-                ]);
-                $replace = array($url_sertifikat, $pes->nama_lengkap);
-                $konten = str_replace($search, $replace, $email->konten);
-
-                $job = new KirimEmailSertifikatJob($pes->email, $pes->nama_lengkap, $jadwal, $konten, $sertifikat);
-                $this->dispatch($job);
-
-                // Mail::to($pes->email)->send(new KirimSertifikatMailable($pes->nama_lengkap, $jadwal, $konten, $sertifikat));
-
-                $at = date('Y-m-d H:i:s');
-                DB::table('sertifikat_peserta')->where('id', $pes->spid)->update([
-                    'email_at' => $at
-                ]);
+                $notifikasi = 'Email sertifikat gagal dikirim, pastikan data sudah benar!';
+                return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'sertifikat'])
+                        ->with([
+                            'error' => $notifikasi,
+                            'page' => 'peserta'
+                        ]);
             }
+
+            $url_sertifikat = route('sertifikat.show', [
+                'peserta' => $peserta->id,
+                'jadwal' => $peserta->diklat_jadwal_id,
+                'sertifikat' => $peserta->spid,
+                'email' => str_slug($peserta->email)
+            ]);
+            $replace = array($url_sertifikat, $peserta->nama_lengkap);
+            $konten = str_replace($search, $replace, $email->konten);
+            $job = new KirimEmailSertifikatJob($request->email_alamat, $peserta->nama_lengkap, $jadwal, $konten, $sertifikat);
+            $this->dispatch($job);
 
             $notifikasi = 'Email sertifikat berhasil dikirim!';
 
             return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'sertifikat'])
-                        ->with([
-                            'success' => $notifikasi,
-                        ]);
+                            ->with([
+                                'success' => $notifikasi,
+                            ]);
         }
-        catch(\Exception $e)
+        else
         {
-            $notifikasi = 'Email sertifikat gagal dikirim!';
-            return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'sertifikat'])
-                    ->with([
-                        'error' => $notifikasi,
-                        'page' => 'peserta'
+            $peserta = DB::table('v_sertifikat')
+                        ->where('sertifikat_id', $sertifikat->id)
+                        ->whereNull('email_at')
+                        ->get();
+            try
+            {
+                foreach($peserta as $pes)
+                {
+                    if($sertifikat->is_upload && is_null($pes->upload))
+                        continue;
+
+                    $url_sertifikat = route('sertifikat.show', [
+                        'peserta' => $pes->id,
+                        'jadwal' => $pes->diklat_jadwal_id,
+                        'sertifikat' => $pes->spid,
+                        'email' => str_slug($pes->email)
                     ]);
+                    $replace = array($url_sertifikat, $pes->nama_lengkap);
+                    $konten = str_replace($search, $replace, $email->konten);
+                    if(!is_null($email->bcc))
+                    {
+                        $job = new KirimEmailSertifikatJob($pes->email, $pes->nama_lengkap, $jadwal, $konten, $sertifikat, $email->bcc);
+                        $this->dispatch($job);
+                    }
+                    else
+                    {
+                        $job = new KirimEmailSertifikatJob($pes->email, $pes->nama_lengkap, $jadwal, $konten, $sertifikat);
+                        $this->dispatch($job);
+                    }
+
+                    $at = date('Y-m-d H:i:s');
+                    DB::table('sertifikat_peserta')->where('id', $pes->spid)->update([
+                        'email_at' => $at
+                    ]);
+                }
+
+                $notifikasi = 'Email sertifikat berhasil dikirim!';
+
+                return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'sertifikat'])
+                            ->with([
+                                'success' => $notifikasi,
+                            ]);
+            }
+            catch(\Exception $e)
+            {
+                $notifikasi = 'Email sertifikat gagal dikirim!';
+                return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'sertifikat'])
+                        ->with([
+                            'error' => $notifikasi,
+                            'page' => 'peserta'
+                        ]);
+            }
         }
     }
 
