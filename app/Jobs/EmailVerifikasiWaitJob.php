@@ -47,7 +47,7 @@ class EmailVerifikasiWaitJob implements ShouldQueue
             'Content-Type' => 'application/json'
         ];
         $body = [
-            'api_key' => 'api-EFC7EA4860E811ED8F3CF23C91C88F4E',
+            'api_key' => 'api-B8D51865D42D4D5085DA77277171AD5E',
             'sender' => 'SIMPel BPSDM Kaltim <no-reply@bpsdmkaltim.net>',
             'to' => [
                 '<' . $this->email . '>'
