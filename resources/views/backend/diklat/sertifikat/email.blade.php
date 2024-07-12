@@ -68,7 +68,7 @@
                     </div>
                     <div class="block-content block-content-full">
                         <label for="bcc" class="control-label">BCC Email</label>
-                        <input type="email" class="form-control" id="bcc" name="bcc" value="{!! $email->bcc !!}" placeholder="BCC Email">
+                        <input type="email" class="form-control" id="bcc" name="bcc" value="{!! $email->count() !!}" placeholder="BCC Email">
                     </div>
                     <div class="block-content block-content-full">
                         <textarea class="js-summernote" name="konten">
