@@ -1,3 +1,6 @@
+@php
+    dd($email);
+@endphp
 @extends('layouts.backend')
 
 @section('sidebar')
