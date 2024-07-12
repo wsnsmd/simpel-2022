@@ -1,6 +1,3 @@
-@php
-    dd($email);
-@endphp
 @extends('layouts.backend')
 
 @section('sidebar')
@@ -71,7 +68,11 @@
                     </div>
                     <div class="block-content block-content-full">
                         <label for="bcc" class="control-label">BCC Email</label>
-                        <input type="email" class="form-control" id="bcc" name="bcc" value="{!! $email->count() !!}" placeholder="BCC Email">
+                        @if(is_null($email))
+                        <input type="email" class="form-control" id="bcc" name="bcc" value="" placeholder="BCC Email">
+                        @else
+                        <input type="email" class="form-control" id="bcc" name="bcc" value="{!! $email->bcc !!}" placeholder="BCC Email">
+                        @endif
                     </div>
                     <div class="block-content block-content-full">
                         <textarea class="js-summernote" name="konten">
