@@ -233,7 +233,6 @@
                 <tr>
                     <td  style="padding-bottom: 100px">&nbsp;</td>
                 </tr>
-                @endif
                 <tr>
                     <td style="">{!! $sertifikat->nama2 !!}</td>
                 </tr>
