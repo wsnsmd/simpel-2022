@@ -96,7 +96,7 @@
         }
         #tt4 {
             position: fixed;
-            bottom: 4cm;
+            bottom: 8cm;
             left: 14cm;
         }
         @endif
@@ -231,7 +231,7 @@
                     <td style="">{!! $sertifikat->jabatan2 !!}</td>
                 </tr>
                 <tr>
-                    <td  style="padding-bottom: 100px">&nbsp;</td>
+                    <td  style="padding-bottom: 80px">&nbsp;</td>
                 </tr>
                 <tr>
                     <td style="">{!! $sertifikat->nama2 !!}</td>
