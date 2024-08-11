@@ -96,7 +96,7 @@
         }
         #tt4 {
             position: fixed;
-            bottom: 10cm;
+            bottom: 9.5cm;
             left: 14cm;
         }
         @endif
