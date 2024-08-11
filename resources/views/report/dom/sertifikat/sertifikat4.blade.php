@@ -96,8 +96,8 @@
         }
         #tt4 {
             position: fixed;
-            bottom: 4cm;
-            left: 20cm;
+            bottom: 10cm;
+            left: 14cm;
         }
         @endif
     </style>
