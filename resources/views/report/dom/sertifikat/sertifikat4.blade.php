@@ -1,13 +1,7 @@
-@php
-    $date_awal = date_create($jadwal->tgl_awal);
-    $date_akhir = date_create($jadwal->tgl_akhir);
-    $jum_hari = date_diff($date_awal, $date_akhir);
-@endphp
-
 <html>
 
 <head>
-    <title>Sertifikat - {!! $sertPeserta->nomor !!}</title>
+    <title>STTP - {!! $sertPeserta->nomor !!}</title>
     <meta name="author" content="IT BPSDM Prov. Kaltim @ {!! date('Y') !!}" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
@@ -52,6 +46,7 @@
         table.mdiklat td {
             font-family: bookman;
             font-size: 11pt;
+            line-height: 0.9;
         }
 
         div {
@@ -107,7 +102,7 @@
     <table width="100%" cellspacing="0" cellpadding="0" class="header" style="padding-top: 0.5cm;">
         <tbody>
             <tr>
-                <td width="15%" style="text-align: center"><img src="{{ imageToBase64(public_path('/media/images/pemprov.png')) }}"
+                <td width="15%" style="text-align: center"><img src="{{ imageToBase64(public_path('/media/images/garuda.png')) }}"
                         height="120" width="120"></td>
             </tr>
         </tbody>
@@ -116,8 +111,8 @@
         <tbody>
             <tr>
                 <td style="text-align: center">
-                    <span style="font-weight: bold; font-size: 12pt; font-family: bookman; line-height: 1.0;">BADAN PENGEMBANGAN SUMBER DAYA MANUSIA PROVINSI KALIMANTAN TIMUR</span><br>
-                    <span style="font-weight: bold; font-size: 20pt; font-family: bookman; line-height: 1.5;">S E R T I F I K A T</span><br>
+                    <span style="font-weight: bold; font-size: 12pt; font-family: bookman; line-height: 1.0;">GUBERNUR KALIMANTAN TIMUR</span><br>
+                    <span style="font-weight: bold; font-size: 14pt; font-family: bookman; line-height: 1.5;">SURAT TANDA TAMAT PENDIDIKAN DAN PELATIHAN</span><br>
                     <span style="font-size: 12pt; font-family: bookman; line-height: 1.0;">Nomor : {!! $sertPeserta->nomor !!}</span></td>
             </tr>
         </tbody>
@@ -125,18 +120,24 @@
 
     <div id="container">
         <div style="text-align: center; margin-left: 0px; margin-right: 0px; margin-top: 20px">
-			<p style="text-align: center;;">Diberikan kepada</p>
-			<table width="100%" cellspacing="0" cellpadding="0" class="info" style="margin: 20px 0; font-weight: bold; font-size: 11pt;">
+			<p>Gubernur Kalimantan Timur berdasarkan Undang-Undang Nomor 20 Tahun 2023 tentang Aparatur Sipil Negara, dan ketentuan-ketentuannya menyatakan bahwa :</p>
+			<table width="100%" cellspacing="0" cellpadding="0" class="info" style="margin: 10px 0; font-weight: bold; font-size: 12pt;">
                 <tbody>
                     <tr>
                         <td style="vertical-align: top">
-                            <table width="100%" cellspacing="0" cellpadding="3" border="0"
+                            <table width="100%" cellspacing="0" border="0"
                                 style="padding: 0;" class="mdiklat">
                                 <tbody>
                                     <tr>
+                                        <td rowspan="7" width="14%" style="vertical-align: top; text-align: center;"><img style="border: 2px solid;" src="{{ storage_path('app/' . $sertPeserta->foto) }}" height="200px" /></td>
                                         <td width="22%">Nama</td>
                                         <td width="2%">:</td>
                                         <td width="62%">{!! $sertPeserta->nama_lengkap !!}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align: top">Tempat, tanggal Lahir</td>
+                                        <td style="vertical-align: top">:</td>
+                                        <td style="vertical-align: top">{!! $sertPeserta->tmp_lahir !!}, {!! formatTanggal($sertPeserta->tgl_lahir) !!}</td>
                                     </tr>
                                     <tr>
                                         <td>NIP/NRP/NI PPPK</td>
@@ -149,10 +150,34 @@
                                             @endif
                                         </td>
                                     </tr>
+									<tr>
+                                        <td>Pangkat/Golongan Ruang</td>
+                                        <td>:</td>
+                                        <td>
+                                            @if(is_null($sertPeserta->pangkat))
+                                                -
+                                            @else
+                                            {!! $sertPeserta->pangkat !!}, {!! $sertPeserta->golongan !!}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align: top">Jabatan</td>
+                                        <td style="vertical-align: top">:</td>
+                                        <td style="vertical-align: top">{!! $sertPeserta->jabatan !!}</td>
+                                    </tr>
                                     <tr>
                                         <td style="vertical-align: top">Instansi</td>
                                         <td style="vertical-align: top">:</td>
                                         <td style="vertical-align: top; text-transform: uppercase">{!! $sertPeserta->instansi !!}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align: top">Kualifikasi</td>
+                                        <td style="vertical-align: top">:</td>
+                                        <td style="vertical-align: top;">{!! is_null($sertPeserta->kualifikasi) ? '-' : $sertPeserta->kualifikasi !!}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" style="font-weight: bold; font-size: 12pt; padding-top: 15px; padding-bottom: 10px; vertical-align: middle; text-align: center; text-transform: uppercase">{!! is_null($sertPeserta->status) ? 'Telah Mengikuti' : $sertPeserta->status !!}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -160,28 +185,27 @@
                     </tr>
                 </tbody>
             </table>
-            @if($jum_hari->d == 0)
-            <p style="line-height: 1.5;">Atas partisipasinya dalam {!! $jadwal->nama !!} Tahun {!! $jadwal->tahun !!} yang diselenggarakan oleh {!! $sertifikat->fasilitasi !!} bekerja sama dengan Badan Pengembangan Sumber Daya Manusia Provinsi Kalimantan Timur pada tanggal {!! formatTanggal($jadwal->tgl_awal) !!} bertempat di {!! $jadwal->lokasi !!} yang meliputi, {!! $jadwal->total_jp !!} JP (Jam Pelajaran).</p>
-            @else
-			<p style="line-height: 1.5;">Atas partisipasinya dalam {!! $jadwal->nama !!} Tahun {!! $jadwal->tahun !!} yang diselenggarakan oleh {!! $sertifikat->fasilitasi !!} bekerja sama dengan Badan Pengembangan Sumber Daya Manusia Provinsi Kalimantan Timur dari tanggal {!! formatTanggal($jadwal->tgl_awal) !!} sampai dengan {!! formatTanggal($jadwal->tgl_akhir) !!} bertempat di {!! $jadwal->lokasi !!} yang meliputi {!! $jadwal->total_jp !!} JP (Jam Pelajaran).</p>
-            @endif
+			<p>Pada {!! $jadwal->nama !!} Tahun {!! $jadwal->tahun !!} yang diselenggarakan oleh {!! $sertifikat->fasilitasi !!} bekerja sama dengan Badan Pengembangan Sumber Daya Manusia Provinsi Kalimantan Timur dari tanggal {!! formatTanggal($jadwal->tgl_awal) !!} sampai dengan {!! formatTanggal($jadwal->tgl_akhir) !!} yang meliputi {!! $jadwal->total_jp !!} JP (Jam Pelajaran).</p>
         </div>
         <div id="tt1">
-            <table cellspacing="0" cellpadding="0" class="mdiklat" style="line-height: 1.0;">
+            <table cellspacing="0" cellpadding="0" class="mdiklat">
                 <tr>
-                    <td>{!! $sertifikat->tempat !!}, {!! formatTanggal($sertifikat->tanggal) !!}</td>
+                    <td style="">Ditetapkan di : {!! $sertifikat->tempat !!}, {!! formatTanggal($sertifikat->tanggal) !!}</td>
+                </tr>
+                <tr>
+                    <td style="padding-left: -40px">a.n. Gubernur Kalimantan Timur</td>
                 </tr>
                 <tr>
                     <td style="padding-bottom: 100px">{!! $sertifikat->jabatan !!} Badan Pengembangan Sumber Daya Manusia</td>
                 </tr>
                 <tr>
-                    <td>{!! $sertifikat->nama !!}</td>
+                    <td style="">{!! $sertifikat->nama !!}</td>
                 </tr>
                 <tr>
-                    <td>{!! $sertifikat->pangkat !!}</td>
+                    <td style="">{!! $sertifikat->pangkat !!}</td>
                 </tr>
                 <tr>
-                    <td>NIP. {!! formatNIP($sertifikat->nip) !!}</td>
+                    <td style="">NIP. {!! formatNIP($sertifikat->nip) !!}</td>
                 </tr>
             </table>
         </div>
@@ -197,7 +221,7 @@
             <tbody>
                 <tr>
                     <td style="text-align: center">
-                        <span style="font-weight: bold; font-size: 11pt; font-family: bookman; line-height: 1.0;">AGENDA KEGIATAN</span><br>
+                        <span style="font-weight: bold; font-size: 12pt; font-family: bookman; line-height: 1.0;">AGENDA PEMBELAJARAN</span><br>
                     </td>
                 </tr>
             </tbody>
@@ -206,7 +230,7 @@
             <thead>
                 <tr>
                     <th width="5%" style="border-right: 2px solid; border-bottom: 2px solid; padding-top: 15px; padding-bottom: 15px; vertical-align: center; text-align: center"><span style="font-weight: bold;">No.</span></th>
-                    <th style="border-bottom: 2px solid; padding-top: 15px; padding-bottom: 15px; vertical-align: center; text-align: center"><span style="font-weight: bold;">Materi</span></th>
+                    <th style="border-bottom: 2px solid; padding-top: 15px; padding-bottom: 15px; vertical-align: center; text-align: center"><span style="font-weight: bold;">Mata Pelatihan</span></th>
                 </tr>
             </thead>
             <tbody>
