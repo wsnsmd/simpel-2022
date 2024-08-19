@@ -5,7 +5,7 @@
 @endsection
 
 @section('css_before')
-    <!-- Page JS Plugins CSS -->  
+    <!-- Page JS Plugins CSS -->
     <link rel="stylesheet" href="{{ asset('js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
     <link rel="stylesheet" href="{{ asset('js/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}">
@@ -27,16 +27,16 @@
             }
         });
 
-        jQuery(function(){ 
-            Dashmix.helpers(['datepicker', 'maxlength']); 
-            $('#nip').keypress(function(event){	
+        jQuery(function(){
+            Dashmix.helpers(['datepicker', 'maxlength']);
+            $('#nip').keypress(function(event){
                 var keycode = (event.keyCode ? event.keyCode : event.which);
                 if(keycode == '13'){
                     cariNIP();
                 }
                 event.stopPropagation();
             });
-        });   
+        });
 
         @if (session('success'))
         $.notify({
@@ -97,7 +97,7 @@
                         $('#instansi').trigger('change');
                         $('#satker_nama').val(data.satker_nama);
                         $('#satker_telp').val(data.satker_telp);
-                        $('#satker_alamat').val(data.satker_alamat);					
+                        $('#satker_alamat').val(data.satker_alamat);
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         var err = JSON.parse(xhr.responseText);
@@ -117,7 +117,7 @@
                         $('#form-peserta').trigger('reset');
                     }
                 });
-            }          
+            }
         }
     </script>
 @endsection
@@ -168,7 +168,7 @@
                             <div class="invalid-feedback d-block">{{ $errors->first('foto') }}</div>
                             @endif
                         </div>
-                    </div>                            
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="nip">NIP</label>
                         <div class="col-sm-9">
@@ -177,16 +177,16 @@
                                     <input type="text" class="js-maxlength form-control{{ $errors->has('nip') ? ' is-invalid' : '' }}" id="nip" name="nip" maxlength="18" placeholder="NIP..." value="{{ old('nip') }}" data-always-show="true" data-warning-class="badge badge-primary" data-limit-reached-class="badge badge-primary">
                                     <div class="input-group-append">
                                         <button type="button" class="btn btn-primary" onclick="cariNIP()">
-                                            <i class="fa fa-search mr-1"></i> 
+                                            <i class="fa fa-search mr-1"></i>
                                         </button>
                                     </div>
                                 </div>
-                            </div>                            
+                            </div>
                             @if ($errors->has('nip'))
                             <div class="invalid-feedback">{{ $errors->first('nip') }}</div>
                             @endif
                         </div>
-                    </div>             
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="ktp">No KTP</label>
                         <div class="col-sm-9">
@@ -233,7 +233,7 @@
                             <div class="invalid-feedback">{{ $errors->first('alamat') }}</div>
                             @endif
                         </div>
-                    </div>                    
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="jk">Jenis Kelamin <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
@@ -245,8 +245,8 @@
                             @if ($errors->has('jk'))
                             <div class="invalid-feedback">{{ $errors->first('jk') }}</div>
                             @endif
-                        </div>                        
-                    </div>                    
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="tmp_lahir">Tempat Lahir <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
@@ -254,7 +254,7 @@
                             @if ($errors->has('tmp_lahir'))
                             <div class="invalid-feedback">{{ $errors->first('tmp_lahir') }}</div>
                             @endif
-                        </div>                   
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="tgl_lahir">Tanggal Lahir <span class="text-danger">*</span></label>
@@ -263,22 +263,22 @@
                             @if ($errors->has('tgl_lahir'))
                             <div class="invalid-feedback">{{ $errors->first('tgl_lahir') }}</div>
                             @endif
-                        </div>                        
-                    </div>   
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="agama">Agama</label>
                         <div class="col-sm-9">
                             <select class="form-control" id="agama" name="agama" style="width: 100%;">
                                 <option value="" selected>-- Pilih Agama --</option>
                                 @foreach ($agama as $a)
-                                <option value="{{ $a->id }}">{{ $a->nama }}</option>                                    
+                                <option value="{{ $a->id }}">{{ $a->nama }}</option>
                                 @endforeach
                             </select>
                             @if ($errors->has('agama'))
                             <div class="invalid-feedback">{{ $errors->first('agama') }}</div>
                             @endif
-                        </div>                        
-                    </div>                   
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="marital">Status Perkawinan</label>
                         <div class="col-sm-9">
@@ -292,7 +292,7 @@
                             @if ($errors->has('marital'))
                             <div class="invalid-feedback">{{ $errors->first('marital') }}</div>
                             @endif
-                        </div>                        
+                        </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="hp">Handphone <span class="text-danger">*</span></label>
@@ -311,14 +311,14 @@
                                 <div class="invalid-feedback">{{ $errors->first('email') }}</div>
                                 @endif
                             </div>
-                        </div>                                                                                   
+                        </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="pangkat">Pangkat</label>
                         <div class="col-sm-9">
                             <select class="form-control" id="pangkat" name="pangkat" style="width: 100%;">
                                 <option value="" selected>-- Pilih Pangkat --</option>
                                 @foreach ($pangkat as $p)
-                                <option value="{{ $p->id }}">{{ $p->singkat }}</option>                                    
+                                <option value="{{ $p->id }}">{{ $p->singkat }}</option>
                                 @endforeach
                             </select>
                             @if ($errors->has('pangkat'))
@@ -333,8 +333,8 @@
                             @if ($errors->has('jabatan'))
                             <div class="invalid-feedback">{{ $errors->first('jabatan') }}</div>
                             @endif
-                        </div>  
-                    </div>                    
+                        </div>
+                    </div>
                     <h2 class="content-heading pt-0">Data Instansi</h2>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="instansi">Instansi <span class="text-danger">*</span></label>
@@ -344,14 +344,14 @@
                                 @foreach ($instansi as $i)
                                 <option value="{{ $i->nama }}">
                                 @endforeach
-                            </datalist>                            
+                            </datalist>
                             @if ($errors->has('instansi'))
                             <div class="invalid-feedback">{{ $errors->first('instansi') }}</div>
                             @endif
                         </div>
-                    </div>                    
+                    </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label text-right" for="satker_nama">Satuan Kerja (SKPD/OPD) <span class="text-danger">*</span></label>
+                        <label class="col-sm-3 col-form-label text-right" for="satker_nama">Satuan Kerja (SKPD/OPD) / Partai <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control{{ $errors->has('satker_nama') ? ' is-invalid' : '' }}" id="satker_nama" name="satker_nama" placeholder="Satuan Kerja..." value="{{ old('satker_nama') }}" required>
                             @if ($errors->has('satker_nama'))
@@ -367,7 +367,7 @@
                             <div class="invalid-feedback">{{ $errors->first('satker_alamat') }}</div>
                             @endif
                         </div>
-                    </div>  
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="satker_telp">Telepon</label>
                         <div class="col-sm-9">
@@ -376,8 +376,8 @@
                             <div class="invalid-feedback">{{ $errors->first('satker_telp') }}</div>
                             @endif
                         </div>
-                    </div>                         
-                    {{-- <h2 class="content-heading pt-0">Status Peserta</h2>  
+                    </div>
+                    {{-- <h2 class="content-heading pt-0">Status Peserta</h2>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="verifikasi">Verifikasi <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
@@ -390,8 +390,8 @@
                             @if ($errors->has('verifikasi'))
                             <div class="invalid-feedback">{{ $errors->first('verifikasi') }}</div>
                             @endif
-                        </div>                        
-                    </div>   
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label text-right" for="batal">Batal <span class="text-danger">*</span></label>
                         <div class="col-sm-9">
@@ -403,7 +403,7 @@
                             @if ($errors->has('batal'))
                             <div class="invalid-feedback">{{ $errors->first('batal') }}</div>
                             @endif
-                        </div>                        
+                        </div>
                     </div>
                     <div class="form-group row batal-ket" style="display: none">
                         <label class="col-sm-3 col-form-label text-right" for="batal_ket">Keterangan Batal <span class="text-danger">*</span></label>
@@ -412,7 +412,7 @@
                             @if ($errors->has('batal_ket'))
                             <div class="invalid-feedback">{{ $errors->first('batal_ket') }}</div>
                             @endif
-                        </div>                     
+                        </div>
                     </div>                     --}}
                     <div class="form-group mt-4 row">
                         <label class="col-sm-3 col-form-label text-right">&nbsp;</label>

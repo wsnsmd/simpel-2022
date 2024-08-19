@@ -7,7 +7,7 @@
 @section('css_before')
     <!-- Page JS Plugins CSS -->
     <link rel="stylesheet" href="{{ asset('js/plugins/datatables/dataTables.bootstrap4.css') }}">
-    <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}">    
+    <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}">
 @endsection
 
 @section('js_after')
@@ -17,11 +17,11 @@
     <script src="{{ asset('js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
     <script src="{{ asset('js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>    
+    <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     <script>
         var jadwal_id = '{{ $jadwal->id }}'
         var kurikulum_id = '{{ $jadwal->kurikulum_id }}';
-        
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -29,7 +29,7 @@
         });
 
         jQuery(function(){
-            // Dashmix.helpers(['datepicker', 'validation']); 
+            // Dashmix.helpers(['datepicker', 'validation']);
             // Override a few default classes
             jQuery.extend(jQuery.fn.dataTable.ext.classes, {
                 sWrapper: "dataTables_wrapper dt-bootstrap4",
@@ -98,12 +98,12 @@
                         }
                     });
 
-            e.fire({   
-                title: 'Apakah anda yakin',   
-                text: 'Anda tidak akan dapat mengembalikan data anda',   
-                type: 'warning',   
+            e.fire({
+                title: 'Apakah anda yakin',
+                text: 'Anda tidak akan dapat mengembalikan data anda',
+                type: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Ya',  
+                confirmButtonText: 'Ya',
                 cancelButtonText: 'Tidak',
                 customClass: {
                     confirmButton: "btn btn-danger m-1",
@@ -128,12 +128,12 @@
                     });
 
             if(id == 1) {
-                e.fire({   
-                    title: 'Apakah anda yakin',   
-                    text: 'Melakukan verifikasi dan menyetujui peserta?',   
-                    type: 'warning',   
+                e.fire({
+                    title: 'Apakah anda yakin',
+                    text: 'Melakukan verifikasi dan menyetujui peserta?',
+                    type: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Setuju',  
+                    confirmButtonText: 'Setuju',
                     cancelButtonText: 'Batal',
                     customClass: {
                         confirmButton: "btn btn-success m-1",
@@ -148,12 +148,12 @@
                 });
             }
             else if(id == 2) {
-                e.fire({   
-                    title: 'Apakah anda yakin',   
-                    text: 'Melakukan verifikasi dan menolak peserta?',   
-                    type: 'warning',   
+                e.fire({
+                    title: 'Apakah anda yakin',
+                    text: 'Melakukan verifikasi dan menolak peserta?',
+                    type: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Tolak',  
+                    confirmButtonText: 'Tolak',
                     cancelButtonText: 'Batal',
                     customClass: {
                         confirmButton: "btn btn-danger m-1",
@@ -180,12 +180,12 @@
                     });
 
             if(id == 1) {
-                e.fire({   
-                    title: 'Apakah anda yakin',   
-                    text: 'Melakukan konfirmasi manual peserta?',   
-                    type: 'warning',   
+                e.fire({
+                    title: 'Apakah anda yakin',
+                    text: 'Melakukan konfirmasi manual peserta?',
+                    type: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Ya',  
+                    confirmButtonText: 'Ya',
                     cancelButtonText: 'Batal',
                     customClass: {
                         confirmButton: "btn btn-success m-1",
@@ -200,12 +200,12 @@
                 });
             }
             else if(id == 2) {
-                e.fire({   
-                    title: 'Apakah anda yakin',   
-                    text: 'Mengirim ulang email konfirmasi peserta?',   
-                    type: 'warning',   
+                e.fire({
+                    title: 'Apakah anda yakin',
+                    text: 'Mengirim ulang email konfirmasi peserta?',
+                    type: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Ya',  
+                    confirmButtonText: 'Ya',
                     cancelButtonText: 'Batal',
                     customClass: {
                         confirmButton: "btn btn-warning m-1",
@@ -231,10 +231,10 @@
                         }
                     });
 
-            const { value: text } = await e.fire({   
-                title: 'Apakah anda yakin',   
-                text: 'Melakukan pembatalan pada peserta?',   
-                type: 'warning',   
+            const { value: text } = await e.fire({
+                title: 'Apakah anda yakin',
+                text: 'Melakukan pembatalan pada peserta?',
+                type: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Ya',
                 cancelButtonText: 'Tidak',
@@ -253,7 +253,7 @@
                 form.append('<input type="hidden" name="batal_ket" value="' + text + '" /> ');
                 form.submit();
             }
-        }   
+        }
     </script>
 @endsection
 
@@ -280,7 +280,7 @@
     <!-- Quick Menu -->
     @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
     <div class="pt-4 px-4 bg-body-dark rounded push">
-        <div class="row row-deck">        
+        <div class="row row-deck">
             <div class="col-6 col-md-4 col-xl-2">
                 <a class="block block-rounded block-link-pop text-center d-flex align-items-center" href="{{ route('backend.diklat.peserta.create', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama)]) }}">
                     <div class="block-content">
@@ -320,7 +320,7 @@
                     <input type="hidden" name="export" value="2">
                     <input type="hidden" name="jadwal_id" value="{{ $jadwal->id}}">
                 </form>
-            </div>    
+            </div>
             <div class="col-6 col-md-4 col-xl-2">
                 <a class="block block-rounded block-link-pop text-center d-flex align-items-center" href="javascript:;" onclick="event.preventDefault(); document.getElementById('export-form3').submit();">
                     <div class="block-content">
@@ -335,7 +335,7 @@
                     <input type="hidden" name="export" value="3">
                     <input type="hidden" name="jadwal_id" value="{{ $jadwal->id}}">
                 </form>
-            </div>          
+            </div>
             <div class="col-6 col-md-4 col-xl-2">
                 <a class="block block-rounded block-link-pop text-center d-flex align-items-center" href="javascript:;" onclick="event.preventDefault(); document.getElementById('import-form').submit();">
                     <div class="block-content">
@@ -346,13 +346,13 @@
                     </div>
                 </a>
                 <form id="import-form" action="{{ route('backend.diklat.peserta.import', ['jadwal' => $jadwal->id]) }}" method="post" style="display: none;">
-                    @csrf                
+                    @csrf
                 </form>
-            </div>        
+            </div>
         </div>
     </div>
     @endif
-    <!-- END Quick Menu --> 
+    <!-- END Quick Menu -->
 
     <!-- Page Content -->
     <div class="content">
@@ -369,11 +369,11 @@
                             <tr>
                                 <th class="text-center" style="width: 30px;">#</th>
                                 <th style="width: 60px;">Foto</th>
-                                <th style="width: 12%;">NIP</th>   
-                                <th>Nama</th>                         
-                                <th>Satker</th>
+                                <th style="width: 12%;">NIP</th>
+                                <th>Nama</th>
+                                <th>Satker / Partai</th>
                                 <th>Instansi</th>
-                                @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))                
+                                @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
                                 <th style="width: 5%;">Aksi</th>
                                 <th style="width: 5%;">Batal</th>
                                 @endif
@@ -391,36 +391,36 @@
                                 </td>
                                 <td class="font-w600">
                                     {{ $pv->nama_lengkap }}
-                                </td>             
+                                </td>
                                 <td class="font-w600">
                                     {{ $pv->satker_nama }}
-                                </td>          
+                                </td>
                                 <td class="font-w600">
                                     {{ $pv->instansi }}
-                                </td>               
-                                @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))                                                                              
+                                </td>
+                                @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
                                 <td class="text-center">
                                     <form action="{{ route('backend.diklat.peserta.destroy', $pv->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <div class="btn-group">   
+                                        <div class="btn-group">
                                             <a href="{{ route('backend.diklat.peserta.edit', ['jadwal' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'id' => $pv->id]) }}" class="btn btn-sm btn-primary" title="Edit">
                                                 <i class="fa fa-pencil-alt"></i>
                                             </a>
                                             <a href="javascript:;" onclick="return showAlert($(this).closest('form'));" class="btn btn-sm btn-danger" title="Hapus">
                                                 <i class="far fa-trash-alt"></i>
-                                            </a>                               
+                                            </a>
                                         </div>
                                     </form>
                                 </td>
                                 <td class="text-center">
                                     <form action="{{ route('backend.diklat.peserta.batal', $pv->id) }}" method="POST">
                                         @csrf
-                                        <div class="btn-group">   
+                                        <div class="btn-group">
                                             <a href="javascript:;" onclick="return showBatal($(this).closest('form'));" class="btn btn-sm btn-danger" title="Batal"><i class="fa fa-times"></i></a>
                                         </div>
                                     </form>
-                                </td>  
+                                </td>
                                 @endif
                             </tr>
                             @endforeach
@@ -443,9 +443,9 @@
                             <tr>
                                 <th class="text-center" style="width: 30px;">#</th>
                                 <th style="width: 60px;">Foto</th>
-                                <th style="width: 12%;">NIP</th>   
-                                <th>Nama</th>                         
-                                <th>Satker</th>
+                                <th style="width: 12%;">NIP</th>
+                                <th>Nama</th>
+                                <th>Satker / Partai</th>
                                 <th>Instansi</th>
                                 @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
                                 <th style="width: 5%;">Verifikasi</th>
@@ -465,10 +465,10 @@
                                 </td>
                                 <td class="font-w600">
                                     {{ $pn->nama_lengkap }}
-                                </td>             
+                                </td>
                                 <td class="font-w600">
                                     {{ $pn->satker_nama }}
-                                </td>          
+                                </td>
                                 <td class="font-w600">
                                     {{ $pn->instansi }}
                                 </td>
@@ -476,23 +476,23 @@
                                 <td class="text-center">
                                     <form action="{{ route('backend.diklat.peserta.verifikasi', $pn->id) }}" method="POST">
                                         @csrf
-                                        <div class="btn-group">   
+                                        <div class="btn-group">
                                             <a href="javascript:;" onclick="return showVerifikasi($(this).closest('form'), 1);" class="btn btn-sm btn-success" title="Setuju"><i class="fa fa-check"></i></a>
                                             <a href="javascript:;" onclick="return showVerifikasi($(this).closest('form'), 2);" class="btn btn-sm btn-danger" title="Tolak"><i class="fa fa-times"></i></a>
                                         </div>
                                     </form>
-                                </td>                                
+                                </td>
                                 <td class="text-center">
                                     <form action="{{ route('backend.diklat.peserta.destroy', $pn->id) }}" method="POST">
                                         @csrf
-                                        @method('DELETE')                                        
-                                        <div class="btn-group">   
+                                        @method('DELETE')
+                                        <div class="btn-group">
                                             <a href="{{ route('backend.diklat.peserta.edit', ['jadwal' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'id' => $pn->id]) }}" class="btn btn-sm btn-primary" title="Edit">
                                                 <i class="fa fa-pencil-alt"></i>
-                                            </a>                                            
+                                            </a>
                                             <a href="javascript:;" onclick="return showAlert($(this).closest('form'));" class="btn btn-sm btn-danger" title="Hapus">
                                                 <i class="far fa-trash-alt"></i>
-                                            </a>                               
+                                            </a>
                                         </div>
                                     </form>
                                 </td>
@@ -517,9 +517,9 @@
                             <tr>
                                 <th class="text-center" style="width: 30px;">#</th>
                                 <th style="width: 60px;">Foto</th>
-                                <th style="width: 12%;">NIP</th>   
-                                <th>Nama</th>                         
-                                <th>Satker</th>
+                                <th style="width: 12%;">NIP</th>
+                                <th>Nama</th>
+                                <th>Satker / Partai</th>
                                 <th>Instansi</th>
                                 @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
                                 <th style="width: 5%;">Konfirmasi</th>
@@ -539,10 +539,10 @@
                                 </td>
                                 <td class="font-w600">
                                     {{ $pc->nama_lengkap }}
-                                </td>             
+                                </td>
                                 <td class="font-w600">
                                     {{ $pc->satker_nama }}
-                                </td>          
+                                </td>
                                 <td class="font-w600">
                                     {{ $pc->instansi }}
                                 </td>
@@ -550,23 +550,23 @@
                                 <td class="text-center">
                                     <form action="{{ route('backend.diklat.peserta.konfirmasi', $pc->id) }}" method="POST">
                                         @csrf
-                                        <div class="btn-group">   
+                                        <div class="btn-group">
                                             <a href="javascript:;" onclick="return showKonfirmasi($(this).closest('form'), 1);" class="btn btn-sm btn-success" title="Konfirmasi Manual"><i class="fa fa-check"></i></a>
                                             <a href="javascript:;" onclick="return showKonfirmasi($(this).closest('form'), 2);" class="btn btn-sm btn-warning" title="Kirim Ulang Email"><i class="fa fa-paper-plane"></i></a>
                                         </div>
                                     </form>
-                                </td>                                
+                                </td>
                                 <td class="text-center">
                                     <form action="{{ route('backend.diklat.peserta.destroy', $pc->id) }}" method="POST">
                                         @csrf
-                                        @method('DELETE')                                        
-                                        <div class="btn-group">   
+                                        @method('DELETE')
+                                        <div class="btn-group">
                                             <a href="{{ route('backend.diklat.peserta.edit', ['jadwal' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'id' => $pc->id]) }}" class="btn btn-sm btn-primary" title="Edit">
                                                 <i class="fa fa-pencil-alt"></i>
-                                            </a>                                            
+                                            </a>
                                             <a href="javascript:;" onclick="return showAlert($(this).closest('form'));" class="btn btn-sm btn-danger" title="Hapus">
                                                 <i class="far fa-trash-alt"></i>
-                                            </a>                               
+                                            </a>
                                         </div>
                                     </form>
                                 </td>
@@ -578,7 +578,7 @@
                 </div>
             </div>
         </div>
-        <!-- END Peserta Belum Konfirmasi -->        
+        <!-- END Peserta Belum Konfirmasi -->
         <!-- Peserta Batal -->
         <div class="block block-bordered block-themed">
             <div class="block-header bg-danger">
@@ -591,8 +591,8 @@
                             <tr>
                                 <th class="text-center" style="width: 30px;">#</th>
                                 <th style="width: 60px;">Foto</th>
-                                <th style="width: 12%;">NIP</th>   
-                                <th>Nama</th>                         
+                                <th style="width: 12%;">NIP</th>
+                                <th>Nama</th>
                                 <th>Satker</th>
                                 <th>Instansi</th>
                                 @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
@@ -612,25 +612,25 @@
                                 </td>
                                 <td class="font-w600">
                                     {{ $pb->nama_lengkap }}
-                                </td>             
+                                </td>
                                 <td class="font-w600">
                                     {{ $pb->satker_nama }}
-                                </td>          
+                                </td>
                                 <td class="font-w600">
                                     {{ $pb->instansi }}
-                                </td>   
-                                @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))                                                          
+                                </td>
+                                @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
                                 <td class="text-center">
                                     <form action="{{ route('backend.diklat.peserta.destroy', $pb->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <div class="btn-group">   
+                                        <div class="btn-group">
                                             <a href="{{ route('backend.diklat.peserta.edit', ['jadwal' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'id' => $pb->id]) }}" class="btn btn-sm btn-primary" title="Edit">
                                                 <i class="fa fa-pencil-alt"></i>
                                             </a>
                                             <a href="javascript:;" onclick="return showAlert($(this).closest('form'));" class="btn btn-sm btn-danger" title="Hapus">
                                                 <i class="far fa-trash-alt"></i>
-                                            </a>                               
+                                            </a>
                                         </div>
                                     </form>
                                 </td>
@@ -644,5 +644,5 @@
         </div>
         <!-- END Peserta Batal -->
     </div>
-    <!-- END Page Content -->     
+    <!-- END Page Content -->
 @endsection
