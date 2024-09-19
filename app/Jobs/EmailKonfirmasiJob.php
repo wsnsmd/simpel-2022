@@ -48,7 +48,7 @@ class EmailKonfirmasiJob implements ShouldQueue
             'Content-Type' => 'application/json'
         ];
         $body = [
-            'api_key' => 'api-B8D51865D42D4D5085DA77277171AD5E',
+            'api_key' => env('MAIL_API_SEND'),
             'sender' => 'SIMPel BPSDM Kaltim <no-reply@bpsdmkaltim.net>',
             'to' => [
                 '<' . $this->email . '>'
