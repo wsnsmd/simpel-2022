@@ -43,7 +43,7 @@ class VerifikasiStatusMailable extends Mailable
     public function build()
     {
         return $this->from(setting()->get('from_email'), setting()->get('from_name'))
-                    ->subject('Status Verifikasi Pendaftaran' . $this->jadwal_tipe . ' ' . $this->jadwal_nama)
+                    ->subject('Status Verifikasi Pendaftaran ' . $this->jadwal_tipe . ' ' . $this->jadwal_nama)
                     ->view('emails.verifikasi_status');
     }
 }
