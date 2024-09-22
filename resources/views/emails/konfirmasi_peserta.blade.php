@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Verifikasi Status Peserta</title>
+  <title>Konfirmasi Peserta</title>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600;700&amp;display=swap" rel="stylesheet">
   <style>
@@ -202,12 +202,64 @@
                     </h1>
                     <p class="template-email-text" style="mso-line-height: exactly; line-height: 25px;">
                       <!--[if mso]><span style="font-family: sans-serif;"><![endif]-->
-                      Status verifikasi peserta <strong>{{ $jadwal_tipe }} {{ $jadwal_nama }}</strong> <br />
-                      pada tanggal <strong>{{ $jadwal_tgl_awal }}</strong> s/d <strong>{{ $jadwal_tgl_akhir }}</strong>.
+                      Proses registrasi anda hampir selesai, klik tombol Konfirmasi dibawah ini untuk menyelesaikan proses registrasi.
                       <!--[if mso]></span><![endif]-->
                     </p>
-                    <p class="template-email-text" style="mso-line-height: exactly; line-height: 25px;">
-                      <strong>{{ $status }}</strong> oleh <strong>BPSDM Prov. Kaltim</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="template-email-button">
+                    <table>
+                      <tr>
+                        <td cellpadding="0" style="padding: 0;">
+                          <div>
+                            <!--[if mso]>
+                          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:36px;v-text-anchor:middle;width:174px;" arcsize="10%" stroke="f" fillcolor="#32a0e8">
+                            <w:anchorlock/>
+                            <center style="color:#ffffff;font-family:sans-serif;font-size:16px;font-weight:bold;">
+                              Get started
+                            </center>
+                          </v:roundrect>
+                          <![endif]-->
+                            <!--[if !mso]><!-->
+                            <table cellspacing="0" cellpadding="0">
+                              <tr>
+                                <td align="center" width="174" height="36" bgcolor="#32a0e8"
+                                  style="-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; color: #ffffff; display: block;box-shadow: 0px 0px 0px 1px #258cd0;"
+                                  class="template-button-container">
+                                  <a href="{{ $konfirmasi_url }}" class="template-email-blue-action-button"
+                                    style="font-size:16px; font-weight: 600; font-family: 'Open Sans', Helvetica, Arial, sans-serif; text-decoration: none; line-height:36px; width:100%; letter-spacing: -0.22px;display:inline-block">
+                                    <span style="color: #ffffff; padding-left: 10px; padding-right: 10px;">
+                                      Konfirmasi
+                                    </span>
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
+                            <!--[endif]><!-->
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <!--[if !mso]>-->
+                <tr>
+                  <td>
+                    <hr style="margin-top: 26px; background: #dfebf6; border: 1px solid #dfebf6;">
+                  </td>
+                </tr>
+                <!--<![endif]-->
+                <tr>
+                  <td>
+                    <p class="template-email-text no-margin" style="mso-line-height: exactly; line-height: 25px;">
+                      <!--[if mso]><span style="font-family: sans-serif;"><![endif]-->
+                      <small>Jika anda memiliki masalah dengan tombol diatas, salin dan tempel tautan/link dibawah pada
+                        peramban web anda.
+                        <br>
+                        {{ $konfirmasi_url }}
+                      </small>
+                      <!--[if mso]></span><![endif]-->
                     </p>
                   </td>
                 </tr>

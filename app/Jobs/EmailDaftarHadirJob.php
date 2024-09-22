@@ -7,6 +7,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Mail;
+
+use App\Mail\DaftarHadirMailable;
 
 use GuzzleHttp\Client;
 
@@ -42,6 +45,7 @@ class EmailDaftarHadirJob implements ShouldQueue
      */
     public function handle()
     {
+        /*
         $client = new Client();
         $headers = [
             'Content-Type' => 'application/json'
@@ -69,5 +73,7 @@ class EmailDaftarHadirJob implements ShouldQueue
         // print_r($body);
         $request = new \GuzzleHttp\Psr7\Request('POST', 'https://api.smtp2go.com/v3/email/send', $headers, json_encode($body));
         $res = $client->sendAsync($request)->wait();
+        */
+        Mail::to($this->email)->send(new DaftarHadirMailable($this->nama, $this->jadwal, $this->url));
     }
 }

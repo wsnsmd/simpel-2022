@@ -7,6 +7,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Mail;
+
+use App\Mail\KonfirmasiMailable;
 
 use GuzzleHttp\Client;
 
@@ -14,8 +17,8 @@ class EmailKonfirmasiJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 1;
-    public $timeout = 10;
+    public $tries = 10;
+    public $timeout = 180;
 
     public $nama;
     public $email;
@@ -42,7 +45,7 @@ class EmailKonfirmasiJob implements ShouldQueue
      */
     public function handle()
     {
-        //
+        /*
         $client = new Client();
         $headers = [
             'Content-Type' => 'application/json'
@@ -69,5 +72,7 @@ class EmailKonfirmasiJob implements ShouldQueue
         // print_r($body);
         $request = new \GuzzleHttp\Psr7\Request('POST', 'https://api.smtp2go.com/v3/email/send', $headers, json_encode($body));
         $res = $client->sendAsync($request)->wait();
+        */
+        Mail::to($this->email)->send(new KonfirmasiMailable($this->nama, $this->jadwal, $this->url));
     }
 }

@@ -10,21 +10,29 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class VerifikasiStatusMailable extends Mailable
 {
     use Queueable, SerializesModels;
-    public $name;
-    public $jadwal;
+
+    public $peserta;
+    public $jadwal_tipe;
+    public $jadwal_nama;
+    public $jadwal_tgl_awal;
+    public $jadwal_tgl_akhir;
     public $status;
+    public $tahun;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($name, $jadwal, $status)
+    public function __construct($nama, $jadwal, $status)
     {
-        //
-        $this->name = $name;
-        $this->jadwal = $jadwal; 
+        $this->peserta = $nama;
+        $this->jadwal_tipe = $jadwal->tipe;
+        $this->jadwal_nama = $jadwal->nama;
+        $this->jadwal_tgl_awal = $jadwal->tgl_awal;
+        $this->jadwal_tgl_akhir = $jadwal->tgl_akhir;
         $this->status = $status;
+        $this->tahun = $jadwal->tahun;
     }
 
     /**
@@ -35,7 +43,7 @@ class VerifikasiStatusMailable extends Mailable
     public function build()
     {
         return $this->from(setting()->get('from_email'), setting()->get('from_name'))
-                    ->subject('Status Verifikasi Pendaftaran')
+                    ->subject('Status Verifikasi Pendaftaran' . $this->jadwal_tipe . ' ' . $this->jadwal_nama)
                     ->view('emails.verifikasi_status');
     }
 }

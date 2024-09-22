@@ -124,7 +124,7 @@
                                                 <td>
 												@php
                                                     $output = '';
-                                                    if(!is_null($p->nip))
+                                                    if(!is_null($p->nip) && strlen($p->nip) == 18)
                                                     {
                                                         $count = strlen($p->nip) - 8;
                                                         $output = substr_replace($p->nip, str_repeat('*', $count), 2, $count);

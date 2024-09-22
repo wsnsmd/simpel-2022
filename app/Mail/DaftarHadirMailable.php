@@ -7,16 +7,15 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class VerifikasiWaitMailable extends Mailable
+class DaftarHadirMailable extends Mailable
 {
-    use Queueable, SerializesModels;    
-    
+    use Queueable, SerializesModels;
+
     public $peserta;
     public $jadwal_tipe;
     public $jadwal_nama;
-    public $jadwal_tgl_awal;
-    public $jadwal_tgl_akhir;
-    public $url;
+    public $jadwal_tanggal;
+    public $konfirmasi_url;
     public $tahun;
 
     /**
@@ -29,10 +28,9 @@ class VerifikasiWaitMailable extends Mailable
         $this->peserta = $nama;
         $this->jadwal_tipe = $jadwal->tipe;
         $this->jadwal_nama = $jadwal->nama;
-        $this->jadwal_tgl_awal = $jadwal->tgl_awal;
-        $this->jadwal_tgl_akhir = $jadwal->tgl_akhir;
-        $this->url = $url;
-        $this->tahun = $jadwal->tahun;   
+        $this->jadwal_tanggal = $jadwal->tgl_awal;
+        $this->konfirmasi_url = $url;
+        $this->tahun = $jadwal->tahun;
     }
 
     /**
@@ -43,7 +41,7 @@ class VerifikasiWaitMailable extends Mailable
     public function build()
     {
         return $this->from(setting()->get('from_email'), setting()->get('from_name'))
-                    ->subject('Status Verifikasi Pendaftaran' . $this->jadwal_tipe . ' ' . $this->jadwal_nama)
-                    ->view('emails.verifikasi_wait');
+            ->subject('Daftar Hadir - ' . $this->jadwal_tipe . ' ' . $this->jadwal_nama)
+            ->view('emails.daftar_hadir');
     }
 }
