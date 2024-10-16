@@ -75,6 +75,11 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
+        $user->last_login = now();  // Atur waktu terakhir login ke waktu sekarang
+        $user->last_login_ip = $request->ip();  // Ambil alamat IP
+        $user->last_login_browser = $request->header('User-Agent');  // Ambil informasi browser
+        $user->save();  // Simpan perubahan ke database
+        
         $request->session()->put('apps_tahun', $request->tahun);
         $instansi = DB::table('instansi')->where('id', $user->instansi_id)->first();
 
