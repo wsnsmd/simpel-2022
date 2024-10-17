@@ -278,7 +278,7 @@
     <!-- END Hero -->
 
     <!-- Quick Menu -->
-    @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
+    @if(Gate::check('isCreator', $jadwal) || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
     <div class="pt-4 px-4 bg-body-dark rounded push">
         <div class="row row-deck">
             <div class="col-6 col-md-4 col-xl-2">
@@ -359,7 +359,7 @@
                                 <th style="width: 12%;">NIP</th>
                                 <th>Nama</th>
                                 <th>Instansi</th>
-                                @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
+                                @if(Gate::check('isCreator', $jadwal) || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
                                 <th style="width: 5%;">Aksi</th>
                                 <th style="width: 5%;">Batal</th>
                                 @endif
@@ -378,7 +378,7 @@
                                 <td class="font-w600">
                                     {{ $pv->instansi }}
                                 </td>
-                                @if(Gate::check('isUser') || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
+                                @if(Gate::check('isCreator', $jadwal) || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
                                 <td class="text-center">
                                     <form action="{{ route('backend.diklat.peserta.destroy', $pv->id) }}" method="POST">
                                         @csrf

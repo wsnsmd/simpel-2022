@@ -20,6 +20,7 @@ $admin_path = config('app.admin_path');
 Route::get($admin_path . '/login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post($admin_path . '/login', 'Auth\LoginController@login');
 Route::post($admin_path . '/logout', 'Auth\LoginController@logout')->name('logout');
+Route::get($admin_path . '/reload-captcha', 'Auth\LoginController@reloadCaptcha')->name('reload.captcha');
 // Authentication Routes
 
 // Frontend Routes

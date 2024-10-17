@@ -6,7 +6,7 @@
 
 @section('css_before')
     <!-- Page JS Plugins CSS -->
-    <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}">    
+    <link rel="stylesheet" href="{{ asset('js/plugins/sweetalert2/sweetalert2.min.css') }}">
 @endsection
 
 @section('js_after')
@@ -14,10 +14,10 @@
     <script src="{{ asset('js/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
     <script src="{{ asset('js/plugins/es6-promise/es6-promise.auto.min.js') }}"></script>
-    <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>    
+    <script src="{{ asset('js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jquery-validation/additional-methods.js') }}"></script>
-    <script>        
+    <script>
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -25,7 +25,7 @@
         });
 
         jQuery(function(){
-            Dashmix.helpers(['validation']); 
+            Dashmix.helpers(['validation']);
         });
 
         var action = '';
@@ -46,9 +46,9 @@
             });
         }
 
-        jQuery(document).ready(function () {        
+        jQuery(document).ready(function () {
             loadchecklist();
-            
+
             var form_tambah = $('#mdl-tambah-form').validate({
                 messages: {
                     dokumen: {
@@ -89,7 +89,7 @@
                         );
                     });
                     return false;
-                } 
+                }
             })
 
             var form_upload = $('#mdl-upload-form').validate({
@@ -103,7 +103,7 @@
                     var formData = new FormData();
 
                     formData.append('file', file_data);
-                    formData.append('checklist_id', $('#checklist_id').val());            
+                    formData.append('checklist_id', $('#checklist_id').val());
 
                     request = $.ajax({
                         type: 'POST',
@@ -130,7 +130,7 @@
                         );
                     });
                     return false;
-                } 
+                }
             })
 
             var form_import = $('#mdl-import-form').validate({
@@ -144,7 +144,7 @@
                     var formData = new FormData();
 
                     formData.append('file', file_data);
-                    formData.append('jadwal_id', $('#jadwal_id').val());            
+                    formData.append('jadwal_id', $('#jadwal_id').val());
 
                     request = $.ajax({
                         type: 'POST',
@@ -171,23 +171,23 @@
                         );
                     });
                     return false;
-                } 
+                }
             })
 
-            $('#mdl-tambah').on('hidden.bs.modal', function() {        
+            $('#mdl-tambah').on('hidden.bs.modal', function() {
                 form_tambah.resetForm();
                 $('input[name=dokumen]').val('');
                 $('textarea[name=keterangan]').val('');
                 $('.is-invalid').removeClass('is-invalid');
             });
 
-            $('#mdl-upload').on('hidden.bs.modal', function() {        
+            $('#mdl-upload').on('hidden.bs.modal', function() {
                 $('input[name=file]').val('');
                 form_upload.resetForm();
                 $('.is-invalid').removeClass('is-invalid');
             });
 
-            $('#mdl-import').on('hidden.bs.modal', function() {        
+            $('#mdl-import').on('hidden.bs.modal', function() {
                 $('input[name=file_import]').val('');
                 form_import.resetForm();
                 $('.is-invalid').removeClass('is-invalid');
@@ -198,7 +198,7 @@
         function showTambah() {
             action = 'add';
             $("#mdl-form-title").html("Tambah Checklist");
-            $('#mdl-tambah').modal('show');        
+            $('#mdl-tambah').modal('show');
         }
 
         function showEdit(id) {
@@ -232,12 +232,12 @@
                         }
                     });
 
-            e.fire({   
-                title: 'Apakah anda yakin',   
-                text: 'Anda tidak akan dapat mengembalikan data anda',   
-                type: 'warning',   
+            e.fire({
+                title: 'Apakah anda yakin',
+                text: 'Anda tidak akan dapat mengembalikan data anda',
+                type: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Ya',  
+                confirmButtonText: 'Ya',
                 cancelButtonText: 'Tidak',
                 customClass: {
                     confirmButton: "btn btn-danger m-1",
@@ -279,11 +279,11 @@
         function showUpload($id) {
             $('input[name=checklist_id]').val($id);
             $('input[name=file]').val('');
-            $('#mdl-upload').modal('show');  
+            $('#mdl-upload').modal('show');
         }
 
         function showImport() {
-            $('#mdl-import').modal('show');  
+            $('#mdl-import').modal('show');
         }
 
         function showNotifikasi(msg, type='success') {
@@ -326,6 +326,7 @@
     <!-- END Hero -->
 
     <!-- Quick Menu -->
+    @if(Gate::check('isCreator', $jadwal) || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
     <div class="pt-4 px-4 bg-body-dark rounded push">
         <div class="row row-deck">
             <div class="col-6 col-md-4 col-xl-2">
@@ -337,7 +338,7 @@
                         <p class="font-w600 font-size-sm text-uppercase">Tambah</p>
                     </div>
                 </a>
-            </div>        
+            </div>
             <div class="col-6 col-md-4 col-xl-2">
                 <a class="block block-rounded block-link-pop text-center d-flex align-items-center" href="javascript:;" onclick="showImport()">
                     <div class="block-content">
@@ -360,7 +361,8 @@
             </div>
         </div>
     </div>
-    <!-- END Quick Menu --> 
+    @endif
+    <!-- END Quick Menu -->
 
     <!-- Page Content -->
     <div class="content">
@@ -375,7 +377,7 @@
             </div>
         </div>
         <!-- END Checklist -->
-        
+
         <!-- Modal Tambah -->
         <div class="modal fade" id="mdl-tambah" tabindex="-1" role="dialog" aria-labelledby="mdl-tambah" aria-hidden="true">
             <div class="modal-dialog modal-dialog-popin" role="document">
@@ -479,5 +481,5 @@
         </div>
         <!-- END Modal Import -->
     </div>
-    <!-- END Page Content -->     
+    <!-- END Page Content -->
 @endsection

@@ -89,6 +89,22 @@
                                                 </div>
                                             </div>
                                         </div>                                        
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <input type="text" name="captcha" id="captcha" class="form-control py-2" placeholder="Captcha">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <a href="javascript:;" id="reload"><i class="fa fa-sync"></i></a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="text-center captcha">
+                                                <span>{!! captcha_img('flat') !!}</span>
+                                            </div>
+                                        </div>
 
                                         <div class="form-group text-center">
                                             <button type="submit" class="btn btn-hero-primary">
@@ -133,6 +149,18 @@
             });
         </script>
         @endif
+
+        <script>
+        $("#reload").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "{{ route('reload.captcha') }}",
+                success: function (data) {
+                    $(".captcha span").html(data.captcha);
+                }
+            });
+        });
+        </script>
 
     </body>
 </html>

@@ -20,10 +20,10 @@
             </td>
             <td class="font-w600">
                 {{ $j->jenis }}
-            </td>  
+            </td>
             <td class="font-w600">
                 {{formatTgl2($j->tgl_awal)}} - {{formatTgl2($j->tgl_akhir)}}
-            </td>                     
+            </td>
             <td class="font-w600">
                 {{ $j->kelas }}
             </td>
@@ -33,7 +33,7 @@
             <td class="font-w600">
                 @switch($j->status_jadwal)
                     @case(1)
-                        <span class="badge badge-success">Berjalan</span>                                                    
+                        <span class="badge badge-success">Berjalan</span>
                         @break
                     @case(2)
                         <span class="badge badge-primary">Akan Datang</span>
@@ -41,7 +41,7 @@
                     @default
                         <span class="badge badge-danger">Selesai</span>
                 @endswitch
-            </td>                                                                                      
+            </td>
             <td class="text-center">
                 {{-- @if (Auth::user()->can('update', $j)) --}}
                 <form action="{{ route('backend.diklat.jadwal.destroy', $j->id) }}" method="POST">
@@ -51,19 +51,19 @@
                         <a href="{{ route('backend.diklat.jadwal.detail', ['jadwal' => $j->id, 'slug' => str_slug($j->nama)]) }}" class="btn btn-sm btn-success">
                             <i class="fa fa-cog"></i>
                         </a>
-                        @can('isUser')
+                        @can('isCreator', $j)
                         <a href="{{ route('backend.diklat.jadwal.edit', $j->id) }}" class="btn btn-sm btn-primary">
                             <i class="fa fa-pencil-alt"></i>
                         </a>
                         <a href="javascript:;" onclick="return showAlert($(this).closest('form'));" class="btn btn-sm btn-danger">
                             <i class="far fa-trash-alt"></i>
-                        </a>                               
-                        @endcan 
+                        </a>
+                        @endcan
                     </div>
                 </form>
                 {{-- @endif --}}
             </td>
-        </tr>                            
+        </tr>
         @endforeach
     </tbody>
 </table>

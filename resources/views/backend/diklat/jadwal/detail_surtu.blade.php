@@ -149,6 +149,7 @@
     <!-- END Hero -->
 
     <!-- Quick Menu -->
+    @if(Gate::check('isCreator', $jadwal) || (Gate::check('isKontribusi') && $jadwal->status_jadwal < 3))
     <div class="pt-4 px-4 bg-body-dark rounded push">
         <div class="row row-deck">
             <div class="col-6 col-md-4 col-xl-2">
@@ -163,6 +164,7 @@
             </div>
         </div>
     </div>
+    @endif
     <!-- END Quick Menu -->
 
     <!-- Page Content -->

@@ -67,6 +67,24 @@ class LoginController extends Controller
     }
 
     /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+            'tahun' => 'required',
+            'captcha' => 'required|captcha',
+        ]);
+    }
+
+    /**
      * The user has been authenticated.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -96,5 +114,10 @@ class LoginController extends Controller
     {
         //
         $request->session()->flush();
+    }
+
+    public function reloadCaptcha()
+    {
+        return response()->json(['captcha'=> captcha_img('flat')]);
     }
 }

@@ -260,7 +260,7 @@
     <!-- END Hero -->
 
     <!-- Quick Menu -->
-    @if(Gate::check('isUser'))
+    @if(Gate::check('isCreator', $jadwal) && Gate::check('isUser'))
     <div class="pt-4 px-4 bg-body-dark rounded push">
         <div class="row row-deck">
             @if(!$sertifikat)

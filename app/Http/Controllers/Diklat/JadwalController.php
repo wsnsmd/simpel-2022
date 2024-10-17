@@ -41,11 +41,21 @@ class JadwalController extends Controller
                 break;
 
             case 'user':
-                $jadwal = DB::table('v_jadwal_detail')
-                            ->where('usergroup', $this->user->usergroup)
+                if($this->isViewer())
+                {
+                    $jadwal = DB::table('v_jadwal_detail')
                             ->where('tahun', $this->tahun)
                             ->orderby('tgl_awal', 'desc')
                             ->get();
+                }
+                else
+                {
+                    $jadwal = DB::table('v_jadwal_detail')
+                                ->where('usergroup', $this->user->usergroup)
+                                ->where('tahun', $this->tahun)
+                                ->orderby('tgl_awal', 'desc')
+                                ->get();
+                }
                 break;
 
             case 'kontribusi':
@@ -68,7 +78,7 @@ class JadwalController extends Controller
             abort(403);
         }
 
-        $jdiklat = DB::table('diklat_jenis')->where('usergroup', $this->user->usergroup)->orderBy('nama')->get();
+        $jdiklat = DB::table('diklat_jenis')->orderBy('nama')->get();
         $lokasi = DB::table('lokasi')->orderBy('nama')->get();
         $kelas = DB::table('instansi')->orderBy('sort')->get();
 
@@ -170,7 +180,7 @@ class JadwalController extends Controller
                     ->where('tahun', $this->tahun)
                     ->first();
 
-        $jdiklat = DB::table('diklat_jenis')->where('usergroup', $this->user->usergroup)->orderBy('nama')->get();
+        $jdiklat = DB::table('diklat_jenis')->orderBy('nama')->get();
         $lokasi = DB::table('lokasi')->orderBy('nama')->get();
         $kelas = DB::table('instansi')->orderBy('nama')->get();
         $kurikulum = DB::table('kurikulum')->where('id', $jadwal->kurikulum_id)->first();
@@ -563,7 +573,7 @@ class JadwalController extends Controller
 
     public function checkAuth($id)
     {
-        if($this->isAdmin())
+        if($this->isAdmin() || $this->isViewer())
             return true;
 
         $data = DB::table('v_jadwal_detail')->where('id', $id)

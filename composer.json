@@ -17,6 +17,7 @@
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "^3.1",
+        "mews/captcha": "~3.0",
         "phpoffice/phpspreadsheet": "^1.9",
         "qcod/laravel-app-settings": "^1.2",
         "simplesoftwareio/simple-qrcode": "^2.0",
@@ -57,7 +58,7 @@
         },
         "files" : ["app/Helper.php"]
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "post-autoload-dump": [

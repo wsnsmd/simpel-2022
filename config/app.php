@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Kuala_Lumpur',
 
     /*
     |--------------------------------------------------------------------------
@@ -174,10 +174,11 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        
+
         Yajra\DataTables\DataTablesServiceProvider::class,
         willvincent\Feeds\FeedsServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class,
 
     ],
 
@@ -232,6 +233,7 @@ return [
         'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class,
         'HTMLMin' => HTMLMin\HTMLMin\Facades\HTMLMin::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
 
     ],
 

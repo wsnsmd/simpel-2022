@@ -11,7 +11,7 @@ use Session;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    
+
     protected $tahun;
     protected $user;
 
@@ -19,8 +19,13 @@ class Controller extends BaseController
     {
         if($this->user->superadmin)
             return true;
-            
+
         return false;
+    }
+
+    public function isViewer()
+    {
+        return $this->user->viewer;
     }
 
     public function checkLevel()
@@ -29,7 +34,7 @@ class Controller extends BaseController
             return 'admin';
 
         $group = $this->user->usergroup;
-        
+
         switch($group)
         {
             case 'skpk':
@@ -37,11 +42,11 @@ class Controller extends BaseController
             case 'pkmf':
                 $level = 'user';
                 break;
-            
+
             case 'kontribusi';
                 $level = 'kontribusi';
                 break;
-            
+
             default:
                 $level = 'guest';
                 break;
