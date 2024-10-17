@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
@@ -20,7 +21,7 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers, ThrottlesLogins;
 
     /**
      * Show the application's login form.
@@ -97,7 +98,7 @@ class LoginController extends Controller
         $user->last_login_ip = $request->ip();  // Ambil alamat IP
         $user->last_login_browser = $request->header('User-Agent');  // Ambil informasi browser
         $user->save();  // Simpan perubahan ke database
-        
+
         $request->session()->put('apps_tahun', $request->tahun);
         $instansi = DB::table('instansi')->where('id', $user->instansi_id)->first();
 
