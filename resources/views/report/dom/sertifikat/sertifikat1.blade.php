@@ -182,7 +182,7 @@
         </div>
         @if(!is_null($sertifikat->spesimen))
         <div id="tt2">
-            <img src="{{ $sertifikat->spesimen }}" height="200" />
+            <img src="{{ asset($sertifikat->spesimen) }}" height="200" />
         </div>
         @endif
     </div>
