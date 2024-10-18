@@ -18,15 +18,14 @@
             margin-right: 0cm;
         }
         @font-face {
-            font-family: 'Bookman';
+            font-family: 'bookman';
             src: url({{ storage_path('fonts/bookos.ttf') }}) format('truetype');
         }
         @font-face {
-            font-family: 'Bookman';
+            font-family: 'bookman';
             src: url({{ storage_path('fonts/bookosb.ttf') }}) format('truetype');
             font-weight: bold;
         }
-
         html,
         body,
         form,
@@ -45,11 +44,11 @@
         }
 
         table.header th, td {
-            font-family: 'Bookman';
+            font-family: 'bookman';
         }
 
         table.mdiklat td {
-            font-family: 'Bookman';
+            font-family: 'bookman';
             font-size: 11pt;
         }
 
@@ -58,7 +57,7 @@
         }
 
         p {
-            font-family: 'Bookman';
+            font-family: 'bookman';
             font-size: 11pt;
             margin: 0;
             text-align: justify;
@@ -110,9 +109,9 @@
         <tbody>
             <tr>
                 <td style="text-align: center">
-                    <span style="font-weight: bold; font-size: 12pt; font-family: 'Bookman'; line-height: 1.0;">BADAN PENGEMBANGAN SUMBER DAYA MANUSIA PROVINSI KALIMANTAN TIMUR</span><br>
-                    <span style="font-weight: bold; font-size: 20pt; font-family: 'Bookman'; line-height: 1.5;">S E R T I F I K A T</span><br>
-                    <span style="font-size: 12pt; font-family: 'Bookman'; line-height: 1.0;">Nomor : {!! $sertPeserta->nomor !!}</span></td>
+                    <span style="font-weight: bold; font-size: 12pt; font-family: 'bookman'; line-height: 1.0;">BADAN PENGEMBANGAN SUMBER DAYA MANUSIA PROVINSI KALIMANTAN TIMUR</span><br>
+                    <span style="font-weight: bold; font-size: 20pt; font-family: 'bookman'; line-height: 1.5;">S E R T I F I K A T</span><br>
+                    <span style="font-size: 12pt; font-family: 'bookman'; line-height: 1.0;">Nomor : {!! $sertPeserta->nomor !!}</span></td>
             </tr>
         </tbody>
     </table>
