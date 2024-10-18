@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use DB;
-use Validator;
 use App\User;
+use App\ActivityLog;
 
 class UserController extends Controller
 {
@@ -49,7 +49,7 @@ class UserController extends Controller
     {
         //
         // dd($request->all());
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'nama' => 'required',
             'username' => 'required|unique:users',
             'email' => 'required|unique:users',
@@ -58,8 +58,8 @@ class UserController extends Controller
             'instansi' => 'required',
             'foto' => 'nullable|file|mimes:jpeg,jpg,png,gif|max:512',
         ]);
-        
-        try 
+
+        try
         {
 
             $created_at = date('Y-m-d H:i:s');
@@ -67,7 +67,7 @@ class UserController extends Controller
             if(isset($request->foto))
             {
                 $foto = $request->file('foto');
-                $nama_file = time()."_".$foto->getClientOriginalName();    
+                $nama_file = time()."_".$foto->getClientOriginalName();
                 $path = $request->foto->storeAs('public/files/photo/user', $nama_file);
             }
 
@@ -87,13 +87,13 @@ class UserController extends Controller
 
             if(isset($request->add))
                 return redirect()->route('backend.pengguna.index')->with('success', $notifikasi);
-            
-            return redirect()->back()->with('success', $notifikasi); 
+
+            return redirect()->back()->with('success', $notifikasi);
         }
         catch(\Exception $e)
         {
             $notifikasi = 'Data pengguna gagal ditambahkan!';
-            return redirect()->back()->with('error', $notifikasi); 
+            return redirect()->back()->with('error', $notifikasi);
         }
     }
 
@@ -135,7 +135,7 @@ class UserController extends Controller
         //
         $user = User::find($id);
 
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'nama' => 'required',
             'username' => 'required' . ($request->username != $user->username ? '|unique:users' : ''),
             'email' => 'required' . ($request->email != $user->email ? '|unique:users' : ''),
@@ -144,17 +144,17 @@ class UserController extends Controller
             'instansi' => 'required',
         ]);
 
-        try 
+        try
         {
             $updated_at = date('Y-m-d H:i:s');
             $path = null;
             if(isset($request->foto))
             {
                 $foto = $request->file('foto');
-                $nama_file = time()."_".$foto->getClientOriginalName();    
-                $path = $request->foto->storeAs('public/files/photo/user', $nama_file);                
+                $nama_file = time()."_".$foto->getClientOriginalName();
+                $path = $request->foto->storeAs('public/files/photo/user', $nama_file);
             }
-            else 
+            else
             {
                 $path = $request->foto_lama;
             }
@@ -182,8 +182,8 @@ class UserController extends Controller
         catch(\Exception $e)
         {
             $notifikasi = 'Data pengguna gagal diubah!';
-            return redirect()->back()->with('error', $notifikasi); 
-        }  
+            return redirect()->back()->with('error', $notifikasi);
+        }
     }
 
     /**
@@ -222,7 +222,7 @@ class UserController extends Controller
 
     public function profilupdate(Request $request)
     {
-        $validator = $request->validate([            
+        $validator = $request->validate([
             'nama' => 'required',
             'email' => 'required' . ($request->email != Auth::user()->email ? '|unique:users' : ''),
             'foto' => 'nullable|file|mimes:jpeg,jpg,png,gif|max:512',
@@ -234,17 +234,17 @@ class UserController extends Controller
             'password_baru' => 'required_with:password_lama'
         ]);
 
-        try 
+        try
         {
             $updated_at = date('Y-m-d H:i:s');
             $path = null;
             if(isset($request->foto))
             {
                 $foto = $request->file('foto');
-                $nama_file = time()."_".$foto->getClientOriginalName();    
-                $path = $request->foto->storeAs('public/files/photo/user', $nama_file);                
+                $nama_file = time()."_".$foto->getClientOriginalName();
+                $path = $request->foto->storeAs('public/files/photo/user', $nama_file);
             }
-            else 
+            else
             {
                 $path = $request->foto_lama;
             }
@@ -270,7 +270,14 @@ class UserController extends Controller
         catch(\Exception $e)
         {
             $notifikasi = 'Data profil gagal diubah!';
-            return redirect()->back()->with('error', $notifikasi); 
-        }    
+            return redirect()->back()->with('error', $notifikasi);
+        }
+    }
+
+    public function aktifitas(Request $request)
+    {
+        $logs = ActivityLog::orderBy('created_at', 'desc')->take(1000)->get();
+
+        return view('backend.pengaturan.pengguna.aktifitas', compact('logs'));
     }
 }

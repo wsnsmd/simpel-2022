@@ -198,6 +198,7 @@ Route::group(['prefix'=>$admin_path,'as'=>$admin_path.'.'], function () {
     Route::get('pengguna/{users}/edit', 'UserController@edit')->name('pengguna.edit')->middleware('can:isAdmin');;
     Route::patch('pengguna/{users}', 'UserController@update')->name('pengguna.update')->middleware('can:isAdmin');;
     Route::delete('pengguna/{users}', 'UserController@destroy')->name('pengguna.destroy')->middleware('can:isAdmin');;
+    Route::get('aktifitas', 'UserController@aktifitas')->name('aktifitas')->middleware('can:isAdmin');;
 
     // Cetak
     Route::post('cetak', 'CetakController@index')->name('cetak.index');

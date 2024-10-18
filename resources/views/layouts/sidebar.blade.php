@@ -60,14 +60,14 @@
                         <a class="nav-main-link{{ request()->routeIs('backend.master.agama.create') ? ' active' : '' }}" href="{{ route('backend.master.agama.create') }}">
                             <i class="nav-main-link-icon fa fa-plus"></i>
                             <span class="nav-main-link-name">Tambah</span>
-                        </a>        
+                        </a>
                     </li>
                     <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->routeIs('backend.master.agama.index') ? ' active' : '' }}" href="{{ route('backend.master.agama.index') }}">
                             <i class="nav-main-link-icon fa fa-list"></i>
                             <span class="nav-main-link-name">Data</span>
                         </a>
-                    </li>       
+                    </li>
                 </ul>
             </li>
             <li class="nav-main-item{{ request()->routeIs('backend.master.instansi*') ? ' open' : '' }}">
@@ -80,16 +80,16 @@
                         <a class="nav-main-link{{ request()->routeIs('backend.master.instansi.create') ? ' active' : '' }}" href="{{ route('backend.master.instansi.create') }}">
                             <i class="nav-main-link-icon fa fa-plus"></i>
                             <span class="nav-main-link-name">Tambah</span>
-                        </a>        
+                        </a>
                     </li>
                     <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->routeIs('backend.master.instansi.index') ? ' active' : '' }}" href="{{ route('backend.master.instansi.index') }}">
                             <i class="nav-main-link-icon fa fa-list"></i>
                             <span class="nav-main-link-name">Data</span>
                         </a>
-                    </li>       
+                    </li>
                 </ul>
-            </li>            
+            </li>
             <li class="nav-main-item{{ request()->routeIs('backend.master.lokasi*') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                     <i class="nav-main-link-icon fa fa-location-arrow"></i>
@@ -100,14 +100,14 @@
                         <a class="nav-main-link{{ request()->routeIs('backend.master.lokasi.create') ? ' active' : '' }}" href="{{ route('backend.master.lokasi.create') }}">
                             <i class="nav-main-link-icon fa fa-plus"></i>
                             <span class="nav-main-link-name">Tambah</span>
-                        </a>        
+                        </a>
                     </li>
                     <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->routeIs('backend.master.lokasi.index') ? ' active' : '' }}" href="{{ route('backend.master.lokasi.index') }}">
                             <i class="nav-main-link-icon fa fa-list"></i>
                             <span class="nav-main-link-name">Data</span>
                         </a>
-                    </li>       
+                    </li>
                 </ul>
             </li>
             <li class="nav-main-item{{ request()->routeIs('backend.master.opd*') ? ' open' : '' }}">
@@ -120,16 +120,16 @@
                         <a class="nav-main-link{{ request()->routeIs('backend.master.opd.create') ? ' active' : '' }}" href="{{ route('backend.master.opd.create') }}">
                             <i class="nav-main-link-icon fa fa-plus"></i>
                             <span class="nav-main-link-name">Tambah</span>
-                        </a>        
+                        </a>
                     </li>
                     <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->routeIs('backend.master.opd.index') ? ' active' : '' }}" href="{{ route('backend.master.opd.index') }}">
                             <i class="nav-main-link-icon fa fa-list"></i>
                             <span class="nav-main-link-name">Data</span>
                         </a>
-                    </li>       
+                    </li>
                 </ul>
-            </li>                        
+            </li>
             <li class="nav-main-item{{ request()->routeIs('backend.master.pangkat*') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                     <i class="nav-main-link-icon fa fa-chevron-up"></i>
@@ -140,14 +140,14 @@
                         <a class="nav-main-link{{ request()->routeIs('backend.master.pangkat.create') ? ' active' : '' }}" href="{{ route('backend.master.pangkat.create') }}">
                             <i class="nav-main-link-icon fa fa-plus"></i>
                             <span class="nav-main-link-name">Tambah</span>
-                        </a>        
+                        </a>
                     </li>
                     <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->routeIs('backend.master.pangkat.index') ? ' active' : '' }}" href="{{ route('backend.master.pangkat.index') }}">
                             <i class="nav-main-link-icon fa fa-list"></i>
                             <span class="nav-main-link-name">Data</span>
                         </a>
-                    </li>       
+                    </li>
                 </ul>
             </li>
             <li class="nav-main-item{{ request()->routeIs('backend.master.tahun*') ? ' open' : '' }}">
@@ -160,17 +160,17 @@
                         <a class="nav-main-link{{ request()->routeIs('backend.master.tahun.create') ? ' active' : '' }}" href="{{ route('backend.master.tahun.create') }}">
                             <i class="nav-main-link-icon fa fa-plus"></i>
                             <span class="nav-main-link-name">Tambah</span>
-                        </a>        
+                        </a>
                     </li>
                     <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->routeIs('backend.master.tahun.index') ? ' active' : '' }}" href="{{ route('backend.master.tahun.index') }}">
                             <i class="nav-main-link-icon fa fa-list"></i>
                             <span class="nav-main-link-name">Data</span>
                         </a>
-                    </li>       
+                    </li>
                 </ul>
-            </li>     
-            @endcan                                               
+            </li>
+            @endcan
             <li class="nav-main-heading">Pelatihan</li>
             @can('isUser')
             <li class="nav-main-item{{ request()->routeIs('backend.diklat.fasilitator*') ? ' open' : '' }}">
@@ -183,16 +183,16 @@
                         <a class="nav-main-link{{ request()->routeIs('backend.diklat.fasilitator.create') ? ' active' : '' }}" href="{{ route('backend.diklat.fasilitator.create') }}">
                             <i class="nav-main-link-icon fa fa-plus"></i>
                             <span class="nav-main-link-name">Tambah</span>
-                        </a>        
+                        </a>
                     </li>
                     <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->routeIs('backend.diklat.fasilitator.index') ? ' active' : '' }}" href="{{ route('backend.diklat.fasilitator.index') }}">
                             <i class="nav-main-link-icon fa fa-list"></i>
                             <span class="nav-main-link-name">Data</span>
                         </a>
-                    </li>       
+                    </li>
                 </ul>
-            </li> 
+            </li>
             <li class="nav-main-item{{ request()->routeIs('backend.diklat.jenis*') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                     <i class="nav-main-link-icon fa fa-tags"></i>
@@ -203,16 +203,16 @@
                         <a class="nav-main-link{{ request()->routeIs('backend.diklat.jenis.create') ? ' active' : '' }}" href="{{ route('backend.diklat.jenis.create') }}">
                             <i class="nav-main-link-icon fa fa-plus"></i>
                             <span class="nav-main-link-name">Tambah</span>
-                        </a>        
+                        </a>
                     </li>
                     <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->routeIs('backend.diklat.jenis.index') ? ' active' : '' }}" href="{{ route('backend.diklat.jenis.index') }}">
                             <i class="nav-main-link-icon fa fa-list-alt"></i>
                             <span class="nav-main-link-name">Data</span>
                         </a>
-                    </li>       
+                    </li>
                 </ul>
-            </li>            
+            </li>
             <li class="nav-main-item{{ request()->routeIs('backend.diklat.kurikulum*') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                     <i class="nav-main-link-icon fa fa-book"></i>
@@ -223,17 +223,17 @@
                         <a class="nav-main-link{{ request()->routeIs('backend.diklat.kurikulum.create') ? ' active' : '' }}" href="{{ route('backend.diklat.kurikulum.create') }}">
                             <i class="nav-main-link-icon fa fa-plus"></i>
                             <span class="nav-main-link-name">Tambah</span>
-                        </a>        
+                        </a>
                     </li>
                     <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->routeIs('backend.diklat.kurikulum.index') ? ' active' : '' }}" href="{{ route('backend.diklat.kurikulum.index') }}">
                             <i class="nav-main-link-icon fa fa-list"></i>
                             <span class="nav-main-link-name">Data</span>
                         </a>
-                    </li>       
+                    </li>
                 </ul>
             </li>
-            @endcan  
+            @endcan
             <li class="nav-main-item{{ request()->routeIs('backend.diklat.jadwal*') ? ' open' : '' }}">
                 <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true" aria-expanded="true" href="#">
                     <i class="nav-main-link-icon far fa-calendar-alt"></i>
@@ -245,15 +245,15 @@
                         <a class="nav-main-link{{ request()->routeIs('backend.diklat.jadwal.create') ? ' active' : '' }}" href="{{ route('backend.diklat.jadwal.create') }}">
                             <i class="nav-main-link-icon fa fa-plus"></i>
                             <span class="nav-main-link-name">Tambah</span>
-                        </a>        
+                        </a>
                     </li>
-                    @endcan  
+                    @endcan
                     <li class="nav-main-item">
                         <a class="nav-main-link{{ request()->routeIs('backend.diklat.jadwal.index') ? ' active' : '' }}" href="{{ route('backend.diklat.jadwal.index') }}">
                             <i class="nav-main-link-icon fa fa-list"></i>
                             <span class="nav-main-link-name">Data</span>
                         </a>
-                    </li>       
+                    </li>
                 </ul>
             </li>
             @can('isAdmin')
@@ -263,14 +263,20 @@
                     <i class="nav-main-link-icon fa fa-cog"></i>
                     <span class="nav-main-link-name">Aplikasi</span>
                 </a>
-            </li>     
+            </li>
             <li class="nav-main-item">
                 <a class="nav-main-link {{ request()->routeIs('backend.pengguna*') ? ' active' : '' }}" href="{{ route('backend.pengguna.index') }}">
                     <i class="nav-main-link-icon fa fa-users"></i>
                     <span class="nav-main-link-name">Pengguna</span>
                 </a>
-            </li> 
-            @endcan                    
+            </li>
+            <li class="nav-main-item">
+                <a class="nav-main-link {{ request()->routeIs('backend.aktifitas*') ? ' active' : '' }}" href="{{ route('backend.aktifitas') }}">
+                    <i class="nav-main-link-icon fa fa-users"></i>
+                    <span class="nav-main-link-name">Aktifitas</span>
+                </a>
+            </li>
+            @endcan
         </ul>
     </div>
     <!-- END Side Navigation -->
