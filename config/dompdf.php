@@ -156,7 +156,7 @@ return array(
                 "R" => "bookos.ttf",
                 "B" => "bookosb.ttf",
             ]
-        ]
+        ],
 
         /**
          * Image DPI setting
