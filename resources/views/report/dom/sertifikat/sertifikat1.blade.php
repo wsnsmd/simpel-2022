@@ -20,11 +20,11 @@
 
         @font-face {
             font-family: 'bookman';
-            src: url({{ storage_path('fonts/bookos.ttf') }}) format('truetype');
+            src: {{ storage_path('fonts/bookos.ttf') }} format('truetype');
         }
         @font-face {
             font-family: 'bookman';
-            src: url({{ storage_path('fonts/bookosb.ttf') }}) format('truetype');
+            src: {{ storage_path('fonts/bookosb.ttf') }} format('truetype');
             font-weight: bold;
         }
 
@@ -182,7 +182,7 @@
         </div>
         @if(!is_null($sertifikat->spesimen))
         <div id="tt2">
-            <img src="{{ asset($sertifikat->spesimen) }}" height="200" />
+            <img src="{{ tt_storage($sertifikat->spesimen) }}" height="200" />
         </div>
         @endif
     </div>

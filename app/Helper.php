@@ -15,7 +15,7 @@ function formatNumber($number, $currency = 'IDR')
    return number_format($number, 0, '.', '.');
 }
 
-function formatTanggal($date) 
+function formatTanggal($date)
 {
     $bulan = array (
         1 => 'Januari',
@@ -31,24 +31,24 @@ function formatTanggal($date)
         'November',
         'Desember'
     );
-    
+
     $tanggal = new Carbon($date);
 
     $value = sprintf('%02d', $tanggal->day) . ' ' . $bulan[$tanggal->month] . ' ' . $tanggal->year;
-    
+
     return $value;
 }
 
-function formatTgl($date) 
+function formatTgl($date)
 {
     $tanggal = new Carbon($date);
 
     $value = sprintf('%02d', $tanggal->day) . '-' . sprintf('%02d', $tanggal->month) . '-' . $tanggal->year;
-    
+
     return $value;
 }
 
-function formatTgl2($date) 
+function formatTgl2($date)
 {
     $bulan = array (
         1 => 'Jan',
@@ -64,18 +64,18 @@ function formatTgl2($date)
         'Nov',
         'Des'
     );
-    
+
     $tanggal = new Carbon($date);
 
     $value = sprintf('%02d', $tanggal->day) . ' ' . $bulan[$tanggal->month];
-    
+
     return $value;
 }
 
 function formatJam($time)
 {
     $jam = date('H:i', strtotime($time));
-    
+
     return $jam;
 }
 
@@ -142,7 +142,7 @@ function getHari($date, $pendek = false)
 function getJenisPembelajaran($id)
 {
     switch($id)
-    {        
+    {
         case 1:
             return "Klasikal Penuh";
         case 2:
@@ -160,7 +160,7 @@ function getLamaHari($date_from, $date_to)
     $start = new DateTime($date_from);
     $to = new DateTime($date_to);
     $interval = $start->diff($to);
-    $hari = $interval->days + 1; 
+    $hari = $interval->days + 1;
     return $hari;
 }
 
@@ -173,38 +173,38 @@ function getKeperluan()
 
 function getPangkat($pangkat)
 {
-    $gol = array("(I/a)", "(I/b)", "(I/c)", "(I/d)", 
+    $gol = array("(I/a)", "(I/b)", "(I/c)", "(I/d)",
                 "(II/a)", "(II/b)", "(II/c)", "(II/d)",
                 "(III/a)", "(III/b)", "(III/c)", "(III/d)",
                 "(IV/a)", "(IV/b)", "(IV/c)", "(IV/d)", "(IV/e)"
             );
 
     $jabatan = str_ireplace($gol, "", $pangkat);
-    
+
     return $jabatan;
 }
 
 function getBayarLabel($status)
 {
-    if($status) 
+    if($status)
     {
         return '<span class="label label-success">Sudah</span>';
     }
-    
-    return '<span class="label label-danger">Belum</span>';    
-}
 
-function getVerifikasiLabel($status) 
-{
-    if($status) 
-    {
-        return '<span class="label label-success">Sudah</span>';
-    }
-    
     return '<span class="label label-danger">Belum</span>';
 }
 
-function getMarital($status) 
+function getVerifikasiLabel($status)
+{
+    if($status)
+    {
+        return '<span class="label label-success">Sudah</span>';
+    }
+
+    return '<span class="label label-danger">Belum</span>';
+}
+
+function getMarital($status)
 {
     $data = '';
 
@@ -231,7 +231,7 @@ function getNomorSPWI($tahun)
     return $nomor;
 }
 
-function getSex($status) 
+function getSex($status)
 {
     return ($status == 'L' ? 'Laki-laki' : 'Perempuan');
 }
@@ -243,35 +243,35 @@ function imageToBase64($relative_path)
     $data = \File::get($path);
 
 	$base64 = "";
-    
+
     if ($type == "svg") {
 		$base64 = "data:image/svg+xml;base64,".base64_encode($data);
 	} else {
 		$base64 = "data:image/". $type .";base64,".base64_encode($data);
     }
-    
+
 	return $base64;
 }
 
 function set_active($uri, $output = 'current')
-{   
-    if( is_array($uri) ) 
+{
+    if( is_array($uri) )
     {
-        foreach ($uri as $u) 
+        foreach ($uri as $u)
         {
-            if (Route::is($u)) 
+            if (Route::is($u))
             {
                 return $output;
             }
         }
-    } 
-    else 
+    }
+    else
     {
         if (strcasecmp($uri, url()->current()) == 0 )
         {
             return $output;
         }
-        else 
+        else
         {
             if (Route::is($uri))
             {
@@ -284,6 +284,11 @@ function set_active($uri, $output = 'current')
 function url_storage($uri)
 {
     return env('APP_URL').'/public'.$uri;
+}
+
+function tt_storage($path)
+{
+    return str_replace('public', 'storage', $path);
 }
 
 function simpegJK($data)
