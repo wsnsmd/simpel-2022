@@ -272,7 +272,7 @@
             </li>
             <li class="nav-main-item">
                 <a class="nav-main-link {{ request()->routeIs('backend.aktifitas*') ? ' active' : '' }}" href="{{ route('backend.aktifitas') }}">
-                    <i class="nav-main-link-icon fa fa-users"></i>
+                    <i class="nav-main-link-icon fa fa-clipboard-list"></i>
                     <span class="nav-main-link-name">Aktifitas</span>
                 </a>
             </li>
