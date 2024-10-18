@@ -182,7 +182,7 @@
         </div>
         @if(!is_null($sertifikat->spesimen))
         <div id="tt2">
-            <img src="{{ storage_path('app/' . $sertifikat->spesimen) }}" height="200" />
+            <img src="{{ public_path($sertifikat->spesimen) }}" height="200" />
         </div>
         @endif
     </div>
