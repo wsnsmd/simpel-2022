@@ -151,6 +151,13 @@ return array(
          */
         "default_font" => "serif",
 
+        "fonts" => [
+            "BookmanOld" => [
+                "R" => "bookos.ttf",
+                "B" => "bookosb.ttf",
+            ]
+        ]
+
         /**
          * Image DPI setting
          *

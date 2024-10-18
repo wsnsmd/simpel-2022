@@ -18,16 +18,6 @@
             margin-right: 0cm;
         }
 
-        @font-face {
-            font-family: 'bookman';
-            src: {{ storage_path('fonts/bookos.ttf') }} format('truetype');
-        }
-        @font-face {
-            font-family: 'bookman';
-            src: {{ storage_path('fonts/bookosb.ttf') }} format('truetype');
-            font-weight: bold;
-        }
-
         html,
         body,
         form,
@@ -46,7 +36,7 @@
         }
 
         table.header th, td {
-            font-family: 'Bookman';
+            font-family: 'BookmanOld';
         }
 
         table.mdiklat td {
