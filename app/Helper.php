@@ -288,7 +288,7 @@ function url_storage($uri)
 
 function tt_storage($path)
 {
-    return str_replace('public', '/storage', $path);
+    return storage_path('app/' . $path);
 }
 
 function simpegJK($data)

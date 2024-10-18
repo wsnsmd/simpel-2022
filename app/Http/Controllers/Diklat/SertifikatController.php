@@ -282,7 +282,7 @@ class SertifikatController extends Controller
         $view = view('report.dom.sertifikat.' . $template->file, compact('sertPeserta', 'sertifikat', 'jadwal', 'kurikulum'));
         // return $view;
         $pdf = App::make('dompdf.wrapper');
-        $pdf->setOptions(['dpi' => '120', 'isRemoteEnabled' => true ]);
+        $pdf->setOptions(['dpi' => '120']);
         $pdf->loadHTML($view);
         $pdf->setPaper($papersize, $paperorientation);
 
