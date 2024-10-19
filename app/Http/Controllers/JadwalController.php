@@ -301,7 +301,7 @@ class JadwalController extends Controller
         if(session('status_asn') == 1 || session('status_asn') ==2)
         {
             $validator = $request->validate([
-                'foto' => 'image|max:512',
+                'foto' => 'mimetypes:image/jpeg,image/png|max:512',
                 'nip' => 'required|min:18|max:18',
                 'ktp' => 'required|min:16|max:16',
                 'nama_lengkap' => 'required',
@@ -322,10 +322,10 @@ class JadwalController extends Controller
                 //'satker_telp' => 'required',
             ]);
         }
-        else 
+        else
         {
             $validator = $request->validate([
-                'foto' => 'image|max:512',
+                'foto' => 'mimetypes:image/jpeg,image/png|max:512',
                 'ktp' => 'required|min:16|max:16',
                 'nama_lengkap' => 'required',
                 'nama_panggil' => 'required',

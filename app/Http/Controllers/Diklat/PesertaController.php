@@ -54,7 +54,7 @@ class PesertaController extends Controller
     public function store(Request $request, $id)
     {
         $validator = $request->validate([
-            'foto' => 'image|max:512',
+            'foto' => 'mimetypes:image/jpeg,image/png|max:512',
             // 'nip' => 'required|min:18|max:18',
             // 'ktp' => 'required|min:16|max:16',
             'nama_lengkap' => 'required',
@@ -249,7 +249,7 @@ class PesertaController extends Controller
     public function update(Request $request, $id)
     {
         $validator = $request->validate([
-            'foto' => 'image|max:512',
+            'foto' => 'mimetypes:image/jpeg,image/png|max:512',
             // 'nip' => 'required|min:18|max:18',
             // 'ktp' => 'required|min:16|max:16',
             'nama_lengkap' => 'required',
