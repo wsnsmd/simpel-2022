@@ -1,7 +1,7 @@
 @extends('layouts.frontend')
 
 @section('css_before')
-    <!-- Page JS Plugins CSS -->  
+    <!-- Page JS Plugins CSS -->
     <link rel="stylesheet" href="{{ asset('js/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css') }}">
     <link rel="stylesheet" href="{{ asset('js/plugins/jasny-bootstrap/css/jasny-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('js/plugins/magnific-popup/magnific-popup.css') }}">
@@ -15,11 +15,9 @@
     <script src="{{ asset('js/plugins/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
     <script src="{{ asset('js/plugins/jasny-bootstrap/js/jasny-bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/plugins/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
-    {!! NoCaptcha::renderJs() !!}
-    {{-- <script src="{{ asset('js/plugins/jquery-bootstrap-wizard/bs4/jquery.bootstrap.wizard.min.js') }}"></script> --}}
 
     <script>
-        jQuery(function() { 
+        jQuery(function() {
             Dashmix.helpers(['datepicker', 'maxlength', 'magnific-popup']);
         });
 
@@ -50,7 +48,7 @@
         @endif
 
     </script>
-    
+
     @yield('js_sub')
 @endsection
 
@@ -122,13 +120,13 @@
                                     <tr>
                                         <td class="font-w700">Kuota</td>
                                         <td>{{$jadwal->kuota}} Peserta</td>
-                                    </tr>            
+                                    </tr>
                                     <tr>
                                         <td class="font-w700">Registrasi</td>
                                         <td>
                                             @switch($jadwal->registrasi)
                                             @case(0)
-                                                <span class="badge badge-warning">Internal</span>                                                    
+                                                <span class="badge badge-warning">Internal</span>
                                                 @break
                                             @case(1)
                                                 <span class="badge badge-primary">Online</span>
@@ -137,13 +135,13 @@
                                                 <span class="badge badge-warning">Internal</span>
                                             @endswitch
                                         </td>
-                                    </tr>                                                              
+                                    </tr>
                                     <tr>
                                         <td class="font-w700">Status</td>
                                         <td>
                                             @switch($jadwal->status_jadwal)
                                             @case(1)
-                                                <span class="badge badge-success">Berjalan</span>                                                    
+                                                <span class="badge badge-success">Berjalan</span>
                                                 @break
                                             @case(2)
                                                 <span class="badge badge-primary">Akan Datang</span>
@@ -152,7 +150,7 @@
                                                 <span class="badge badge-danger">Selesai</span>
                                             @endswitch
                                         </td>
-                                    </tr>                                
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -173,4 +171,4 @@
             </div>
         </div>
     </div>
-@endsection    
+@endsection
