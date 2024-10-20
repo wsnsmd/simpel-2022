@@ -245,7 +245,7 @@ class SurtuController extends Controller
         // return view($view, compact('surtu', 'pegawai', 'template', 'bawah'))->render();
         $view = view($view, compact('surtu', 'pegawai', 'template', 'bawah'))->render();
         $pdf = App::make('dompdf.wrapper');
-        $pdf->setOptions(['dpi' => '120' ]);
+        $pdf->setOptions(['dpi' => '120', 'isRemoteEnabled' => true, 'chroot' => realpath(base_path()), 'enable_html5_parser' => true, ]);
         $pdf->loadHTML($view);
         $pdf->setPaper($papersize, $paperorientation);
 
