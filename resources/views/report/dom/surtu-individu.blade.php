@@ -11,16 +11,9 @@
             margin-right: 2.5rem;
         }
 
-        header,
         footer {
             width: 100%;
             position: fixed;
-        }
-        header {
-            top: -10rem;
-            margin: 0px;
-        }
-        footer {
             bottom: 0px;
         }
 
@@ -121,6 +114,14 @@
             page-break-after: always;
         }
 
+        #kop {
+            width: 100%;
+            position: fixed;
+            top: -10rem;
+            margin: 0px;
+            display: block;
+        }
+
         #container {
             margin-top: 0rem;
             margin-right: 20px;
@@ -137,32 +138,32 @@
 </head>
 
 <body style="page-break-inside: avoid !important;">
-    <header>
-        <table width="100%" cellspacing="0" cellpadding="0">
-            <tbody>
-                <tr>
-                    <td width="15%" style="text-align: center"><img src="{{ imageToBase64(public_path('/media/images/logo_pemprov_bw.jpg')) }}"
-                            height="150" width="150"></td>
-                    <td width="85%" style="text-align: center">
-                        <span style="font-weight: bold; font-size: 16pt">PEMERINTAH PROVINSI KALIMANTAN TIMUR</span><br>
-                        <span style="font-weight: bold; font-size: 18pt">BADAN PENGEMBANGAN SUMBER DAYA MANUSIA</span><br>
-                        <span style="font-size: 11.5pt">Jalan H.A.M.M Rifaddin No. 88 Samarinda Seberang</span><br>
-                        <span style="font-size: 11.5pt">Telp: 0541 - 7270207 Fax : 0541 7270208, email : <span style="text-decoration: underline">bpsdm@kaltimprov.go.id</span>
-                            /</span><br>
-                        <span style="font-size: 11.5pt"><span style="text-decoration: underline">bpsdm.kaltimprov@gmail.com</span>
-                            website : http://bpsdm.kaltimprov.go.id</span><br>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <hr class="style2">
-    </header>
     @php
         $page = 1;
         $counter = 1;
     @endphp
     @for($hal=1; $hal<=2; $hal++)
     <main>
+        <div id="kop">
+            <table width="100%" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td width="15%" style="text-align: center"><img src="{{ imageToBase64(public_path('/media/images/logo_pemprov_bw.jpg')) }}"
+                                height="150" width="150"></td>
+                        <td width="85%" style="text-align: center">
+                            <span style="font-weight: bold; font-size: 16pt">PEMERINTAH PROVINSI KALIMANTAN TIMUR</span><br>
+                            <span style="font-weight: bold; font-size: 18pt">BADAN PENGEMBANGAN SUMBER DAYA MANUSIA</span><br>
+                            <span style="font-size: 11.5pt">Jalan H.A.M.M Rifaddin No. 88 Samarinda Seberang</span><br>
+                            <span style="font-size: 11.5pt">Telp: 0541 - 7270207 Fax : 0541 7270208, email : <span style="text-decoration: underline">bpsdm@kaltimprov.go.id</span>
+                                /</span><br>
+                            <span style="font-size: 11.5pt"><span style="text-decoration: underline">bpsdm.kaltimprov@gmail.com</span>
+                                website : http://bpsdm.kaltimprov.go.id</span><br>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr class="style2">
+        </div>
         <div id="container">
             <h4 style="text-decoration: underline;">SURAT TUGAS</h4>
             <p style="text-align: center; margin-top: 5px;">Nomor : {{ $surtu->nomor }}</p>
