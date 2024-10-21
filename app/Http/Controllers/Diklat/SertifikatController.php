@@ -162,6 +162,15 @@ class SertifikatController extends Controller
             $bawah = $template->spesimen_bawah;
         }
 
+        if(is_null($pid))
+        {
+            $notifikasi = 'Tidak ada data peserta yang dipilih!';
+            return redirect()->route('backend.diklat.jadwal.detail', ['id' => $jadwal->id, 'slug' => str_slug($jadwal->nama), 'page' => 'sertifikat'])
+                        ->with([
+                            'success' => $notifikasi,
+                        ]);
+        }
+
         DB::beginTransaction();
 
         try
